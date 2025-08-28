@@ -3,7 +3,8 @@
 namespace app\models;
 
 use Yii;
-
+use yii\behaviors\TimestampBehavior;
+use yii\behaviors\BlameableBehavior;
 /**
  * This is the model class for table "driver".
  *
@@ -40,7 +41,7 @@ class Driver extends \yii\db\ActiveRecord
     {
         return [
             [['email', 'phone', 'address'], 'default', 'value' => null],
-            [['first_name', 'last_name', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'required'],
+            [['first_name', 'last_name'], 'required'],
             [['created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['first_name', 'last_name', 'email', 'address'], 'string', 'max' => 255],
             [['phone'], 'string', 'max' => 50],
@@ -67,7 +68,13 @@ class Driver extends \yii\db\ActiveRecord
             'updated_by' => 'Updated By',
         ];
     }
-
+public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
+            BlameableBehavior::class,
+        ];
+    }
     /**
      * Gets query for [[CreatedBy]].
      *
