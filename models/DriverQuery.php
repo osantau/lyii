@@ -3,11 +3,11 @@
 namespace app\models;
 
 /**
- * This is the ActiveQuery class for [[User]].
+ * This is the ActiveQuery class for [[Driver]].
  *
- * @see User
+ * @see Driver
  */
-class UserQuery extends \yii\db\ActiveQuery
+class DriverQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class UserQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return User[]|array
+     * @return Driver[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class UserQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return User|array|null
+     * @return Driver|array|null
      */
     public function one($db = null)
     {

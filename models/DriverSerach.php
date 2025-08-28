@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\User;
+use app\models\Driver;
 
 /**
- * UserSearch represents the model behind the search form of `app\models\User`.
+ * DriverSerach represents the model behind the search form of `app\models\Driver`.
  */
-class UserSearch extends User
+class DriverSerach extends Driver
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class UserSearch extends User
     public function rules()
     {
         return [
-            [['id', 'created_at', 'updated_at', 'is_admin'], 'integer'],
-            [['username', 'email', 'password_hash', 'auth_key','created_by','updated_by'], 'safe'],
+            [['id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['first_name', 'last_name', 'email', 'phone', 'address'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class UserSearch extends User
      */
     public function search($params, $formName = null)
     {
-        $query = User::find();
+        $query = Driver::find();
 
         // add conditions that should always apply here
 
@@ -62,13 +62,15 @@ class UserSearch extends User
             'id' => $this->id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'is_admin' => $this->is_admin,
+            'created_by' => $this->created_by,
+            'updated_by' => $this->updated_by,
         ]);
 
-        $query->andFilterWhere(['like', 'username', $this->username])
+        $query->andFilterWhere(['like', 'first_name', $this->first_name])
+            ->andFilterWhere(['like', 'last_name', $this->last_name])
             ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'password_hash', $this->password_hash])
-            ->andFilterWhere(['like', 'auth_key', $this->auth_key]);
+            ->andFilterWhere(['like', 'phone', $this->phone])
+            ->andFilterWhere(['like', 'address', $this->address]);
 
         return $dataProvider;
     }

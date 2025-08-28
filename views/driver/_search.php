@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var app\models\UserSearch $model */
+/** @var app\models\DriverSerach $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-<div class="user-search">
+<div class="driver-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -20,19 +20,23 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'username') ?>
+    <?= $form->field($model, 'first_name') ?>
+
+    <?= $form->field($model, 'last_name') ?>
 
     <?= $form->field($model, 'email') ?>
 
-    <?= $form->field($model, 'password_hash') ?>
+    <?= $form->field($model, 'phone') ?>
 
-    <?= $form->field($model, 'auth_key') ?>
+    <?php // echo $form->field($model, 'address') ?>
 
     <?php // echo $form->field($model, 'created_at') ?>
 
     <?php // echo $form->field($model, 'updated_at') ?>
 
-    <?php // echo $form->field($model, 'is_admin') ?>
+    <?php // echo $form->field($model, 'created_by') ?>
+
+    <?php // echo $form->field($model, 'updated_by') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
