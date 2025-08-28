@@ -20,9 +20,11 @@ class m250828_085657_create_user_table extends Migration
             'password' => $this->string()->notNull()->defaultValue(''),
             'password_hash' => $this->string()->notNull(),
             'auth_key' => $this->string(32),
+            'is_admin'=>$this->boolean()->notNull()->defaultValue(false),
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
-            'is_admin'=>$this->boolean()->notNull()->defaultValue(false),
+            'created_by'=>$this->integer(),
+            'updated_by'=> $this->integer(),      
         ]);
         $admin = new User();
         $admin->username = "admin";
@@ -33,6 +35,29 @@ class m250828_085657_create_user_table extends Migration
         $admin->created_at = time();
         $admin->updated_at = time();    
         $admin->save();
+        $admin->created_by = $admin->id;
+        $admin->updated_by=$admin->id;
+        $admin->save();
+
+        $this->addForeignKey(
+        'fk-user-created_by',
+        '{{%user}}',
+        'created_by',
+        '{{%user}}',
+        'id',
+        'SET NULL',
+        'CASCADE'
+    );
+
+    $this->addForeignKey(
+        'fk-user-updated_by',
+        '{{%user}}',
+        'updated_by',
+        '{{%user}}',
+        'id',
+        'SET NULL',
+        'CASCADE'
+    );
     }
 
     /**
