@@ -39,9 +39,8 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'options' => ['class' => 'navbar-nav'],
         'items' => [
             ['label' => 'Acasa', 'url' => ['/site/index']],  
-            ( !Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin())?  ['label' => 'Utilizatori', 'url' => ['/user']]:'',
             !Yii::$app->user->isGuest ?['label' => 'Conducatori auto', 'url' => ['/driver']]:'', 
-            
+            ( !Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin())?  ['label' => 'Utilizatori', 'url' => ['/user']]:'',                        
             Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
                 : '<li class="nav-item">'

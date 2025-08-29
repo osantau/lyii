@@ -10,15 +10,15 @@ use yii\widgets\Pjax;
 /** @var app\models\DriverSerach $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Drivers';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Conducatori Auto';
+// $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="driver-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Driver', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Adauga', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -30,18 +30,39 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            // 'id',
             'first_name',
             'last_name',
             'email:email',
             'phone',
             //'address',
-            //'created_at',
-            //'updated_at',
-            //'created_by',
-            //'updated_by',
+            ['attribute' => 'created_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
+            ['attribute' => 'updated_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
             [
-                'class' => ActionColumn::className(),
+                'attribute' => 'created_by',
+                'value' => function ($model) {
+                        return $model->createdBy->username ?? null;
+                    },
+            ],
+            [
+                'attribute' => 'updated_by',
+                'value' => function ($model) {
+                        return $model->updatedBy->username ?? null;
+                    },
+            ],
+            [
+                'class' => ActionColumn::class,
+                'template'=>'{update} {delete}',
+                  'buttons' => [
+                'delete' => function ($url, $model, $key) {
+                    return Html::a('<i class="fas fa-trash"></i>', $url, [
+                        'title' => Yii::t('app', 'Delete'),
+                        'data-confirm' => Yii::t('app', 'Sunteti sigur ca vreti sa stergeti '.$model->first_name.' - '.$model->last_name.'  ?'),
+                        'data-method' => 'post',
+                        'class' => 'btn btn-danger btn-sm', // your custom class
+                    ]);
+                },
+            ],
                 'urlCreator' => function ($action, Driver $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }

@@ -11,10 +11,9 @@ use yii\widgets\Pjax;
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Utilizatori';
-$this->params['breadcrumbs'][] = $this->title;
+// $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-index">
-
+<div class="user-index">        
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
@@ -22,7 +21,6 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -30,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            // 'id',
             'username',
             'email:email',
             // 'password_hash',
@@ -58,10 +56,21 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             [
-                'class' => ActionColumn::className(),
+                'class' => ActionColumn::class,
+                'template'=>'{update} {delete}',
+                'buttons' => [
+                'delete' => function ($url, $model, $key) {
+                    return Html::a('<i class="fas fa-trash"></i>', $url, [
+                        'title' => Yii::t('app', 'Delete'),
+                        'data-confirm' => Yii::t('app', 'Sunteti sigur ca vreti sa stergeti '.$model->username.'  ?'),
+                        'data-method' => 'post',
+                        'class' => 'btn btn-danger btn-sm', // your custom class
+                    ]);
+                },
+            ],
                 'urlCreator' => function ($action, User $model, $key, $index, $column) {
                         return Url::toRoute([$action, 'id' => $model->id]);
-                    }
+                    },
             ],
         ],
     ]); ?>

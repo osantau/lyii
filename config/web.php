@@ -4,7 +4,7 @@ $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
 $config = [
-    'id' => 'basic',
+    'id' => 'lyii',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -48,9 +48,13 @@ $config = [
             'showScriptName' => false,
             'rules' => [
             ],
+        ],
+        'assetManager'=>[
+            'appendTimestamp'=> true,
         ],        
     ],
     'params' => $params,
+    'timeZone'=>'Europe/Bucharest',
 ];
 
 if (YII_ENV_DEV) {
