@@ -35,7 +35,7 @@ $this->title = 'Conducatori Auto';
             'last_name',
             'email:email',
             'phone',
-            //'address',
+            'address',
             ['attribute' => 'created_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
             ['attribute' => 'updated_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
             [

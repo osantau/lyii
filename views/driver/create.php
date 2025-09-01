@@ -5,9 +5,9 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Driver $model */
 
-$this->title = 'Create Driver';
-$this->params['breadcrumbs'][] = ['label' => 'Drivers', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Adauga Conducator Auto';
+// $this->params['breadcrumbs'][] = ['label' => 'Drivers', 'url' => ['index']];
+// $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="driver-create">
 
