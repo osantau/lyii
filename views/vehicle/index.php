@@ -49,13 +49,13 @@ $this->title = 'Autovehicule';
              [
                 'class' => ActionColumn::class,
                 'template'=>'{update} {delete}',
+                 'contentOptions' => ['style' => 'width:50px; text-align:center;'],
                 'buttons' => [
                 'delete' => function ($url, $model, $key) {
-                    return Html::a('<i class="fas fa-trash"></i>', $url, [
-                        'title' => Yii::t('app', 'Delete'),
-                        'data-confirm' => Yii::t('app', 'Sunteti sigur ca vreti sa stergeti '.$model->regno.'  ?'),
-                        'data-method' => 'post',
-                        'class' => 'btn btn-danger btn-sm', // your custom class
+                    return Html::a('<span style="color:red;"><i class="fa-solid fa-trash fa-xs"></i></span>', $url, [
+                        'title' => 'Sterge',
+                        'data-confirm' => 'Sunteti sigur ca vreti sa stergeti <b>'.$model->regno.'</b> ?',
+                        'data-method' => 'post',                        
                     ]);
                 },
             ],

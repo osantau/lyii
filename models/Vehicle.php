@@ -94,4 +94,12 @@ class Vehicle extends \yii\db\ActiveRecord
         return new VehicleQuery(get_called_class());
     }
 
+    public function beforeSave($insert){
+        if(parent::beforeSave($insert)){
+            $this->regno=trim(strtoupper($this->regno));
+            return true;
+        }
+        return false;
+    }
+
 }
