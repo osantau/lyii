@@ -57,15 +57,15 @@ class Driver extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'first_name' => 'First Name',
-            'last_name' => 'Last Name',
+            'first_name' => 'Nume',
+            'last_name' => 'Prenume',
             'email' => 'Email',
-            'phone' => 'Phone',
-            'address' => 'Address',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'created_by' => 'Created By',
-            'updated_by' => 'Updated By',
+            'phone' => 'Telefon',
+            'address' => 'Adresa',
+            'created_at' => 'Data Creare',
+            'updated_at' => 'Ultima Modificre',
+            'created_by' => 'Creat De',
+            'updated_by' => 'Actualizat De',
         ];
     }
 public function behaviors()

@@ -57,14 +57,16 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             'id' => 'ID',
-            'username' => 'Username',
+            'username' => 'Utilizator',
             'email' => 'Email',
-            'password' => 'Password',
+            'password' => 'Parola',
             'password_hash' => 'Password Hash',
             'auth_key' => 'Auth Key',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'is_admin' => 'Is Admin',
+            'created_at' => 'Data Creare',
+            'updated_at' => 'Ultima Modificare',
+            'is_admin' => 'Administrator',
+            'created_by'=>'Creat De',
+            'updated_by'=>'Actualizat De'
         ];
     }
 
