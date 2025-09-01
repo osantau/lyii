@@ -91,11 +91,11 @@ $this->title = 'Autovehicule';
         'export' => [true],
         'exportConfig' => [
                  GridView::CSV => [
-            'label' => 'Export as CSV',
+            'label' => 'CSV',
             'filename' => 'My_CSV_Export',
         ],
         GridView::EXCEL => [
-            'label' => 'Export to Excel',
+            'label' => 'Excel',
             'filename' => 'My_Excel_Export',
         ],
                
