@@ -13,10 +13,11 @@ use yii\widgets\Pjax;
 $this->title = 'Conducatori Auto';
 // $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="driver-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
+<div class="row">
+<div class="col-12">
+ <div class="form-group">
+<h1><?= Html::encode($this->title) ?></h1>
+</div>
     <p>
         <?= Html::a('Adauga', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
@@ -36,7 +37,7 @@ $this->title = 'Conducatori Auto';
             'email:email',
             'phone',
             'address',
-            ['attribute' => 'created_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
+            ['attribute' => 'created_at', 'format' => ['datetime', 'php:d.m.Y']],
             ['attribute' => 'updated_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
             [
                 'attribute' => 'created_by',
@@ -53,13 +54,13 @@ $this->title = 'Conducatori Auto';
             [
                 'class' => ActionColumn::class,
                 'template'=>'{update} {delete}',
+                'contentOptions' => ['style' => 'width:50px; text-align:center;'],
                   'buttons' => [
                 'delete' => function ($url, $model, $key) {
-                    return Html::a('<i class="fas fa-trash"></i>', $url, [
+                    return Html::a('<span style="color:red;"><i class="fa-solid fa-trash fa-xs"></i></span>', $url, [
                         'title' => Yii::t('app', 'Delete'),
                         'data-confirm' => Yii::t('app', 'Sunteti sigur ca vreti sa stergeti '.$model->first_name.' - '.$model->last_name.'  ?'),
-                        'data-method' => 'post',
-                        'class' => 'btn btn-danger btn-sm', // your custom class
+                        'data-method' => 'post',                        
                     ]);
                 },
             ],
@@ -71,5 +72,5 @@ $this->title = 'Conducatori Auto';
     ]); ?>
 
     <?php Pjax::end(); ?>
-
+</div>
 </div>
