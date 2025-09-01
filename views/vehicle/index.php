@@ -4,8 +4,11 @@ use app\models\Vehicle;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
-use yii\grid\GridView;
+
 use yii\widgets\Pjax;
+use kartik\icons\Icon;
+Icon::map($this, Icon::FAB);
+Icon::map($this, Icon::FAS);
 /** @var yii\web\View $this */
 /** @var app\models\VehicleSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
@@ -20,15 +23,11 @@ $this->title = 'Autovehicule';
     <p>
         <?= Html::a('Adauga', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
-    <?php Pjax::begin(); ?>
+    
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+    <?php 
+    $gridColumns=[
+            ['class' => 'kartik\grid\SerialColumn'],
 
             // 'id',
             'regno',
@@ -63,9 +62,33 @@ $this->title = 'Autovehicule';
                         return Url::toRoute([$action, 'id' => $model->id]);
                     },
             ],
-        ],
+        ];
+
+    ?>
+    <?= \kartik\grid\GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,         
+        'toolbar' =>  [                
+        '{export}',              
+            ],                  
+        'pjax' => true, 
+        'responsive'=>true,
+        'bordered' => true,        
+        'floatHeader' => true,
+        'columns' => $gridColumns,
+        'panel' => [
+        'type' => \kartik\grid\GridView::TYPE_PRIMARY,  
+    'pager' => [                        // Custom pagination options
+        'firstPageLabel' => Icon::show('angle-double-left') . ' First',
+        'lastPageLabel'  => 'Last ' . Icon::show('angle-double-right'),
+        'prevPageLabel'  => Icon::show('angle-left'),
+        'nextPageLabel'  => Icon::show('angle-right'),
+        'maxButtonCount' => 10,
+        'class' => \yii\bootstrap5\LinkPager::class, // Optional: use Bootstrap 5 pager
+    ],      
+    ],
     ]); ?>
 
-    <?php Pjax::end(); ?>
+    
 
 </div>

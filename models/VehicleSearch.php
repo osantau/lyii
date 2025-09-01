@@ -5,6 +5,7 @@ namespace app\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Vehicle;
+use Yii;
 
 /**
  * VehicleSearch represents the model behind the search form of `app\models\Vehicle`.
@@ -47,6 +48,7 @@ class VehicleSearch extends Vehicle
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination'=>[ 'pageSize' => Yii::$app->params['defaultPageSize'],],
         ]);
 
         $this->load($params, $formName);
