@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use kartik\export\ExportMenu;
+use \kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\icons\Icon;
 Icon::map($this, Icon::FAB);
@@ -67,7 +68,7 @@ $this->title = 'Autovehicule';
 
     ?>
      <?php Pjax::begin(); ?>
-    <?= \kartik\grid\GridView::widget([
+    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,         
         'toolbar' =>  [   
@@ -75,24 +76,25 @@ $this->title = 'Autovehicule';
         '{export}',     
         '{toggleData}'         
             ],
-        'export'=>[
-             'exportConfig' => [
-                 \kartik\grid\GridView::EXCEL => [
-                'label' => 'Export to Excel 2007+',
-                'icon' => Icon::show('file-excel'),
-                'filename' => 'grid-exportx', // file name without extension
-                'showPageSummary' => false,
-                'mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'extension' => 'xlsx', // force Excel 2007+ format
-            ],
+        'export' => [true],
+        'exportConfig' => [
+                 GridView::CSV => [
+            'label' => 'Export as CSV',
+            'filename' => 'My_CSV_Export',
         ],
-        ],                      
+        GridView::EXCEL => [
+            'label' => 'Export to Excel',
+            'filename' => 'My_Excel_Export',
+        ],
+               
+        ],
+                              
         'pjax' => true, 
         'responsive'=>true,
         'bordered' => true,        
         'columns' => $gridColumns,
         'panel' => [
-        'type' => \kartik\grid\GridView::TYPE_PRIMARY,  
+        'type' => GridView::TYPE_PRIMARY,  
         'pager' => [                        // Custom pagination options
         'firstPageLabel' => Icon::show('angle-double-left') . ' First',
         'lastPageLabel'  => 'Last ' . Icon::show('angle-double-right'),
