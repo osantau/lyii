@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use \kartik\grid\GridView;
+use \kartik\export\ExportMenu;
 use yii\widgets\Pjax;
 use kartik\icons\Icon;
 Icon::map($this, Icon::FAB);
@@ -66,14 +67,26 @@ $this->title = 'Autovehicule';
         ];
 
     ?>
-     <?php Pjax::begin(); ?>
+    <?php Pjax::begin(); ?>
+    <?php $full_export =  
+    ExportMenu::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => $gridColumns,
+    'target' => ExportMenu::TARGET_BLANK, // open in new tab
+    'fontAwesome' => true,
+    'dropdownOptions' => [
+        'label' => 'Full Export',
+        'class' => 'btn btn-outline-secondary'
+    ],
+]);
+    ?>     
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,         
         'toolbar' =>  [   
-            ['content'=>Html::a('<i class="fas fa-repeat"></i>', ['/vehicle'], ['data-pjax'=>0,'class'=>'btn btn-default', 'title'=>'Reset Grid'])],             
+            ['content'=>$full_export,Html::a('<i class="fas fa-repeat"></i>', ['/vehicle'], ['data-pjax'=>0,'class'=>'btn btn-default', 'title'=>'Reset Grid'])],             
         '{export}',     
-        '{toggleData}'         
+        // '{toggleData}'         
             ],
         'export' => [true],
         'exportConfig' => [
