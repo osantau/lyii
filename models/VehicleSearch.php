@@ -12,6 +12,8 @@ use Yii;
  */
 class VehicleSearch extends Vehicle
 {
+    public $createdByName;
+    public $updatedByName;
     /**
      * {@inheritdoc}
      */
@@ -19,7 +21,7 @@ class VehicleSearch extends Vehicle
     {
         return [
             [['id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-            [['regno'], 'safe'],
+            [['regno','createdByName','updatedByName'], 'safe'],
         ];
     }
 
@@ -43,6 +45,7 @@ class VehicleSearch extends Vehicle
     public function search($params, $formName = null)
     {
         $query = Vehicle::find();
+        $query->joinWith(['createdBy']);
 
         // add conditions that should always apply here
 
@@ -50,7 +53,13 @@ class VehicleSearch extends Vehicle
             'query' => $query,
             'pagination'=>[ 'pageSize' => Yii::$app->params['defaultPageSize'],],
         ]);
-
+        $dataProvider->sort->attributes['createdByName'] = [
+            'asc' => ['user.username' => SORT_ASC],
+            'desc' => ['user.username' => SORT_DESC],
+];       $dataProvider->sort->attributes['updatedByName'] = [
+            'asc' => ['user.username' => SORT_ASC],
+            'desc' => ['user.username' => SORT_DESC],
+];
         $this->load($params, $formName);
 
         if (!$this->validate()) {
@@ -69,6 +78,8 @@ class VehicleSearch extends Vehicle
         ]);
 
         $query->andFilterWhere(['like', 'regno', $this->regno]);
+        $query->andFilterWhere(['like', 'user.username', $this->createdByName]);
+        $query->andFilterWhere(['like', 'user.username', $this->updatedByName]);
 
         return $dataProvider;
     }

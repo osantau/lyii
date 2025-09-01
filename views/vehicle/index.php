@@ -8,6 +8,9 @@ use \kartik\grid\GridView;
 use \kartik\export\ExportMenu;
 use yii\widgets\Pjax;
 use kartik\icons\Icon;
+use kartik\select2\Select2;
+use app\models\User;
+use yii\helpers\ArrayHelper;
 Icon::map($this, Icon::FAB);
 Icon::map($this, Icon::FAS);
 /** @var yii\web\View $this */
@@ -36,16 +39,12 @@ $this->title = 'Autovehicule';
           ['attribute' => 'created_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
           ['attribute' => 'updated_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
               [
-                'attribute' => 'created_by',
-                'value' => function ($model) {
-                        return $model->createdBy->username ?? null;
-                    },
+                'attribute' => 'createdByName','label'=>'Creat De',
+                'value' => 'createdBy.username',
             ],
             [
-                'attribute' => 'updated_by',
-                'value' => function ($model) {
-                        return $model->updatedBy->username ?? null;
-                    },
+                'attribute' => 'updatedByName','label'=>'Actualizat De',
+                'value' => 'updatedBy.username',
             ],
              [
                 'class' => ActionColumn::class,
@@ -84,8 +83,9 @@ $this->title = 'Autovehicule';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,         
         'toolbar' =>  [   
-            ['content'=>$full_export,Html::a('<i class="fas fa-repeat"></i>', ['/vehicle'], ['data-pjax'=>0,'class'=>'btn btn-default', 'title'=>'Reset Grid'])],             
+            ['content'=>Html::a('<i class="fas fa-repeat"></i>', ['/vehicle'], ['data-pjax'=>0,'class'=>'btn btn-default', 'title'=>'Reset Grid'])],             
         '{export}',     
+        $full_export,
         // '{toggleData}'         
             ],
         'export' => [true],
