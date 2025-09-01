@@ -4,7 +4,7 @@ use app\models\Vehicle;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
-
+use kartik\export\ExportMenu;
 use yii\widgets\Pjax;
 use kartik\icons\Icon;
 Icon::map($this, Icon::FAB);
@@ -25,6 +25,7 @@ $this->title = 'Autovehicule';
     </p>
     
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
     <?php 
     $gridColumns=[
             ['class' => 'kartik\grid\SerialColumn'],
@@ -65,20 +66,34 @@ $this->title = 'Autovehicule';
         ];
 
     ?>
+     <?php Pjax::begin(); ?>
     <?= \kartik\grid\GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,         
-        'toolbar' =>  [                
-        '{export}',              
-            ],                  
+        'toolbar' =>  [   
+            ['content'=>Html::a('<i class="fas fa-repeat"></i>', ['/vehicle'], ['data-pjax'=>0,'class'=>'btn btn-default', 'title'=>'Reset Grid'])],             
+        '{export}',     
+        '{toggleData}'         
+            ],
+        'export'=>[
+             'exportConfig' => [
+                 \kartik\grid\GridView::EXCEL => [
+                'label' => 'Export to Excel 2007+',
+                'icon' => Icon::show('file-excel'),
+                'filename' => 'grid-exportx', // file name without extension
+                'showPageSummary' => false,
+                'mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'extension' => 'xlsx', // force Excel 2007+ format
+            ],
+        ],
+        ],                      
         'pjax' => true, 
         'responsive'=>true,
         'bordered' => true,        
-        'floatHeader' => true,
         'columns' => $gridColumns,
         'panel' => [
         'type' => \kartik\grid\GridView::TYPE_PRIMARY,  
-    'pager' => [                        // Custom pagination options
+        'pager' => [                        // Custom pagination options
         'firstPageLabel' => Icon::show('angle-double-left') . ' First',
         'lastPageLabel'  => 'Last ' . Icon::show('angle-double-right'),
         'prevPageLabel'  => Icon::show('angle-left'),
@@ -89,6 +104,6 @@ $this->title = 'Autovehicule';
     ],
     ]); ?>
 
-    
+        <?php Pjax::end(); ?>
 
 </div>
