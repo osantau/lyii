@@ -11,7 +11,7 @@ use yii\widgets\Pjax;
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Utilizatori';
-// $this->params['breadcrumbs'][] = $this->title;
+//  $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">        
     <h1><?= Html::encode($this->title) ?></h1>
