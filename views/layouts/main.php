@@ -57,15 +57,13 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     NavBar::end();
     ?>
 </header>
-
-    <div class="container-fluid">
+    <div class="container-fluid mt-5 pt-2">
         <?php if (!empty($this->params['breadcrumbs'])): ?>
             <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
         <?php endif ?>
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>
-
 
 <footer id="footer" class="mt-auto py-3 bg-light">
     <div class="container">
