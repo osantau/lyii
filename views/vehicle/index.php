@@ -23,10 +23,6 @@ $this->title = 'Autovehicule';
 <div class="vehicle-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Adauga', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
     
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -81,9 +77,15 @@ $this->title = 'Autovehicule';
     ?>     
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,         
+        'filterModel' => $searchModel,
+        'toolbarContainerOptions' => [
+         'style' => 'margin: 4px; padding: 2px;'
+    ],         
         'toolbar' =>  [   
-            ['content'=>Html::a('<i class="fas fa-repeat"></i>', ['/vehicle'], ['data-pjax'=>0,'class'=>'btn btn-default', 'title'=>'Reset Grid'])],             
+            ['content'=>Html::a('<i class="bi bi-plus"></i> Adauga', ['create'], [
+                    'class' => 'btn btn-success',
+                    'title' => 'Adauga'
+                ]) ,Html::a('<i class="fas fa-repeat"></i>', ['/vehicle'], ['data-pjax'=>0,'class'=>'btn btn-default', 'title'=>'Reset Grid'])],             
         '{export}',     
         $full_export,
         // '{toggleData}'         
