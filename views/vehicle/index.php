@@ -38,10 +38,10 @@ $this->title = 'Autovehicule';
                 'attribute' => 'createdByName','label'=>'Creat De',
                 'value' => 'createdBy.username',
             ],
-            [
-                'attribute' => 'updatedByName','label'=>'Actualizat De',
-                'value' => 'updatedBy.username',
-            ],
+            // [
+            //     'attribute' => 'updatedByName','label'=>'Actualizat De',
+            //     'value' => 'updatedBy.username',
+            // ],
              [
                 'class' => ActionColumn::class,
                 'template'=>'{update} {delete}',

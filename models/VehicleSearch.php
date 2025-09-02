@@ -12,8 +12,7 @@ use Yii;
  */
 class VehicleSearch extends Vehicle
 {
-    public $createdByName;
-    public $updatedByName;
+    public $createdByName;    
     /**
      * {@inheritdoc}
      */
@@ -21,7 +20,7 @@ class VehicleSearch extends Vehicle
     {
         return [
             [['id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-            [['regno','createdByName','updatedByName'], 'safe'],
+            [['regno','createdByName'], 'safe'],
         ];
     }
 
@@ -56,10 +55,7 @@ class VehicleSearch extends Vehicle
         $dataProvider->sort->attributes['createdByName'] = [
             'asc' => ['user.username' => SORT_ASC],
             'desc' => ['user.username' => SORT_DESC],
-];       $dataProvider->sort->attributes['updatedByName'] = [
-            'asc' => ['user.username' => SORT_ASC],
-            'desc' => ['user.username' => SORT_DESC],
-];
+];      
         $this->load($params, $formName);
 
         if (!$this->validate()) {
@@ -78,8 +74,7 @@ class VehicleSearch extends Vehicle
         ]);
 
         $query->andFilterWhere(['like', 'regno', $this->regno]);
-        $query->andFilterWhere(['like', 'user.username', $this->createdByName]);
-        $query->andFilterWhere(['like', 'user.username', $this->updatedByName]);
+        $query->andFilterWhere(['like', 'user.username', $this->createdByName]);        
 
         return $dataProvider;
     }
