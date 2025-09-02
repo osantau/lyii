@@ -77,15 +77,13 @@ $this->title = 'Autovehicule';
     ?>     
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'toolbarContainerOptions' => [
-         'style' => 'margin: 4px; padding: 2px;'
-    ],         
+        'filterModel' => $searchModel,    
         'toolbar' =>  [   
-            ['content'=>Html::a('<i class="bi bi-plus"></i> Adauga', ['create'], [
+            ['content'=>Html::a('<i class="fas fa-plus"></i> Adauga', ['create'], [
                     'class' => 'btn btn-success',
                     'title' => 'Adauga'
-                ]) ,Html::a('<i class="fas fa-repeat"></i>', ['/vehicle'], ['data-pjax'=>0,'class'=>'btn btn-default', 'title'=>'Reset Grid'])],             
+                ]). Html::a('<i class="fas fa-repeat"></i>', ['/vehicle'], ['data-pjax'=>0,'class'=>'btn btn-outline-secondary', 'title'=>'Reset Grid'])
+            ],             
         '{export}',     
         $full_export,
         // '{toggleData}'         
