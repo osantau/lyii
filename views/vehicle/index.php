@@ -81,13 +81,7 @@ $this->title = 'Autovehicule';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,    
         'toolbar' =>  [   
-            ['content'=>
-            Html::button('<i class="fas fa-plus"></i> Test Modal', [
-                    'value' => Url::to(['vehicle/create']),
-                    'class' => 'btn btn-success',
-                    'id' => 'modalButton'
-                ])
-            .Html::a('<i class="fas fa-plus"></i> Adauga', ['create'], [
+            ['content'=>Html::a('<i class="fas fa-plus"></i> Adauga', ['create'], [
                     'class' => 'btn btn-success',
                     'title' => 'Adauga'
                 ]). Html::a('<i class="fas fa-repeat"></i>', ['/vehicle'], ['data-pjax'=>0,'class'=>'btn btn-outline-secondary', 'title'=>'Reset Grid'])
