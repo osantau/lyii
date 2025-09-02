@@ -11,6 +11,8 @@ use kartik\icons\Icon;
 use kartik\select2\Select2;
 use app\models\User;
 use yii\helpers\ArrayHelper;
+use yii\bootstrap5\Modal;
+
 Icon::map($this, Icon::FAB);
 Icon::map($this, Icon::FAS);
 /** @var yii\web\View $this */
@@ -79,7 +81,13 @@ $this->title = 'Autovehicule';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,    
         'toolbar' =>  [   
-            ['content'=>Html::a('<i class="fas fa-plus"></i> Adauga', ['create'], [
+            ['content'=>
+            Html::button('<i class="fas fa-plus"></i> Test Modal', [
+                    'value' => Url::to(['vehicle/create']),
+                    'class' => 'btn btn-success',
+                    'id' => 'modalButton'
+                ])
+            .Html::a('<i class="fas fa-plus"></i> Adauga', ['create'], [
                     'class' => 'btn btn-success',
                     'title' => 'Adauga'
                 ]). Html::a('<i class="fas fa-repeat"></i>', ['/vehicle'], ['data-pjax'=>0,'class'=>'btn btn-outline-secondary', 'title'=>'Reset Grid'])
@@ -117,7 +125,25 @@ $this->title = 'Autovehicule';
     ],      
     ],
     ]); ?>
+    <?php
+Modal::begin([
+    'title' => '<h4>Adauga</h4>',
+    'id' => 'modal',
+    'size' => 'modal-lg',
+]);
 
+echo "<div id='modalContent'></div>"; 
+
+Modal::end(); 
+$this->registerJs("
+    $('#modalButton').click(function(){
+        $('#modal').modal('show')
+            .find('#modalContent')
+            .load($(this).attr('value'));
+    });
+");
+
+?>
         <?php Pjax::end(); ?>
 
 </div>

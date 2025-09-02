@@ -77,6 +77,13 @@ class VehicleController extends Controller
             $model->loadDefaultValues();
         }
 
+        if ($this->request->isAjax)
+        {
+            return $this->renderAjax('create', [
+            'model' => $model,
+            ]);
+        }
+
         return $this->render('create', [
             'model' => $model,
         ]);
