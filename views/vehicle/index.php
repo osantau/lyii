@@ -35,7 +35,7 @@ $this->title = 'Autovehicule';
             // 'id',
             'regno',
           ['attribute' => 'created_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
-          ['attribute' => 'updated_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
+          // ['attribute' => 'updated_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
               [
                 'attribute' => 'createdByName','label'=>'Creat De',
                 'value' => 'createdBy.username',
