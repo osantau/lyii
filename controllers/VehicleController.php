@@ -7,6 +7,7 @@ use app\models\VehicleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * VehicleController implements the CRUD actions for Vehicle model.
@@ -27,7 +28,17 @@ class VehicleController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
-            ]
+            ],
+             ['access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        // allow only the specific user (by username)
+                        'allow' => true,
+                        'roles' => ['@'], // logged-in users                        
+                    ],
+                ],
+            ],],
         );
     }
 
