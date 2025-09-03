@@ -3,7 +3,7 @@
 use app\models\Vehicle;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\grid\ActionColumn;
+use kartik\grid\ActionColumn;
 use \kartik\grid\GridView;
 use \kartik\export\ExportMenu;
 use yii\widgets\Pjax;
@@ -45,13 +45,14 @@ $this->title = 'Autovehicule';
             //     'value' => 'updatedBy.username',
             // ],
              [
+                'header'=>'Actiuni',
                 'class' => ActionColumn::class,
                 'template'=>'{update} {delete}',
                  'contentOptions' => ['style' => 'width:50px; text-align:center;'],
                 'buttons' => [
                 'delete' => function ($url, $model, $key) {
                     return Html::a('<span style="color:red;"><i class="fa-solid fa-trash fa-xs"></i></span>', $url, [
-                        'title' => 'Sterge',
+                        'title' => 'Delete',
                         'data-confirm' => 'Sunteti sigur ca vreti sa stergeti <b>'.$model->regno.'</b> ?',
                         'data-method' => 'post',                        
                     ]);

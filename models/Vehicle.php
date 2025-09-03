@@ -37,6 +37,7 @@ class Vehicle extends \yii\db\ActiveRecord
     {
         return [
             [['regno'], 'required'],
+            [['regno'], 'unique'],
             [['created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['regno'], 'string', 'max' => 50],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
