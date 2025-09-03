@@ -87,11 +87,11 @@ $this->title = 'Autovehicule';
                     'title' => 'Adauga'
                 ]). Html::a('<i class="fas fa-repeat"></i>', ['/vehicle'], ['data-pjax'=>0,'class'=>'btn btn-outline-secondary', 'title'=>'Reset Grid'])
             ],             
-        '{export}',     
-        $full_export,
+        /* '{export}',     
+        $full_export, */
         // '{toggleData}'         
             ],
-        'export' => [true],
+         'export' => [true],
         'exportConfig' => [
                  GridView::CSV => [
             'label' => 'CSV',
