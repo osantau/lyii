@@ -17,6 +17,7 @@ use Yii;
  *
  * @property User $createdBy
  * @property User $updatedBy
+ * @property string $info
  */
 class Vehicle extends \yii\db\ActiveRecord
 {
@@ -40,6 +41,7 @@ class Vehicle extends \yii\db\ActiveRecord
             [['regno'], 'unique'],
             [['created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['regno'], 'string', 'max' => 50],
+            [['info'],'string', 'max'=>100],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updated_by' => 'id']],
         ];
@@ -57,6 +59,7 @@ class Vehicle extends \yii\db\ActiveRecord
             'updated_at' => 'Ultima Modificare',
             'created_by' => 'Creat De',
             'updated_by' => 'Actualizat De',
+            'info'=> 'Info',
         ];
     }
   public function behaviors()
