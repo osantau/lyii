@@ -45,6 +45,10 @@ $this->title = 'Autovehicule';
                         'data-id' => $model->id,
                         'data-pjax' => 0,
                         'style' => 'cursor:pointer; color:#0d6efd; text-decoration:underline;',
+                        'data-bs-toggle' => 'popover',
+                        'data-bs-trigger' => 'hover focus',
+                        'data-bs-placement' => 'top',                        
+                        'data-bs-content'=>"Info: $model->info",
                     ]
                 );
             },
@@ -170,6 +174,8 @@ jQuery(document).on('pjax:end', function() {
 });
 JS;
 $this->registerJs($js);
+$this->registerJs("var popoverTriggerList=[].slice.call(document.querySelectorAll('[data-bs-toggle=\"popover\"]'));popoverTriggerList.map(function(e){return new bootstrap.Popover(e)});");
+
 
 ?>
         <?php Pjax::end(); ?>

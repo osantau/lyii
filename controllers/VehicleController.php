@@ -156,7 +156,8 @@ class VehicleController extends Controller
         $model=$this->findModel($id);
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
         // after save, close modal & refresh GridView
-        return '<script>jQuery("#modal").modal("hide"); $.pjax.reload({container:"#w0-pjax"});</script>';
+        // return '<script>jQuery("#modal").modal("hide"); $.pjax.reload({container:"#grid-pjax"}); console.log("aa");</script>';
+        return $this->redirect(['index']);
     }
         return $this->renderAjax('info', [
         'model' => $model,
