@@ -20,7 +20,7 @@ class VehicleSearch extends Vehicle
     {
         return [
             [['id', 'created_by', 'updated_by'], 'integer'],
-            [['regno','createdByName'], 'safe'],
+            // [['regno','createdByName'], 'safe'],
         ];
     }
 
