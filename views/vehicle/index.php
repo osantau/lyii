@@ -139,7 +139,7 @@ $this->title = 'Autovehicule';
     ]); ?>
     <?php
 Modal::begin([
-    'title' => '<h4>Info</h4>',
+    'title' => '<h4>Editare Info</h4>',
     'id' => 'modal',
     'size' => Modal::SIZE_LARGE,
 ]);

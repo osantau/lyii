@@ -7,7 +7,7 @@ use yii\bootstrap5\ActiveForm;
 ?>
 
 <div class="vehicle-form">
-
+    <h4>Vehicul: <?= $model->regno?></h4>
     <?php $form = ActiveForm::begin(['id'=>'update-form','enableAjaxValidation'=>true]); ?>
 
     <?= $form->field($model, 'info')->textarea(['rows'=>3, 'cols'=>10]) ?>    
