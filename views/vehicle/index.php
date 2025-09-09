@@ -38,7 +38,7 @@ $this->title = 'Autovehicule';
             'format'=>'raw',
              'value' => function ($model) {
                 return Html::a(
-                    $model->regno,
+                    '<b>'.$model->regno.'</b>',
                     Url::to(['vehicle/info', 'id' => $model->id]), // action returning partial view
                     [
                         'class' => 'custom-click',
@@ -54,6 +54,7 @@ $this->title = 'Autovehicule';
             },
 
           ],
+          ['attribute'=>'status','value'=>function($model){return $model->getStatusName();}, 'filter' => \app\models\Vehicle::getStatusList(),],
           ['attribute' => 'created_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
           // ['attribute' => 'updated_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
               [
@@ -129,6 +130,15 @@ $this->title = 'Autovehicule';
         'responsive'=>true,
         'bordered' => true,        
         'columns' => $gridColumns,
+          'rowOptions' => function($model, $key, $index, $grid) {
+        /** @var $model \app\models\Post */
+        if ($model->status == \app\models\Vehicle::STATUS_LIBER) {
+            return ['class' => 'table-success']; // red background
+        } elseif ($model->status == \app\models\Vehicle::STATUS_OCUPAT) {
+            return ['class' => 'table-warning']; // green background
+        }
+        return [];
+    },
         'panel' => [
         'type' => GridView::TYPE_PRIMARY,  
         'pager' => [                        // Custom pagination options

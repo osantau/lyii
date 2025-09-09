@@ -22,6 +22,8 @@ use Yii;
 class Vehicle extends \yii\db\ActiveRecord
 {
 
+    const STATUS_LIBER=0;
+    const STATUS_OCUPAT=1;
 
     /**
      * {@inheritdoc}
@@ -44,6 +46,8 @@ class Vehicle extends \yii\db\ActiveRecord
             [['info'],'string', 'max'=>100],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updated_by' => 'id']],
+            [['status'],'integer'],
+            [['status'],'default','value'=>self::STATUS_LIBER],
         ];
     }
 
@@ -104,6 +108,17 @@ class Vehicle extends \yii\db\ActiveRecord
             return true;
         }
         return false;
+    }
+
+    public static function getStatusList() {
+        return[
+            self::STATUS_LIBER=>'Liber',
+            self::STATUS_OCUPAT=> 'In Cursa',
+        ];
+    }
+
+    public function getStatusName(){
+        return self::getStatusList()[$this->status]??'Necunoscut';
     }
 
 }
