@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use Yii;
 
 /**
  * VehicleController implements the CRUD actions for Vehicle model.
@@ -148,5 +149,17 @@ class VehicleController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionInfo($id)
+    {
+        $model=$this->findModel($id);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        // after save, close modal & refresh GridView
+        return '<script>jQuery("#modal").modal("hide"); $.pjax.reload({container:"#w0-pjax"});</script>';
+    }
+        return $this->renderAjax('info', [
+        'model' => $model,
+    ]);
     }
 }

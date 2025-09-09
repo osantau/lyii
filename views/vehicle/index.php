@@ -33,7 +33,23 @@ $this->title = 'Autovehicule';
             ['class' => 'kartik\grid\SerialColumn'],
 
             // 'id',
-            'regno',
+          [
+            'attribute'=> 'regno',
+            'format'=>'raw',
+             'value' => function ($model) {
+                return Html::a(
+                    $model->regno,
+                    Url::to(['vehicle/info', 'id' => $model->id]), // action returning partial view
+                    [
+                        'class' => 'custom-click',
+                        'data-id' => $model->id,
+                        'data-pjax' => 0,
+                        'style' => 'cursor:pointer; color:#0d6efd; text-decoration:underline;',
+                    ]
+                );
+            },
+
+          ],
           ['attribute' => 'created_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
           // ['attribute' => 'updated_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
               [
@@ -44,7 +60,7 @@ $this->title = 'Autovehicule';
             //     'attribute' => 'updatedByName','label'=>'Actualizat De',
             //     'value' => 'updatedBy.username',
             // ],
-             [
+          /*   [
                 'header'=>'Actiuni',
                 'class' => ActionColumn::class,
                 'template'=>'{update} {delete}',
@@ -61,12 +77,13 @@ $this->title = 'Autovehicule';
                 'urlCreator' => function ($action, Vehicle $model, $key, $index, $column) {
                         return Url::toRoute([$action, 'id' => $model->id]);
                     },
-            ],
+            ], */
         ];
 
     ?>
-    <?php Pjax::begin(); ?>
-    <?php $full_export =  
+    <?php Pjax::begin(['id'=>'grid-pjax']); 
+    /*
+    $full_export =  
     ExportMenu::widget([
     'dataProvider' => $dataProvider,
     'columns' => $gridColumns,
@@ -76,7 +93,7 @@ $this->title = 'Autovehicule';
         'label' => 'Full Export',
         'class' => 'btn btn-outline-secondary'
     ],
-]);
+]);*/
     ?>     
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -122,21 +139,37 @@ $this->title = 'Autovehicule';
     ]); ?>
     <?php
 Modal::begin([
-    'title' => '<h4>Adauga</h4>',
+    'title' => '<h4>Info</h4>',
     'id' => 'modal',
-    'size' => 'modal-lg',
+    'size' => Modal::SIZE_LARGE,
 ]);
 
 echo "<div id='modalContent'></div>"; 
-
 Modal::end(); 
-$this->registerJs("
-    $('#modalButton').click(function(){
-        $('#modal').modal('show')
+$js = <<<JS
+function initCustomClick() {
+    jQuery(document).off('click', '.custom-click').on('click', '.custom-click', function(e) {
+        e.preventDefault();
+        let url = jQuery(this).attr('href');
+        let title = jQuery(this).text();
+
+        jQuery('#modal').modal('show')
             .find('#modalContent')
-            .load($(this).attr('value'));
+            .load(url);
+
+        jQuery('#modalTitle').text(title);
     });
-");
+}
+
+// Initialize on page load
+initCustomClick();
+
+// Re-initialize after PJAX reload
+jQuery(document).on('pjax:end', function() {
+    initCustomClick();
+});
+JS;
+$this->registerJs($js);
 
 ?>
         <?php Pjax::end(); ?>
