@@ -11,9 +11,10 @@ use yii\bootstrap5\ActiveForm;
 <div class="vehicle-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'regno')->textInput(['maxlength' => true,'oninput'=>'this.value=this.value.toUpperCase()','autofocus'=>true]) ?>
-
+<div class="form-group">
+    <?= $form->field($model, 'regno')->textInput(['maxlength' => true,'oninput'=>'this.value=this.value.toUpperCase()','autofocus'=>true
+    ,'class'=>'form-control w-25']) ?>
+</div>
     <div class="form-group">
         <?= Html::submitButton('Salveaza', ['class' => 'btn btn-success']) ?>
           <?= Html::a('Renunta',['index'], ['class' => 'btn btn-primary']) ?>

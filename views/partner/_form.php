@@ -12,10 +12,11 @@ use yii\bootstrap5\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
     <?= $form->errorSummary($model) ?>
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true,'autofocus'=>true]) ?>
-
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+    <?= $form->field($model, 'name')->textInput(['maxlength' => true,'autofocus'=>true,'class'=>'form-control w-25']) ?>
+</div>
+    <div class="form-group">
+        <?= Html::submitButton('Salveaza', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -15,20 +15,23 @@ use kartik\select2\Select2;
 <div class="transport-order-form">
 
     <?php $form = ActiveForm::begin(); ?>
-        <?= $form->errorSummary($model) ?>
-    <?= $form->field($model, 'documentno')->textInput(['maxlength' => true,'autofocus'=>true]) ?>
-
+        <?= $form->errorSummary($model) ?> 
+        <div class="form-group">
+    <?= $form->field($model, 'documentno')->textInput(['maxlength' => true,'autofocus'=>true,'class'=>'form-control w-25']) ?>
+</div>
+<div class="form-group w-25">
     <?= $form->field($model, 'dateordered')->widget(DatePicker::class,
     ['options'=>['placeholder'=>'Selectati o data...'],
         'pluginOptions'=>['autoclose'=>true,'format'=>'yyyy-mm-dd','todayHighlight' => true],
     ]) ?>
-
+</div>
+<div class="form-group w-25" >
     <?= $form->field($model, 'partner_id')->widget(Select2::class,
     ['data'=>ArrayHelper::map(Partner::find()->all(),'id','name'),
     'options'=>['placeholder'=>'Selectati un partener...'],
     'pluginOptions'=>['allowClear'=>true]
 ],) ?>
-    
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
