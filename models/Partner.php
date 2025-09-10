@@ -1,7 +1,8 @@
 <?php
 
 namespace app\models;
-
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use Yii;
 
 /**
@@ -35,7 +36,8 @@ class Partner extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'required'],
+            [['name'], 'required'],
+            [['name'], 'unique'],
             [['created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['name'], 'string', 'max' => 100],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
@@ -50,14 +52,20 @@ class Partner extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'created_at' => 'Created At',
+            'name' => 'Denumire',
+            'created_at' => 'Data Creare',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
         ];
     }
-
+public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
+            BlameableBehavior::class,
+        ];
+    }
     /**
      * Gets query for [[CreatedBy]].
      *
