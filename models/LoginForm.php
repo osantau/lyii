@@ -49,7 +49,7 @@ class LoginForm extends Model
             $user = $this->getUser();
 
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
+                $this->addError($attribute, 'Utilizator sau parola incorecte.');
             }
         }
     }
@@ -79,4 +79,13 @@ class LoginForm extends Model
 
         return $this->_user;
     }
+
+    public function attributeLabels()
+{
+    return [
+        'username' => 'Utilizator',   // change "Username" to "Email Address"
+        'password' => 'Parola',      // change "Password" to "Secret Key"
+        'rememberMe' => 'Ramai autentificat',
+    ];
+}
 }

@@ -11,7 +11,7 @@ use yii\widgets\Pjax;
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Firme';
-$this->params['breadcrumbs'][] = $this->title;
+// $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="partner-index">
 
