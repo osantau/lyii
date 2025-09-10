@@ -23,7 +23,8 @@
         "kartik-v/yii2-icons": "@dev",
         "kartik-v/yii2-export": "^1.4",
         "kartik-v/yii2-mpdf": "^1.0",
-        "kartik-v/yii2-dynagrid": "^1.5"
+        "kartik-v/yii2-dynagrid": "^1.5",
+        "kartik-v/yii2-widget-datepicker": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
