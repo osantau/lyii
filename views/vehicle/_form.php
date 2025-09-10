@@ -12,7 +12,7 @@ use yii\bootstrap5\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'regno')->textInput(['maxlength' => true,'oninput'=>'this.value=this.value.toUpperCase()']) ?>
+    <?= $form->field($model, 'regno')->textInput(['maxlength' => true,'oninput'=>'this.value=this.value.toUpperCase()','autofocus'=>true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Salveaza', ['class' => 'btn btn-success']) ?>

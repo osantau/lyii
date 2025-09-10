@@ -16,7 +16,7 @@ use kartik\select2\Select2;
 
     <?php $form = ActiveForm::begin(); ?>
         <?= $form->errorSummary($model) ?>
-    <?= $form->field($model, 'documentno')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'documentno')->textInput(['maxlength' => true,'autofocus'=>true]) ?>
 
     <?= $form->field($model, 'dateordered')->widget(DatePicker::class,
     ['options'=>['placeholder'=>'Selectati o data...'],

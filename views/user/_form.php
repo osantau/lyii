@@ -13,7 +13,7 @@ use app\models\User;
    
     <?php $form = ActiveForm::begin(); ?>
  <?= $form->errorSummary($model) ?>
-    <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'username')->textInput(['maxlength' => true,'autofocus'=>true]) ?>
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
