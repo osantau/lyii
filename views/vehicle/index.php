@@ -19,7 +19,7 @@ Icon::map($this, Icon::FAS);
 /** @var app\models\VehicleSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Autovehicule';
+$this->title = 'Camioane';
 // $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="vehicle-index">

@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Vehicle $model */
 
-$this->title = 'Adauga autovehicul';
+$this->title = 'Adauga camion';
 ?>
 <div class="vehicle-create">
 

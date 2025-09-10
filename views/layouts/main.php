@@ -40,7 +40,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'items' => [
             // ['label' => 'Acasa', 'url' => ['/site/index']],  
             // !Yii::$app->user->isGuest ?['label' => 'Conducatori auto', 'url' => ['/driver']]:'', 
-            !Yii::$app->user->isGuest ?['label' => 'Autovehicule', 'url' => ['/vehicle']]:'', 
+            !Yii::$app->user->isGuest ?['label' => 'Camioane', 'url' => ['/vehicle']]:'', 
             !Yii::$app->user->isGuest ?['label' => 'Firme', 'url' => ['/partner']]:'', 
             !Yii::$app->user->isGuest ?['label' => 'Comenzi', 'url' => ['/transport-order']]:'', 
             ( !Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin())?  ['label' => 'Utilizatori', 'url' => ['/user']]:'',                        
