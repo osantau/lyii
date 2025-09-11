@@ -152,7 +152,7 @@ $this->title = 'Camioane';
             'attribute' => 'imp_adr_start',   // your model attribute
             'editableOptions' => function ($model, $key, $index) {
                 return [
-                    'header' => 'Adresa Incarcare Intern',
+                    'header' => 'Adresa Incarcare Import',
                     'size'   => 'md',
                      'asPopover' => true,
                     'inputType' => Editable::INPUT_TEXTAREA,
@@ -247,6 +247,22 @@ $this->title = 'Camioane';
         /* '{export}',     
         $full_export, */
         // '{toggleData}'         
+            ],
+            'beforeHeader' => [
+                [
+                    'columns' => [
+                        ['content' => '', 'options' => ['colspan' => 1]],
+                        ['content' => '', 'options' => ['colspan' => 4, 'class' => 'text-center text-white bg-primary font-weight-bold']],
+                        ['content' => 'Export', 'options' => ['colspan' => 2, 'class'=> 'text-center text-white bg-primary font-weight-bold',
+                        ]],
+                        ['content' => 'Import', 'options' => ['colspan' => 2,'class'=>'text-center text-white bg-primary font-weight-bold']],
+                        ['content' => '', 'options' => ['colspan' => 2,'class'=>'text-center text-white bg-primary font-weight-bold']],
+                        
+                    ],
+                    'options' => ['class' => 'skip-export',
+                      //'style' => 'border-bottom: 1px solid;'
+                      ]
+                ]
             ],
          'export' => [true],
         'exportConfig' => [
