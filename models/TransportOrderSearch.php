@@ -54,6 +54,11 @@ class TransportOrderSearch extends TransportOrder
             'query' => $query,
         ]);
 
+        $dataProvider->sort->attributes['partnerName'] = [
+            'asc' => ['partner.name' => SORT_ASC],
+            'desc' => ['partner.name' => SORT_DESC],
+        ];
+
         $this->load($params, $formName);
 
         if (!$this->validate()) {
