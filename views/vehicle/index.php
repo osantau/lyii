@@ -12,6 +12,10 @@ use kartik\select2\Select2;
 use app\models\User;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap5\Modal;
+use kartik\editable\Editable;
+use kartik\grid\EditableColumn;
+use kartik\date\DatePicker;
+use yii\helpers\StringHelper;
 
 Icon::map($this, Icon::FAB);
 Icon::map($this, Icon::FAS);
@@ -55,6 +59,137 @@ $this->title = 'Camioane';
 
           ],
           ['attribute'=>'status','value'=>function($model){return $model->getStatusName();}, 'filter' => \app\models\Vehicle::getStatusList(),],
+            [
+            'class' => EditableColumn::class,
+            'attribute' => 'start_date',
+            'format' => ['date', 'php:d.m.Y'], // display format in Grid
+            'editableOptions' => function ($model, $key, $index) {
+                return [
+                    'header' => 'Data Incarcare',
+                    'size' => 'md',
+                    'inputType' => Editable::INPUT_WIDGET,
+                    'widgetClass' => DatePicker::class,
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true,
+                            'format' => 'yyyy-mm-dd',   // date format
+                            'todayHighlight' => true,
+                        ],
+                    ],
+                    'formOptions' => [
+                        'action' => ['vehicle/edit-start-date'] // ajax controller action
+                    ],
+                ];
+            },
+        ],
+               [
+            'class' => EditableColumn::class,
+            'attribute' => 'end_date',
+            'format' => ['date', 'php:d.m.Y'], // display format in Grid
+            'editableOptions' => function ($model, $key, $index) {
+                return [
+                    'header' => 'Data Descarcare',
+                    'size' => 'md',
+                    'inputType' => Editable::INPUT_WIDGET,
+                    'widgetClass' => DatePicker::class,
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true,
+                            'format' => 'yyyy-mm-dd',   // date format
+                            'todayHighlight' => true,
+                        ],
+                    ],
+                    'formOptions' => [
+                        'action' => ['vehicle/edit-end-date'] // ajax controller action
+                    ],
+                ];
+            },
+        ],
+            [
+            'class' => EditableColumn::class,
+            'attribute' => 'exp_adr_start',   // your model attribute
+            'editableOptions' => function ($model, $key, $index) {
+                return [
+                    'header' => 'Adresa Incarcare Export',
+                    'size'   => 'md',
+                     'asPopover' => true,
+                    'inputType' => Editable::INPUT_TEXTAREA,
+                    'options' => [
+                        'rows' => 5,
+                        'placeholder' => 'Introduceti Adresa Incarcare Export...',
+                    ],
+                    'formOptions' => [
+                        'action' => ['vehicle/edit-exp-adr-start'], // controller action
+                    ],
+                ];
+            },
+            'value'=>function($model){return StringHelper::truncate($model->exp_adr_start, 30);},
+            'format' => 'ntext', // so line breaks show properly in grid
+        ],
+            [
+            'class' => EditableColumn::class,
+            'attribute' => 'exp_adr_end',   // your model attribute
+            'editableOptions' => function ($model, $key, $index) {
+                return [
+                    'header' => 'Adresa Descarcare Export',
+                    'size'   => 'md',
+                     'asPopover' => true,
+                    'inputType' => Editable::INPUT_TEXTAREA,
+                    'options' => [
+                        'rows' => 5,
+                        'placeholder' => 'Introduceti Adresa Descarcare Export...',
+                    ],
+                    'formOptions' => [
+                        'action' => ['vehicle/edit-exp-adr-end'], // controller action
+                    ],
+                ];
+            },
+            'value'=>function($model){return StringHelper::truncate($model->exp_adr_end, 30);},
+            'format' => 'ntext', // so line breaks show properly in grid
+        ],
+            [
+            'class' => EditableColumn::class,
+            'attribute' => 'imp_adr_start',   // your model attribute
+            'editableOptions' => function ($model, $key, $index) {
+                return [
+                    'header' => 'Adresa Incarcare Intern',
+                    'size'   => 'md',
+                     'asPopover' => true,
+                    'inputType' => Editable::INPUT_TEXTAREA,
+                    'options' => [
+                        'rows' => 5,
+                        'placeholder' => 'Introduceti Adresa Incarare Import...',
+                    ],
+                    'formOptions' => [
+                        'action' => ['vehicle/edit-imp-adr-start'], // controller action
+                    ],
+                ];
+            },
+            'value'=>function($model){return StringHelper::truncate($model->imp_adr_start, 30);},
+            'format' => 'ntext', // so line breaks show properly in grid
+        ],
+              [
+            'class' => EditableColumn::class,
+            'attribute' => 'imp_adr_end',   // your model attribute
+            'editableOptions' => function ($model, $key, $index) {
+                return [
+                    'header' => 'Adresa Descarare Import',
+                    'size'   => 'md',
+                     'asPopover' => true,
+                    'inputType' => Editable::INPUT_TEXTAREA,
+                    'options' => [
+                        'rows' => 5,
+                        'placeholder' => 'Introduceti Adresa Descarcare Import...',
+                    ],
+                    'formOptions' => [
+                        'action' => ['vehicle/edit-imp-adr-end'], // controller action
+                    ],
+                ];
+            },
+            'value'=>function($model){return StringHelper::truncate($model->imp_adr_end, 30);},
+            'format' => 'ntext', // so line breaks show properly in grid
+        ],
+          
           ['attribute' => 'created_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
           // ['attribute' => 'updated_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
               [

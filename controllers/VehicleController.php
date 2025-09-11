@@ -163,4 +163,103 @@ class VehicleController extends Controller
         'model' => $model,
     ]);
     }
+
+    public function actionEditStartDate()
+{
+    $model = Vehicle::findOne(Yii::$app->request->post('editableKey'));
+    $out = ['output' => '', 'message' => ''];
+
+    if ($model !== null) {
+        $posted = current($_POST['Vehicle']);
+        $post = ['Vehicle' => $posted];
+        if ($model->load($post) && $model->save()) {
+            $out['output'] = Yii::$app->formatter->asDate($model->start_date, 'php:Y-m-d');
+        } else {
+            $out['message'] = 'Eroare salvare !';
+        }
+    }
+    return json_encode($out);
+}
+  public function actionEditEndDate()
+{
+    $model = Vehicle::findOne(Yii::$app->request->post('editableKey'));
+    $out = ['output' => '', 'message' => ''];
+
+    if ($model !== null) {
+        $posted = current($_POST['Vehicle']);
+        $post = ['Vehicle' => $posted];
+        if ($model->load($post) && $model->save()) {
+            $out['output'] = Yii::$app->formatter->asDate($model->end_date, 'php:Y-m-d');
+        } else {
+            $out['message'] = 'Eroare salvare !';
+        }
+    }
+    return json_encode($out);
+}
+
+public function actionEditExpAdrStart()
+{
+    $model = Vehicle::findOne(Yii::$app->request->post('editableKey'));
+    $out = ['output' => '', 'message' => ''];
+
+    if ($model !== null) {
+        $posted = current($_POST['Vehicle']);
+        $post = ['Vehicle' => $posted];
+        if ($model->load($post) && $model->save()) {
+            $out['output'] = $model->exp_adr_start; // return new value
+        } else {
+            $out['message'] = 'Eroare salvare !';
+        }
+    }
+    return json_encode($out);
+}
+public function actionEditExpAdrEnd()
+{
+    $model = Vehicle::findOne(Yii::$app->request->post('editableKey'));
+    $out = ['output' => '', 'message' => ''];
+
+    if ($model !== null) {
+        $posted = current($_POST['Vehicle']);
+        $post = ['Vehicle' => $posted];
+        if ($model->load($post) && $model->save()) {
+            $out['output'] = $model->exp_adr_end; // return new value
+        } else {
+            $out['message'] = 'Eroare salvare !';
+        }
+    }
+    return json_encode($out);
+}
+
+public function actionEditImpAdrStart()
+{
+    $model = Vehicle::findOne(Yii::$app->request->post('editableKey'));
+    $out = ['output' => '', 'message' => ''];
+
+    if ($model !== null) {
+        $posted = current($_POST['Vehicle']);
+        $post = ['Vehicle' => $posted];
+        if ($model->load($post) && $model->save()) {
+            $out['output'] = $model->imp_adr_start; // return new value
+        } else {
+            $out['message'] = 'Eroare salvare !';
+        }
+    }
+    return json_encode($out);
+}
+public function actionEditImpAdrEnd()
+{
+    $model = Vehicle::findOne(Yii::$app->request->post('editableKey'));
+    $out = ['output' => '', 'message' => ''];
+
+    if ($model !== null) {
+        $posted = current($_POST['Vehicle']);
+        $post = ['Vehicle' => $posted];
+        if ($model->load($post) && $model->save()) {
+            $out['output'] = $model->imp_adr_end; // return new value
+        } else {
+            $out['message'] = 'Eroare salvare !';
+        }
+    }
+    return json_encode($out);
+}
 }

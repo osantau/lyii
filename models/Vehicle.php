@@ -14,7 +14,12 @@ use Yii;
  * @property int $updated_at
  * @property int $created_by
  * @property int $updated_by
- *
+ * @property string|null $start_date
+ * @property string|null $end_date
+ * @property string|null $exp_adr_start
+ * @property string|null $exp_adr_end
+ * @property string|null $imp_adr_start
+ * @property string|null $imp_adr_end
  * @property User $createdBy
  * @property User $updatedBy
  * @property string $info
@@ -43,11 +48,13 @@ class Vehicle extends \yii\db\ActiveRecord
             [['regno'], 'unique'],
             [['created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['regno'], 'string', 'max' => 50],
-            [['info'],'string', 'max'=>100],
+            [['info','exp_adr_start', 'exp_adr_end', 'imp_adr_start', 'imp_adr_end'],'string', 'max'=>100],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updated_by' => 'id']],
             [['status'],'integer'],
             [['status'],'default','value'=>self::STATUS_LIBER],
+            [['start_date', 'end_date'], 'safe'],
+            [['info', 'start_date', 'end_date'], 'default', 'value' => null],
         ];
     }
 
@@ -64,6 +71,13 @@ class Vehicle extends \yii\db\ActiveRecord
             'created_by' => 'Creat De',
             'updated_by' => 'Actualizat De',
             'info'=> 'Info',
+            'status'=>'Stare',
+            'exp_adr_start' => 'Adresa Incarcare',
+            'exp_adr_end' => 'Adresa Descarcare',
+            'imp_adr_start' => 'Adresa Incarcare',
+            'imp_adr_end' => 'Adresa Descarcare',
+            'start_date' => 'Data Incarcare',
+            'end_date' => 'Data Descarcare'
         ];
     }
   public function behaviors()
