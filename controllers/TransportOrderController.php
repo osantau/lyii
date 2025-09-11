@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\TransportOrder;
 use app\models\TransportOrderSearch;
+use app\models\Vehicle;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -103,7 +104,25 @@ class TransportOrderController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        if($model!=null)
+        {
+            if($model->status===0)
+            {
+                $vehicle = Vehicle::findOne(['transport_order_id'=>$model->id]);
+                if($vehicle!=null) {
+                $vehicle->status=0;
+                $vehicle->transport_order_id=null;
+                $vehicle->start_date=null;
+                $vehicle->end_date=null;
+                $vehicle->exp_adr_start=null;
+                $vehicle->exp_adr_end=null;                
+                $vehicle->imp_adr_start=null;
+                $vehicle->imp_adr_end=null;                
+                $vehicle->info=null;
+                $vehicle->save();
+                }
+            } 
+        }
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }

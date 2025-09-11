@@ -123,15 +123,7 @@ class TransportOrder extends \yii\db\ActiveRecord
      
       if(parent::beforeSave($insert)){                       
          $this->dateordered =Yii::$app->formatter->asDatetime($this->dateordered,'php:Y-m-d');         
-         if($this->status!==0)
-            {
-                $vehicle = Vehicle::findOne(['transport_order_id'=>$this->id]);
-                if($vehicle!=null) {
-                $vehicle->status=0;
-                $vehicle->transport_order_id=null;
-                $vehicle->save();
-                }
-            }       
+               
         return true;     
     }            
         
