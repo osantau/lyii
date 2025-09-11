@@ -33,7 +33,9 @@ $this->title = 'Camioane';
     <h1><?= Html::encode($this->title) ?></h1>
     
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+  <?php Pjax::begin(['id'=>'grid-pjax']); 
 
+    ?>  
     <?php 
     $transport_orders = ArrayHelper::map(TransportOrder::find()->all(), 'id', 'documentno');
     $gridColumns=[
@@ -79,13 +81,53 @@ $this->title = 'Camioane';
                         'data' => $transport_orders, // data from Transport Order table
                         'options' => ['placeholder' => 'Selectati o comanda...'],
                         'pluginOptions' => ['allowClear' => true],
+                        'pluginEvents'=>[
+                            "change" => "function() {
+                            var value = $(this).val();                            
+                var row = $(this).closest('tr');
+                if(value!='') {
+                row.removeClass('table-success');
+                row.addClass('table-warning');
+                
+                } else{
+                    row.removeClass('table-warning');
+                    row.addClass('table-success');
+                }
+                    
+            }",
+                        ],
                     ],
                     'formOptions' => [
                         'action' => ['vehicle/edit-order'], // your AJAX save action
                     ],
                 ];
             },
-            'filter' => $transport_orders, // filter in grid header
+            //'filter' => $transport_orders, // filter in grid header
+            'enableSorting' => false, 
+        ],
+
+               [
+            'class' => EditableColumn::class,
+            'attribute' => 'start_date',
+            'format' => ['date', 'php:d.m.Y'], // display format in Grid
+            'editableOptions' => function ($model, $key, $index) {
+                return [
+                    'header' => 'Data Incarcare',
+                    'size' => 'md',
+                    'inputType' => Editable::INPUT_WIDGET,
+                    'widgetClass' => DatePicker::class,
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true,
+                            'format' => 'yyyy-mm-dd',   // date format
+                            'todayHighlight' => true,
+                        ],
+                    ],
+                    'formOptions' => [
+                        'action' => ['vehicle/edit-start-date'] // ajax controller action
+                    ],
+                ];
+            },
         ],
                [
             'class' => EditableColumn::class,
@@ -224,9 +266,6 @@ $this->title = 'Camioane';
                     },
             ], */
         ];
-
-    ?>
-    <?php Pjax::begin(['id'=>'grid-pjax']); 
     /*
     $full_export =  
     ExportMenu::widget([
@@ -239,7 +278,8 @@ $this->title = 'Camioane';
         'class' => 'btn btn-outline-secondary'
     ],
 ]);*/
-    ?>     
+    ?>
+     
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,    
@@ -256,8 +296,8 @@ $this->title = 'Camioane';
             'beforeHeader' => [
                 [
                     'columns' => [
-                        ['content' => '', 'options' => ['colspan' => 1]],
-                        ['content' => '', 'options' => ['colspan' => 4, 'class' => 'text-center text-white bg-primary font-weight-bold']],
+                        ['content' => '', 'options' => ['colspan' => 1,'class'=>'text-center text-white bg-primary font-weight-bold']],
+                        ['content' => 'Detalii Transport', 'options' => ['colspan' => 4, 'class' => 'text-center text-white bg-primary font-weight-bold']],
                         ['content' => 'Export', 'options' => ['colspan' => 2, 'class'=> 'text-center text-white bg-primary font-weight-bold',
                         ]],
                         ['content' => 'Import', 'options' => ['colspan' => 2,'class'=>'text-center text-white bg-primary font-weight-bold']],
@@ -284,6 +324,7 @@ $this->title = 'Camioane';
                               
         'pjax' => true, 
         'responsive'=>true,
+        'responsiveWrap' => false,
         'bordered' => true,        
         'columns' => $gridColumns,
           'rowOptions' => function($model, $key, $index, $grid) {

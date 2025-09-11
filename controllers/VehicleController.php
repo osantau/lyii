@@ -265,13 +265,36 @@ public function actionEditImpAdrEnd()
 public function actionEditOrder()
 {
      $model = Vehicle::findOne(Yii::$app->request->post('editableKey'));
-    $out = ['output' => '', 'message' => ''];
+     $transportOrder = $model->transportOrder;
 
+     $out = ['output' => '', 'message' => ''];        
     if ($model !== null) {
         $posted = current($_POST['Vehicle']);
-        $post = ['Vehicle' => $posted];
+        $post = ['Vehicle' => $posted];      
+         /*if(strlen($posted['transport_order_id'])>0) {
+        $cnt = Vehicle::find()->where(['transport_order_id'=>$posted['transport_order_id']])->count();      
+        if ($cnt>0) {
+            $out['output']='Comanda alocata!';
+            $out['message']=$out['output'];
+            return json_encode($out);
+        }
+         } */
         if ($model->load($post) && $model->save()) {
-            $out['output'] = $model->transportOrder->documentno; // return new value
+            if(strlen($posted['transport_order_id'])>0)
+            {
+           
+            $model->status=1;
+            $model->transportOrder->status=1;
+            $model->transportOrder->save();
+            } else{
+            $model->status=0; 
+            $transportOrder->status=0;
+            $transportOrder->save();
+            }
+         
+            $model->save();            
+            
+            $out['output'] = isset($model->transportOrder)?$model->transportOrder->documentno:null; // return new value
         } else {
             $out['message'] = 'Eroare salvare !';
         }
