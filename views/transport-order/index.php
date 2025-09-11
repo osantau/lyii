@@ -35,6 +35,13 @@ $this->title = 'Comenzi';
             ['attribute'=>'dateordered','format' => ['datetime', 'php:d.m.Y']],
             ['attribute'=>'partnerName','value'=> 'partner.name','label'=>'Client'],
             ['attribute' => 'created_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
+            ['attribute'=>'status',
+             'value'=>function($model){
+               
+                return $model->getStatusName();
+             },
+             'filter'=>[TransportOrder::getStatusList()],
+            ],
             //'updated_at',
             //'created_by',
             //'updated_by',

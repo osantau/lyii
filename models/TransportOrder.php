@@ -24,6 +24,9 @@ use yii\behaviors\TimestampBehavior;
 class TransportOrder extends \yii\db\ActiveRecord
 {
 
+    const STATUS_NEALOCAT=0;
+    const STATUS_ALOCAT=1;
+    const STATUS_FINALIZAT=2;
 
     /**
      * {@inheritdoc}
@@ -48,6 +51,8 @@ class TransportOrder extends \yii\db\ActiveRecord
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
             [['partner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Partner::class, 'targetAttribute' => ['partner_id' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updated_by' => 'id']],
+            [['status'],'integer'],
+            [['status'],'default','value'=>self::STATUS_NEALOCAT],
         ];
     }
 
@@ -65,6 +70,7 @@ class TransportOrder extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
+            'status'=>'Stare',
         ];
     }
     public function behaviors()
@@ -125,5 +131,16 @@ class TransportOrder extends \yii\db\ActiveRecord
 
     public function getFormatedDateOrdered(){
         return Yii::$app->formatter->asDatetime($this->dateordered,'php:d.m.Y');    
+    }
+
+       public static function getStatusList() {
+        return[
+            self::STATUS_ALOCAT=>'Alocata',
+            self::STATUS_NEALOCAT=> 'Nealocata',
+            self::STATUS_FINALIZAT=> 'Finalizata',
+        ];
+    }
+     public function getStatusName(){
+        return self::getStatusList()[$this->status]??'Necunoscut';
     }
 }
