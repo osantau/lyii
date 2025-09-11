@@ -32,6 +32,13 @@ use kartik\select2\Select2;
     'pluginOptions'=>['allowClear'=>true]
 ],) ?>
     </div>
+    <div class="form-group w-25" >
+    <?= $form->field($model, 'status')->widget(Select2::class,
+    ['data'=>$model->getStatusList(),
+    'options'=>['placeholder'=>'Selectati un partener...'],
+    'pluginOptions'=>['allowClear'=>true]
+],) ?>
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

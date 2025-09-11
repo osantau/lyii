@@ -4,7 +4,7 @@ namespace app\models;
 use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-
+use app\models\Vehicle;
 /**
  * This is the model class for table "transport_order".
  *
@@ -122,7 +122,16 @@ class TransportOrder extends \yii\db\ActiveRecord
     public function beforeSave($insert){
      
       if(parent::beforeSave($insert)){                       
-         $this->dateordered =Yii::$app->formatter->asDatetime($this->dateordered,'php:Y-m-d');                
+         $this->dateordered =Yii::$app->formatter->asDatetime($this->dateordered,'php:Y-m-d');         
+         if($this->status!==0)
+            {
+                $vehicle = Vehicle::findOne(['transport_order_id'=>$this->id]);
+                if($vehicle!=null) {
+                $vehicle->status=0;
+                $vehicle->transport_order_id=null;
+                $vehicle->save();
+                }
+            }       
         return true;     
     }            
         
