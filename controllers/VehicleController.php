@@ -262,4 +262,41 @@ public function actionEditImpAdrEnd()
     }
     return json_encode($out);
 }
+public function actionEditOrder()
+{
+     $model = Vehicle::findOne(Yii::$app->request->post('editableKey'));
+    $out = ['output' => '', 'message' => ''];
+
+    if ($model !== null) {
+        $posted = current($_POST['Vehicle']);
+        $post = ['Vehicle' => $posted];
+        if ($model->load($post) && $model->save()) {
+            $out['output'] = $model->transportOrder->documentno; // return new value
+        } else {
+            $out['message'] = 'Eroare salvare !';
+        }
+    }
+    return json_encode($out);
+}
+
+/* Helper function */
+protected function saveEditable($modelClass, $attribute, $displayCallback = null) {
+    $model = $modelClass::findOne(Yii::$app->request->post('editableKey'));
+    $out = ['output' => '', 'message' => ''];
+
+    if($model !== null) {
+        $posted = current($_POST[$modelClass::formName()]);
+        $post = [$modelClass::formName() => $posted];
+        if($model->load($post) && $model->save()) {
+            if($displayCallback) {
+                $out['output'] = $displayCallback($model);
+            } else {
+                $out['output'] = $model->$attribute;
+            }
+        } else {
+            $out['message'] = 'Eroare salvare!';
+        }
+    }
+    return json_encode($out);
+}
 }

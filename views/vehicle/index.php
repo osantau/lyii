@@ -1,5 +1,6 @@
 <?php
 
+use app\models\TransportOrder;
 use app\models\Vehicle;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -17,6 +18,7 @@ use kartik\grid\EditableColumn;
 use kartik\date\DatePicker;
 use yii\helpers\StringHelper;
 
+
 Icon::map($this, Icon::FAB);
 Icon::map($this, Icon::FAS);
 /** @var yii\web\View $this */
@@ -33,6 +35,7 @@ $this->title = 'Camioane';
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?php 
+    $transport_orders = ArrayHelper::map(TransportOrder::find()->all(), 'id', 'documentno');
     $gridColumns=[
             ['class' => 'kartik\grid\SerialColumn'],
 
@@ -58,29 +61,31 @@ $this->title = 'Camioane';
             },
 
           ],
-          ['attribute'=>'status','value'=>function($model){return $model->getStatusName();}, 'filter' => \app\models\Vehicle::getStatusList(),],
-            [
+         
+        //   ['attribute'=>'status','value'=>function($model){return $model->getStatusName();}, 'filter' => \app\models\Vehicle::getStatusList(),],
+             [
             'class' => EditableColumn::class,
-            'attribute' => 'start_date',
-            'format' => ['date', 'php:d.m.Y'], // display format in Grid
-            'editableOptions' => function ($model, $key, $index) {
+            'attribute' => 'transport_order_id',
+            'format' => 'raw',
+            'value' => function($model) use ($transport_orders) {
+                return $transport_orders[$model->transport_order_id] ?? '(not set)';
+            },
+            'editableOptions' => function($model, $key, $index) use ($transport_orders) {
                 return [
-                    'header' => 'Data Incarcare',
-                    'size' => 'md',
+                    'asPopover' => false, // popup editor
                     'inputType' => Editable::INPUT_WIDGET,
-                    'widgetClass' => DatePicker::class,
+                    'widgetClass' => Select2::class,
                     'options' => [
-                        'pluginOptions' => [
-                            'autoclose' => true,
-                            'format' => 'yyyy-mm-dd',   // date format
-                            'todayHighlight' => true,
-                        ],
+                        'data' => $transport_orders, // data from Transport Order table
+                        'options' => ['placeholder' => 'Selectati o comanda...'],
+                        'pluginOptions' => ['allowClear' => true],
                     ],
                     'formOptions' => [
-                        'action' => ['vehicle/edit-start-date'] // ajax controller action
+                        'action' => ['vehicle/edit-order'], // your AJAX save action
                     ],
                 ];
             },
+            'filter' => $transport_orders, // filter in grid header
         ],
                [
             'class' => EditableColumn::class,

@@ -23,6 +23,7 @@ use Yii;
  * @property User $createdBy
  * @property User $updatedBy
  * @property string $info
+ * @property TransportOrder $transportOrder
  */
 class Vehicle extends \yii\db\ActiveRecord
 {
@@ -46,7 +47,7 @@ class Vehicle extends \yii\db\ActiveRecord
         return [
             [['regno'], 'required'],
             [['regno'], 'unique'],
-            [['created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['created_at', 'updated_at', 'created_by', 'updated_by','transport_order_id'], 'integer'],
             [['regno'], 'string', 'max' => 50],
             [['info','exp_adr_start', 'exp_adr_end', 'imp_adr_start', 'imp_adr_end'],'string', 'max'=>100],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
@@ -77,7 +78,8 @@ class Vehicle extends \yii\db\ActiveRecord
             'imp_adr_start' => 'Adresa Incarcare',
             'imp_adr_end' => 'Adresa Descarcare',
             'start_date' => 'Data Incarcare',
-            'end_date' => 'Data Descarcare'
+            'end_date' => 'Data Descarcare',
+            'transport_order_id'=>'Comanda Transport',
         ];
     }
   public function behaviors()
@@ -135,4 +137,14 @@ class Vehicle extends \yii\db\ActiveRecord
         return self::getStatusList()[$this->status]??'Necunoscut';
     }
 
+      /**
+     * Gets query for [[TransportOrder]].
+     *
+     * @return \yii\db\ActiveQuery|TransportOrderQuery
+     */
+    public function getTransportOrder()
+    {
+        return $this->hasOne(TransportOrder::class, ['id' => 'transport_order_id']);
+    }
+    
 }
