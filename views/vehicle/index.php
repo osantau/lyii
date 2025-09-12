@@ -179,6 +179,7 @@ $this->title = 'Camioane';
                     'options' => [
                         'rows' => 5,
                         'placeholder' => 'Introduceti Adresa Incarcare Export...',
+                        'allowEmpty' => false,
                     ],
                     'formOptions' => [
                         'action' => ['vehicle/edit-exp-adr-start'], // controller action
@@ -201,6 +202,7 @@ $this->title = 'Camioane';
                     'options' => [
                         'rows' => 5,
                         'placeholder' => 'Introduceti Adresa Descarcare Export...',
+                        'allowEmpty' => false,
                     ],
                     'formOptions' => [
                         'action' => ['vehicle/edit-exp-adr-end'], // controller action
@@ -223,6 +225,7 @@ $this->title = 'Camioane';
                     'options' => [
                         'rows' => 5,
                         'placeholder' => 'Introduceti Adresa Incarare Import...',
+                        'allowEmpty' => false,
                     ],
                     'formOptions' => [
                         'action' => ['vehicle/edit-imp-adr-start'], // controller action
@@ -245,6 +248,7 @@ $this->title = 'Camioane';
                     'options' => [
                         'rows' => 5,
                         'placeholder' => 'Introduceti Adresa Descarcare Import...',
+                        'allowEmpty' => false,
                     ],
                     'formOptions' => [
                         'action' => ['vehicle/edit-imp-adr-end'], // controller action
