@@ -7,7 +7,7 @@ $this->title = Yii::$app->name;
 <div class="site-index">
 
    <div class="jumbotron text-center bg-transparent">
-      <h1 class="display-4"><i class="fa fa-truck"></i> <?= $this->title ?></h1>
+      <h1 class="display-4"><i class="fa fa-road"></i> <?= $this->title ?></h1>
       <div class="alert alert-info" role="alert">
     
       <?php if (Yii::$app->user->isGuest): ?>
