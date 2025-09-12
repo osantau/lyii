@@ -161,4 +161,14 @@ class TransportOrderController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionOrderList()
+    {
+         $query = TransportOrder::find()
+        ->select(['id', 'text' => 'documentno'])        
+        ->where(['status'=>0])
+        ->asArray()
+        ->all();  
+        return json_encode($query);    
+    }
 }

@@ -17,7 +17,7 @@ use kartik\editable\Editable;
 use kartik\grid\EditableColumn;
 use kartik\date\DatePicker;
 use yii\helpers\StringHelper;
-
+use yii\web\JsExpression;
 
 Icon::map($this, Icon::FAB);
 Icon::map($this, Icon::FAS);
@@ -78,9 +78,21 @@ $this->title = 'Camioane';
                     'inputType' => Editable::INPUT_WIDGET,
                     'widgetClass' => Select2::class,
                     'options' => [
-                        'data' => $transport_orders, // data from Transport Order table
+                        // 'data' => $transport_orders, // data from Transport Order table
                         'options' => ['placeholder' => 'Selectati o comanda...'],
-                        'pluginOptions' => ['allowClear' => true],
+                        'pluginOptions' => ['allowClear' => true,'minimumInputLength' => 0,
+                           'ajax' => [
+            'url' => Url::to(['transport-order/order-list']), // your controller action
+            'dataType' => 'json',
+            'delay' => 100,
+            'data' => new JsExpression('function(params) { 
+                return {}; 
+            }'),
+            'processResults' => new JsExpression('function(data) {
+                return {results: data};
+            }'),
+        ],
+                    ],
                         'pluginEvents'=>[
                             "change" => "function() {
                             var value = $(this).val();                            
