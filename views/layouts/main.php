@@ -31,25 +31,26 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <header id="header">
     <?php
     NavBar::begin([
-        'brandLabel' => Yii::$app->name,
+        'brandLabel' => '<i class="fa fa-truck"></i> '.Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
+        'encodeLabels' => false,
         'items' => [
             // ['label' => 'Acasa', 'url' => ['/site/index']],  
             // !Yii::$app->user->isGuest ?['label' => 'Conducatori auto', 'url' => ['/driver']]:'', 
-            !Yii::$app->user->isGuest ?['label' => 'Camioane', 'url' => ['/vehicle']]:'', 
-            !Yii::$app->user->isGuest ?['label' => 'Firme', 'url' => ['/partner']]:'', 
-            !Yii::$app->user->isGuest ?['label' => 'Comenzi', 'url' => ['/transport-order']]:'', 
+            !Yii::$app->user->isGuest ?['label' => '<i class="fa fa-truck"></i> Camioane', 'url' => ['/vehicle']]:'', 
+            !Yii::$app->user->isGuest ?['label' => '<i class="fa fa-building"></i> Firme', 'url' => ['/partner']]:'', 
+            !Yii::$app->user->isGuest ?['label' => '<i class="fa fa-file-invoice"></i> Comenzi', 'url' => ['/transport-order']]:'', 
             ( !Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin())?  ['label' => 'Utilizatori', 'url' => ['/user']]:'',                        
             Yii::$app->user->isGuest
-                ? ['label' => 'Intră în cont', 'url' => ['/site/login']]
+                ? ['label' => '<i class="fa fa-sign-in"></i> Intră în cont', 'url' => ['/site/login']]
                 : '<li class="nav-item">'
                     . Html::beginForm(['/site/logout'])
                     . Html::submitButton(
-                        'Deconectare (' . Yii::$app->user->identity->username . ')',
+                        '<i class="fa fa-sign-out"></i> Deconectare (' . ucfirst(Yii::$app->user->identity->username) . ')',
                         ['class' => 'nav-link btn btn-link logout']
                     )
                     . Html::endForm()
