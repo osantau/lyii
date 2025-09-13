@@ -51,7 +51,8 @@ $config = [
             ],
         ],
         'assetManager'=>[
-            'appendTimestamp'=> true,
+            'appendTimestamp'=> false,
+            'linkAssets'=>true,
         ],             
     ],
     'modules'=>[
