@@ -52,14 +52,14 @@ $config = [
         ],
         'assetManager'=>[
             'appendTimestamp'=> true,
-        ],     
-        'modules'=>[
+        ],             
+    ],
+    'modules'=>[
             'gridview' => [
                 'class' => '\kartik\grid\Module',
                 // other module settings can be configured here
             ],
         ],
-    ],
     'params' => $params,
     'timeZone'=>'Europe/Bucharest',
 ];
