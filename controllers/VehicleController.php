@@ -294,7 +294,7 @@ public function actionEditOrder()
          
             $model->save();            
             
-            $out['output'] = isset($model->transportOrder)?$model->transportOrder->documentno:null; // return new value
+            $out['output'] = isset($model->transportOrder)?$model->transportOrder->documentno:'(not set)'; // return new value
         } else {
             $out['message'] = 'Eroare salvare !';
         }
