@@ -115,7 +115,7 @@ $this->title = 'Camioane';
                 ];
             },
             //'filter' => $transport_orders, // filter in grid header
-            'enableSorting' => false, 
+            'enableSorting' => true, 
         ],
 
                [
@@ -359,7 +359,7 @@ $this->title = 'Camioane';
         return [];
     },
         'panel' => [
-        'type' => GridView::TYPE_PRIMARY,  
+        'type' => GridView::TYPE_PRIMARY,
         'pager' => [                        // Custom pagination options
         'firstPageLabel' => Icon::show('angle-double-left') . ' First',
         'lastPageLabel'  => 'Last ' . Icon::show('angle-double-right'),
@@ -393,6 +393,11 @@ function initCustomClick() {
         jQuery('#modalTitle').text(title);
     });
 }
+function initPopovers() {
+    document.querySelectorAll('[data-bs-toggle="popover"]').forEach(function (el) {
+        new bootstrap.Popover(el);
+    });
+}
 
 // Initialize on page load
 initCustomClick();
@@ -400,6 +405,7 @@ initCustomClick();
 // Re-initialize after PJAX reload
 jQuery(document).on('pjax:end', function() {
     initCustomClick();
+    initPopovers();
 });
 JS;
 $this->registerJs($js);
