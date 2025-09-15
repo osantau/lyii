@@ -15,7 +15,9 @@ class m250911_100347_add_column_transport_order_id_to_vehicle_table extends Migr
         '{{%vehicle}}',
         'transport_order_id',
         '{{%transport_order}}',
-        'id'
+        'id',
+        'SET NULL',
+        'NO ACTION'
     );
     }
 

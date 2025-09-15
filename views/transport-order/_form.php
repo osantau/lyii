@@ -6,6 +6,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\bootstrap5\ActiveForm;
 use kartik\select2\Select2;
+use yii\helpers\VarDumper;
 
 /** @var yii\web\View $this */
 /** @var app\models\TransportOrder $model */
@@ -33,9 +34,10 @@ use kartik\select2\Select2;
 ],) ?>
     </div>
     <div class="form-group w-25" >
+        <?php $statusData = $model->getStatusList(); ArrayHelper::remove($statusData,$model::STATUS_ALOCAT);?> 
     <?= $form->field($model, 'status')->widget(Select2::class,
-    ['data'=>$model->getStatusList(),
-    'options'=>['placeholder'=>'Selectati un partener...'],
+    ['data'=>$statusData,
+    'options'=>['placeholder'=>'Selectati o stare...',1=>['disabled'=>true]],
     'pluginOptions'=>['allowClear'=>true]
 ],) ?>
     </div>
