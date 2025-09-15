@@ -144,4 +144,8 @@ class TransportOrder extends \yii\db\ActiveRecord
      public function getStatusName(){
         return self::getStatusList()[$this->status]??'Necunoscut';
     }
+    public function beforeDelete(){
+        Vehicle::updateAll(['transport_order_id'=>null,'status'=>0],'transport_order_id='.$this->id);
+        return parent::beforeDelete();
+    }
 }
