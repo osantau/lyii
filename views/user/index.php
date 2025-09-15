@@ -60,11 +60,14 @@ $this->title = 'Utilizatori';
                 'template'=>'{update} {delete}',
                 'buttons' => [
                 'delete' => function ($url, $model, $key) {
+                   if($model->is_admin==1) {
+                    return '';
+                   }
                     return Html::a('<i class="fas fa-trash"></i>', $url, [
                         'title' => Yii::t('app', 'Delete'),
                         'data-confirm' => Yii::t('app', 'Sunteti sigur ca vreti sa stergeti '.$model->username.'  ?'),
                         'data-method' => 'post',
-                        'class' => 'btn btn-danger btn-sm', // your custom class
+                        'class' => 'btn btn-danger btn-sm', // your custom class                    
                     ]);
                 },
             ],
