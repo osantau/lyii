@@ -46,7 +46,7 @@ class m250828_085657_create_user_table extends Migration
         '{{%user}}',
         'id',
         'SET NULL',
-        'CASCADE'
+        'NO ACTION'
     );
 
     $this->addForeignKey(
@@ -56,7 +56,7 @@ class m250828_085657_create_user_table extends Migration
         '{{%user}}',
         'id',
         'SET NULL',
-        'CASCADE'
+        'NO ACTION'
     );
     }
 

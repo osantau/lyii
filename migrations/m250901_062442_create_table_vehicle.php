@@ -14,8 +14,8 @@ class m250901_062442_create_table_vehicle extends Migration
              'regno' => $this->string(50)->notNull(),             
              'created_at' => $this->integer()->notNull(),
              'updated_at' => $this->integer()->notNull(),
-             'created_by'=>$this->integer()->notNull(),
-             'updated_by'=> $this->integer()->notNull(),
+             'created_by'=>$this->integer(),
+             'updated_by'=> $this->integer(),
              
         ]);
     
@@ -24,7 +24,9 @@ class m250901_062442_create_table_vehicle extends Migration
         '{{%vehicle}}',
         'created_by',
         '{{%user}}',
-        'id'
+        'id',
+        'SET NULL',
+        'NO ACTION'
     );
 
     $this->addForeignKey(
@@ -32,7 +34,9 @@ class m250901_062442_create_table_vehicle extends Migration
         '{{%vehicle}}',
         'updated_by',
         '{{%user}}',
-        'id'
+        'id',
+        'SET NULL',
+        'NO ACTION'
     ); 
     }
 

@@ -21,8 +21,8 @@ class m250828_121033_create_driver_table extends Migration
              'address' => $this->string(),
              'created_at' => $this->integer()->notNull(),
              'updated_at' => $this->integer()->notNull(),
-             'created_by'=>$this->integer()->notNull(),
-             'updated_by'=> $this->integer()->notNull(),
+             'created_by'=>$this->integer(),
+             'updated_by'=> $this->integer(),
              
         ]);
     
@@ -31,7 +31,9 @@ class m250828_121033_create_driver_table extends Migration
         '{{%driver}}',
         'created_by',
         '{{%user}}',
-        'id'
+        'id',
+        'SET NULL',
+        'NO ACTION'
     );
 
     $this->addForeignKey(
@@ -39,7 +41,9 @@ class m250828_121033_create_driver_table extends Migration
         '{{%driver}}',
         'updated_by',
         '{{%user}}',
-        'id'
+        'id',
+        'SET NULL',
+        'NO ACTION'
     ); 
     }
 

@@ -14,8 +14,8 @@ class m250909_094752_create_Table_partner extends Migration
              'name' => $this->string(100)->notNull(),             
              'created_at' => $this->integer()->notNull(),
              'updated_at' => $this->integer()->notNull(),
-             'created_by'=>$this->integer()->notNull(),
-             'updated_by'=> $this->integer()->notNull(),
+             'created_by'=>$this->integer(),
+             'updated_by'=> $this->integer(),
              
         ]);
     
@@ -24,7 +24,9 @@ class m250909_094752_create_Table_partner extends Migration
         '{{%partner}}',
         'created_by',
         '{{%user}}',
-        'id'
+        'id',
+        'SET NULL',
+        'NO ACTION'
     );
 
     $this->addForeignKey(
@@ -32,7 +34,9 @@ class m250909_094752_create_Table_partner extends Migration
         '{{%partner}}',
         'updated_by',
         '{{%user}}',
-        'id'
+        'id',
+        'SET NULL',
+        'NO ACTION'
     ); 
 
     }
