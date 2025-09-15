@@ -266,7 +266,11 @@ public function actionEditOrder()
 {
      $model = Vehicle::findOne(Yii::$app->request->post('editableKey'));
      $transportOrder = $model->transportOrder;
-
+        if($transportOrder!==null)
+        {
+            $transportOrder->status=0;
+            $transportOrder->save();
+        }
      $out = ['output' => '', 'message' => ''];        
     if ($model !== null) {
         $posted = current($_POST['Vehicle']);
@@ -321,5 +325,29 @@ protected function saveEditable($modelClass, $attribute, $displayCallback = null
         }
     }
     return json_encode($out);
+}
+
+public function actionFinalizeOrder($id)
+{
+     $model = Vehicle::findOne($id);
+     $transportOrder = $model->transportOrder;
+        if($transportOrder!==null)
+        {
+            $transportOrder->status=2;
+            $transportOrder->save();
+            // free vehicle
+            $model->status=0;
+             $model->transport_order_id=null;
+            $model->start_date=null;
+            $model->end_date=null;
+            $model->exp_adr_start=null;
+            $model->exp_adr_end=null;                
+            $model->imp_adr_start=null;
+            $model->imp_adr_end=null;                
+            $model->info=null;
+            $model->save();
+        }
+     return $this->redirect(['index']);
+
 }
 }

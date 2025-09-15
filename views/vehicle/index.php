@@ -16,6 +16,7 @@ use yii\bootstrap5\Modal;
 use kartik\editable\Editable;
 use kartik\grid\EditableColumn;
 use kartik\date\DatePicker;
+use yii\grid\ActionColumn as GridActionColumn;
 use yii\helpers\StringHelper;
 use yii\web\JsExpression;
 
@@ -258,7 +259,20 @@ $this->title = 'Camioane';
             'value'=>function($model){return StringHelper::truncate($model->imp_adr_end, 30);},
             'format' => 'ntext', // so line breaks show properly in grid
         ],
-          
+          [
+            'class'=>ActionColumn::class,
+            'template'=>'{custom}',
+            'header'=>'',
+            'buttons'=>[
+                'custom' => function ($url, $model, $key) {                      
+                    return Html::a('<i class="fa-solid fa-check"></i>', ['vehicle/finalize-order?id='.$model->id], [
+                        'title' => 'Finalizeaza',                        
+                        'data-method' => 'post',                        
+                        'class'=>'btn btn-primary btn-sm btn-finalize',                           
+                    ]);
+                },
+            ]
+          ],
           ['attribute' => 'created_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
           // ['attribute' => 'updated_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
               [
@@ -323,7 +337,7 @@ $this->title = 'Camioane';
                         ['content' => 'Export', 'options' => ['colspan' => 2, 'class'=> 'text-center text-white bg-primary font-weight-bold',
                         ]],
                         ['content' => 'Import', 'options' => ['colspan' => 2,'class'=>'text-center text-white bg-primary font-weight-bold']],
-                        ['content' => '', 'options' => ['colspan' => 2,'class'=>'text-center text-white bg-primary font-weight-bold']],
+                        ['content' => '', 'options' => ['colspan' => 3,'class'=>'text-center text-white bg-primary font-weight-bold']],
                         
                     ],
                     'options' => ['class' => 'skip-export',
