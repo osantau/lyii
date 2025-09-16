@@ -136,6 +136,11 @@ $this->title = 'Camioane';
                             'format' => 'yyyy-mm-dd',   // date format
                             'todayHighlight' => true,
                         ],
+                         'pluginEvents'=>[
+                            "changeDate" => "function(e) {
+                            validateDates(e);
+                        }",
+                    ],
                     ],
                     'formOptions' => [
                         'action' => ['vehicle/edit-start-date'] // ajax controller action
@@ -144,7 +149,7 @@ $this->title = 'Camioane';
             },
         ],
                [
-            'class' => EditableColumn::class,
+            'class' => EditableColumn::class, 
             'attribute' => 'end_date',
             'format' => ['date', 'php:d.m.Y'], // display format in Grid
             'editableOptions' => function ($model, $key, $index) {
@@ -160,6 +165,11 @@ $this->title = 'Camioane';
                             'format' => 'yyyy-mm-dd',   // date format
                             'todayHighlight' => true,
                         ],
+                        'pluginEvents'=>[
+                            "changeDate" => "function(e) {
+                            validateDates(e);
+                        }",
+                    ],
                     ],
                     'formOptions' => [
                         'action' => ['vehicle/edit-end-date'] // ajax controller action
@@ -393,6 +403,7 @@ Modal::begin([
 
 echo "<div id='modalContent'></div>"; 
 Modal::end(); 
+
 $js = <<<JS
 function initCustomClick() {
     jQuery(document).off('click', '.custom-click').on('click', '.custom-click', function(e) {
@@ -412,10 +423,29 @@ function initPopovers() {
         new bootstrap.Popover(el);
     });
 }
+function validateDates(e) {
+    
+    var startDateInput =$('#vehicle-0-start_date').val();
+    var endDateInput = $('#vehicle-0-end_date').val();
+    var startDate = Date.parse(startDateInput, 'yyyy-mm-dd');
+    var endDate = Date.parse(endDateInput, 'yyyy-mm-dd');
+                            
+            if (startDate > endDate) {
+                   alert('Atentie: Data Incarcare nu poate fi mai mare decat Data Descarcare.');
+            } else if(endDate<startDate){
+                alert('Atentie: Data Descarcare nu poate fi mai mica decat Data Incarcare.');                
+            }
+        
+    
+}
 
 // Initialize on page load
 initCustomClick();
-
+function showError(message) {
+  let box = document.getElementById("errorBox");
+  box.innerText = message;
+  box.style.display = "block";
+}
 // Re-initialize after PJAX reload
 jQuery(document).on('pjax:end', function() {
     initCustomClick();
@@ -430,3 +460,4 @@ $this->registerJs("var popoverTriggerList=[].slice.call(document.querySelectorAl
         <?php Pjax::end(); ?>
 
 </div>
+<div id="errorBox" class="alert alert-danger" style="display:none;"></div>
