@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\bootstrap5\ActiveForm;
 use app\models\User;
+use kartik\password\PasswordInput;
 
 /** @var yii\web\View $this */
 /** @var app\models\User $model */
@@ -17,7 +18,19 @@ use app\models\User;
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'password')->textInput(['maxlength' => true]) ?>  
+    <?= $form->field($model, 'password')->widget(PasswordInput::class, [
+    'pluginOptions' => [
+        'showMeter' => true, // show strength meter
+        'toggleMask' => true, // show/hide password
+        'strengthMeterOptions' => [
+            'minLength' => 8,
+            'requireLowercase' => true,
+            'requireUppercase' => true,
+            'requireDigit' => true,
+            'requireSpecial' => true,
+        ],
+    ]
+]); ?>  
 
     <?= $form->field($model, 'is_admin')->dropDownList(User::getAdminList(),['label'=>"Administrator?"] )?>
 
