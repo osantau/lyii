@@ -102,12 +102,13 @@ $this->title = 'Camioane';
                             var value = $(this).val();                            
                 var row = $(this).closest('tr');
                 if(value!='') {
-                row.removeClass('table-success');
-                row.addClass('table-warning');
+                row.removeClass('table-light');
+                row.removeClass('table-danger');
+                row.addClass('table-success');
                 
                 } else{
-                    row.removeClass('table-warning');
-                    row.addClass('table-success');
+                    row.removeClass('table-success');
+                    row.addClass('table-light');
                 }
                     
             }",
@@ -379,9 +380,11 @@ $this->title = 'Camioane';
           'rowOptions' => function($model, $key, $index, $grid) {
         /** @var $model \app\models\Post */
         if ($model->status == \app\models\Vehicle::STATUS_LIBER) {
-            return ['class' => 'table-success']; // red background
+            return ['class' => 'table-light']; // red background
         } elseif ($model->status == \app\models\Vehicle::STATUS_OCUPAT) {
-            return ['class' => 'table-warning']; // green background
+            return ['class' => 'table-success']; // green background
+        }elseif ($model->status == \app\models\Vehicle::STATUS_OPRIT) {
+            return ['class' => 'table-danger']; // green background
         }
         return [];
     },

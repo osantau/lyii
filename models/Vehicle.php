@@ -31,6 +31,8 @@ class Vehicle extends \yii\db\ActiveRecord
     const STATUS_LIBER=0;
     const STATUS_OCUPAT=1;
 
+    const STATUS_OPRIT=2;
+
     /**
      * {@inheritdoc}
      */
@@ -130,6 +132,7 @@ class Vehicle extends \yii\db\ActiveRecord
         return[
             self::STATUS_LIBER=>'Liber',
             self::STATUS_OCUPAT=> 'In Cursa',
+            self::STATUS_OPRIT=> 'Oprit',
         ];
     }
 
