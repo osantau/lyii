@@ -51,14 +51,17 @@ $this->title = 'Camioane';
                     '<b>'.$model->regno.'</b>',
                     Url::to(['vehicle/info', 'id' => $model->id]), // action returning partial view
                     [
-                        'class' => 'custom-click',
+                        'class' => 'custom-click regno-popover',
                         'data-id' => $model->id,
                         'data-pjax' => 0,
                         'style' => 'cursor:pointer; color:#0d6efd; text-decoration:underline;',
                         'data-bs-toggle' => 'popover',
-                        'data-bs-trigger' => 'hover focus',
+                        'data-bs-trigger' => 'manual',
                         'data-bs-placement' => 'top',                        
-                        'data-bs-content'=>"Info: $model->info",
+                        'data-bs-content'=>"Se incarca...",
+                        'data-bs-html'=>'true',
+                        'data-url'=>Url::to(['vehicle/summary']),
+                        
                     ]
                 );
             },
@@ -422,6 +425,34 @@ function initPopovers() {
     document.querySelectorAll('[data-bs-toggle="popover"]').forEach(function (el) {
         new bootstrap.Popover(el);
     });
+    document.querySelectorAll('.regno-popover').forEach(function(el) {
+    // Correct: create Popover instance using Bootstrap 5 API
+    const pop = new bootstrap.Popover(el);
+    el._bsPopover = pop; // store instance on element
+
+    el.addEventListener('mouseenter', function() {
+        // Show popover initially
+        pop.show();
+
+        // Fetch fresh content every hover
+        fetch(el.getAttribute('data-url') + '?id=' + el.getAttribute('data-id'))
+            .then(response => response.text())
+            .then(data => {
+                // Correct way to access popover DOM in Bootstrap 5
+                const tip = el._bsPopover._getTipElement(); // official internal method
+                if (tip) {
+                    const body = tip.querySelector('.popover-body');
+                    if (body) body.innerHTML = data;
+                }
+            })
+            .catch(err => console.error('Popover AJAX error:', err));
+    });
+
+    el.addEventListener('mouseleave', function() {
+        pop.hide();
+    });
+});
+
 }
 function validateDates(e) {
     
@@ -441,15 +472,17 @@ function validateDates(e) {
 
 // Initialize on page load
 initCustomClick();
+initPopovers();
 function showError(message) {
   let box = document.getElementById("errorBox");
   box.innerText = message;
   box.style.display = "block";
 }
+
 // Re-initialize after PJAX reload
 jQuery(document).on('pjax:end', function() {
     initCustomClick();
-    initPopovers();
+    initPopovers();    
 });
 JS;
 $this->registerJs($js);
