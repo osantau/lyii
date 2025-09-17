@@ -350,4 +350,11 @@ public function actionFinalizeOrder($id)
      return $this->redirect(['index']);
 
 }
+public function actionSummary($id) {
+    
+    $model=$this->findModel($id);         
+        return $this->renderPartial('_popover', [
+        'model' => $model,
+    ]);
+}
 }
