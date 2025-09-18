@@ -46,6 +46,7 @@ $this->title = 'Camioane';
           [
             'attribute'=> 'regno',
             'format'=>'raw',
+             'filter' => Html::activeTextInput($searchModel, 'regno', ['class' => 'form-control']),
              'value' => function ($model) {
                 return Html::a(
                     '<b>'.$model->regno.'</b>',
@@ -126,7 +127,7 @@ $this->title = 'Camioane';
                [
             'class' => EditableColumn::class,
             'attribute' => 'start_date',
-            'format' => ['date', 'php:d.m.Y'], // display format in Grid
+            'format' => ['date', 'php:d.m.Y'], // display format in Grid           
             'editableOptions' => function ($model, $key, $index) {
                 return [
                     'header' => 'Data Incarcare',
@@ -155,7 +156,14 @@ $this->title = 'Camioane';
                [
             'class' => EditableColumn::class, 
             'attribute' => 'end_date',
-            'format' => ['date', 'php:d.m.Y'], // display format in Grid
+            'filterType' => GridView::FILTER_DATE,
+            'filterWidgetOptions' => [
+                'pluginOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd',
+                ],
+            ],
+            'format' => ['date', 'php:d.m.Y'], // display format in Grid             
             'editableOptions' => function ($model, $key, $index) {
                 return [
                     'header' => 'Data Descarcare',
@@ -481,7 +489,11 @@ function showError(message) {
   box.innerText = message;
   box.style.display = "block";
 }
-
+// PJAX success
+jQuery(document).on('pjax:success', function() {
+    initCustomClick();
+    initPopovers();    
+});
 // Re-initialize after PJAX reload
 jQuery(document).on('pjax:end', function() {
     initCustomClick();

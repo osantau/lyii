@@ -20,7 +20,7 @@ class VehicleSearch extends Vehicle
     {
         return [
             [['id', 'created_by', 'updated_by'], 'integer'],
-            // [['regno','createdByName'], 'safe'],
+             [['regno','end_date'], 'safe'],            
         ];
     }
 
@@ -75,7 +75,11 @@ class VehicleSearch extends Vehicle
 
         $query->andFilterWhere(['like', 'regno', $this->regno]);
         $query->andFilterWhere(['like', 'user.username', $this->createdByName]);        
-
+        if($this->end_date!=null){
+            
+           $query->andFilterWhere(['=','end_date',$this->end_date]); 
+        }
+        
         return $dataProvider;
     }
 }
