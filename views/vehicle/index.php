@@ -489,11 +489,6 @@ function showError(message) {
   box.innerText = message;
   box.style.display = "block";
 }
-// PJAX success
-jQuery(document).on('pjax:success', function() {
-    initCustomClick();
-    initPopovers();    
-});
 // Re-initialize after PJAX reload
 jQuery(document).on('pjax:end', function() {
     initCustomClick();
