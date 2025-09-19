@@ -9,7 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-
+use Yii;
+use yii\web\Response;
 /**
  * TransportOrderController implements the CRUD actions for TransportOrder model.
  */
@@ -171,4 +172,14 @@ class TransportOrderController extends Controller
         ->all();  
         return json_encode($query);    
     }
+
+   public function actionSummary($id) {
+    Yii::$app->response->format = Response::FORMAT_JSON;
+          $model=$this->findModel($id);         
+      $content=   $this->renderPartial('_popover', [
+        'model' => $model,
+    ]);
+
+    return ['content'=>$content];
+}
 }

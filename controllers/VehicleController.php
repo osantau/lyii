@@ -397,7 +397,7 @@ public function actionData()
             $data[] = [
                 $vehicle->id,
                 $vehicle->regno,   
-                 '<select class="comandaSelect"><option value="">Selectati o comanda...</option></select>',
+                '<span id="'.@$vehicle->transportOrder->id.'" class="sp-order-id">'.@$vehicle->transportOrder->documentno.'</span>',
                 $vehicle->start_date,
                 $vehicle->end_date,
                 $vehicle->exp_adr_start,

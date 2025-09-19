@@ -10,7 +10,10 @@ $this->registerJsFile('https://cdn.datatables.net/1.13.6/js/jquery.dataTables.mi
 // $this->registerCssFile('https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css');
 // $this->registerJsFile('https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 $this->registerCss("
-    #vehicleTable tbody td:nth-child(2) {
+    #vehicleTable tbody td:nth-child(2)  {
+        cursor: pointer;
+    }
+         #vehicleTable tbody td:nth-child(3)  {
         cursor: pointer;
     }
 ");
@@ -41,25 +44,12 @@ $this->registerCss("
 <?php
 
 
-$this->registerJs("
-function populateComandaSelect(select, currentComanda){
-    $.ajax({
-        url: 'transport-order/order-list',
-        success: function(options){
-            select.empty(); // remove old options
-            options.forEach(function(opt){
-                var selected = (opt.id === currentComanda) ? 'selected' : '';
-                select.append('<option value=\"'+opt.id+'\" '+selected+'>'+opt.text+'</option>');
-            });
-        }
-    });
-}
-
+$this->registerJs(<<<JS
   var table=  $('#vehicleTable').DataTable({        
         processing: true,
         serverSide: true,
         ordering: false,
-        ajax: '" . Url::to(['vehicle/data']) . "',            
+        ajax: 'vehicle/data',            
      columns: [  
         {data: 0, visible: false },   //ID      
         {data: null,  // Contor
@@ -80,7 +70,7 @@ function populateComandaSelect(select, currentComanda){
 
   ]  ,
       drawCallback: function(settings) {
-        $('#vehicleTable tbody td:nth-child(2)').each(function() { // Name column
+        $('#vehicleTable tbody td:nth-child(2)').each(function() { // Nr. inmatriculare column
             var cell = $(this);
             var rowData = table.row(cell.closest('tr')).data();
             var hoverTimeout;
@@ -147,9 +137,59 @@ function populateComandaSelect(select, currentComanda){
     });
 });
 
+ $('#vehicleTable tbody td:nth-child(3)').each(function() { // Comanda Transport
+            var cell = $(this);
+            var rowNode = cell.closest('tr'); 
+            var rowData = table.row(cell.closest('tr')).data();
+           // var span = $('td', rowNode).eq(2).find('span#action-' + rowData[2]) ;
+            var hoverTimeout;                        
+            cell.attr('data-bs-toggle', 'tooltip')
+                .attr('title', ''); // temporary placeholder
+
+            // Remove any existing tooltip
+            cell.tooltip('dispose');
+           
+            // On mouse enter, fetch tooltip content
+         cell.off('mouseenter').on('mouseenter', function() {                      
+                //console.log(span);
+                hoverTimeout = setTimeout(function() {
+                    $.ajax({
+                        url: 'transport-order/summary',
+                        data: { id: rowData[0] },
+                        success: function(response) {
+                            cell.attr('title', response.content)
+                                .tooltip('dispose')
+                                .tooltip({ html: true })
+                                .tooltip('show');
+                        }
+                    });
+                }, 300); // delay in milliseconds
+            });
+
+            // On mouse leave, hide tooltip
+            cell.off('mouseleave').on('mouseleave', function() {
+                clearTimeout(hoverTimeout);     
+                cell.tooltip('hide');
+            });       
+            
+        cell.off('click').on('click', function() {
+        // Load form via Ajax
+        $.ajax({
+            url: 'vehicle/info',
+            data: { id: rowData[0] },
+            success: function(html) {
+                $('#editInfoModal .modal-body').html(html);                
+                var modal = new bootstrap.Modal(document.getElementById('editInfoModal'));
+                modal.show();
+            }
+        });
+    });
+        });
+
+
     }      
     });
-");
+JS);
 ?>
 </div>
 <!-- Edit Info Modal -->
