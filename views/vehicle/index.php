@@ -15,9 +15,12 @@ use kartik\grid\EditableColumn;
 use kartik\date\DatePicker;
 use yii\helpers\StringHelper;
 use yii\web\JsExpression;
+use yii\web\View;
 
 Icon::map($this, Icon::FAB);
 Icon::map($this, Icon::FAS);
+
+ $this->registerJsFile('@web/js/vehicle.js',['depends' => [\yii\web\JqueryAsset::class], 'position' => View::POS_END,]);
 /** @var yii\web\View $this */
 /** @var app\models\VehicleSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
@@ -421,90 +424,11 @@ Modal::begin([
 
 echo "<div id='modalContent'></div>"; 
 Modal::end(); 
-
-$js = <<<JS
-function initCustomClick() {
-    jQuery(document).off('click', '.custom-click').on('click', '.custom-click', function(e) {
-        e.preventDefault();
-        let url = jQuery(this).attr('href');
-        let title = jQuery(this).text();
-
-        jQuery('#modal').modal('show')
-            .find('#modalContent')
-            .load(url);
-
-        jQuery('#modalTitle').text(title);
-    });
-}
-function initPopovers() {
-    document.querySelectorAll('[data-bs-toggle="popover"]').forEach(function (el) {
-        new bootstrap.Popover(el);
-    });
-    document.querySelectorAll('.regno-popover').forEach(function(el) {
-    // Correct: create Popover instance using Bootstrap 5 API
-    const pop = new bootstrap.Popover(el);
-    el._bsPopover = pop; // store instance on element
-
-    el.addEventListener('mouseenter', function() {
-        // Show popover initially
-        pop.show();
-
-        // Fetch fresh content every hover
-        fetch(el.getAttribute('data-url') + '?id=' + el.getAttribute('data-id'))
-            .then(response => response.text())
-            .then(data => {
-                // Correct way to access popover DOM in Bootstrap 5
-                const tip = el._bsPopover._getTipElement(); // official internal method
-                if (tip) {
-                    const body = tip.querySelector('.popover-body');
-                    if (body) body.innerHTML = data;
-                }
-            })
-            .catch(err => console.error('Popover AJAX error:', err));
-    });
-
-    el.addEventListener('mouseleave', function() {
-        pop.hide();
-    });
-});
-
-}
-function validateDates(e) {
-    
-    var startDateInput =$('#vehicle-0-start_date').val();
-    var endDateInput = $('#vehicle-0-end_date').val();
-    var startDate = Date.parse(startDateInput, 'yyyy-mm-dd');
-    var endDate = Date.parse(endDateInput, 'yyyy-mm-dd');
-                            
-            if (startDate > endDate) {
-                   alert('Atentie: Data Incarcare nu poate fi mai mare decat Data Descarcare.');
-            } else if(endDate<startDate){
-                alert('Atentie: Data Descarcare nu poate fi mai mica decat Data Incarcare.');                
-            }
-        
-    
-}
-
-// Initialize on page load
-initCustomClick();
-initPopovers();
-function showError(message) {
-  let box = document.getElementById("errorBox");
-  box.innerText = message;
-  box.style.display = "block";
-}
-// Re-initialize after PJAX reload
-jQuery(document).on('pjax:end', function() {
-    initCustomClick();
-    initPopovers();    
-});
-JS;
-$this->registerJs($js);
-$this->registerJs("var popoverTriggerList=[].slice.call(document.querySelectorAll('[data-bs-toggle=\"popover\"]'));popoverTriggerList.map(function(e){return new bootstrap.Popover(e)});");
-
+//$this->registerJs("var popoverTriggerList=[].slice.call(document.querySelectorAll('[data-bs-toggle=\"popover\"]'));popoverTriggerList.map(function(e){return new bootstrap.Popover(e)});");
 
 ?>
-        <?php Pjax::end(); ?>
+        <?php Pjax::end(); 
+        ?>
 
 </div>
 <div id="errorBox" class="alert alert-danger" style="display:none;"></div>
