@@ -1,4 +1,6 @@
 <?php
+
+use yii\bootstrap5\Modal;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
@@ -40,6 +42,19 @@ $this->registerCss("
 
 
 $this->registerJs("
+function populateComandaSelect(select, currentComanda){
+    $.ajax({
+        url: 'transport-order/order-list',
+        success: function(options){
+            select.empty(); // remove old options
+            options.forEach(function(opt){
+                var selected = (opt.id === currentComanda) ? 'selected' : '';
+                select.append('<option value=\"'+opt.id+'\" '+selected+'>'+opt.text+'</option>');
+            });
+        }
+    });
+}
+
   var table=  $('#vehicleTable').DataTable({        
         processing: true,
         serverSide: true,
@@ -95,10 +110,65 @@ $this->registerJs("
             cell.off('mouseleave').on('mouseleave', function() {
                 clearTimeout(hoverTimeout);     
                 cell.tooltip('hide');
-            });
+            });       
+            
+        cell.off('click').on('click', function() {
+        // Load form via Ajax
+        $.ajax({
+            url: 'vehicle/info',
+            data: { id: rowData[0] },
+            success: function(html) {
+                $('#editInfoModal .modal-body').html(html);                
+                var modal = new bootstrap.Modal(document.getElementById('editInfoModal'));
+                modal.show();
+            }
         });
+    });
+        });
+    // editare info
+    $('#editInfoModal').on('submit', function(e) {
+    e.preventDefault();
+    $.ajax({
+        url: 'vehicle/info-ajax',
+        method: 'POST',
+        data: $('#editInfoForm').serialize(),
+        success: function(response) {
+            if (response.success) {
+                // Close modal
+                var modalEl = document.getElementById('editInfoModal');
+                var modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+                // Reload DataTable
+                table.ajax.reload(null, false);
+            } else {
+                alert(response.message);
+            }
+        }
+    });
+});
+
     }      
     });
 ");
 ?>
+</div>
+<!-- Edit Info Modal -->
+<div class="modal fade" id="editInfoModal" tabindex="-1" aria-labelledby="editInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="editInfoForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editInfoModalLabel">Editare Info vehicul</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Form fields will be loaded via Ajax -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Inchide</button>
+          <button type="submit" class="btn btn-primary">Salveaza</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

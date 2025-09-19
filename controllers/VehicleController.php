@@ -153,13 +153,8 @@ class VehicleController extends Controller
     }
 
     public function actionInfo($id)
-    {
-        $model=$this->findModel($id);
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        // after save, close modal & refresh GridView
-        // return '<script>jQuery("#modal").modal("hide"); $.pjax.reload({container:"#grid-pjax"}); console.log("aa");</script>';
-        return $this->redirect(['index']);
-    }
+    {   Yii::$app->response->format = Response::FORMAT_JSON;    
+        $model=$this->findModel($id);   
         return $this->renderAjax('info', [
         'model' => $model,
     ]);
@@ -402,7 +397,7 @@ public function actionData()
             $data[] = [
                 $vehicle->id,
                 $vehicle->regno,   
-                $vehicle->transport_order_id,
+                 '<select class="comandaSelect"><option value="">Selectati o comanda...</option></select>',
                 $vehicle->start_date,
                 $vehicle->end_date,
                 $vehicle->exp_adr_start,
@@ -420,4 +415,22 @@ public function actionData()
             "data" => $data,
         ];
     }
+
+    public function actionInfoAjax()
+{
+    Yii::$app->response->format = Response::FORMAT_JSON;
+
+    $id = Yii::$app->request->post('id');
+    $vehicle = Vehicle::findOne($id);
+    if (!$vehicle) return ['success' => false, 'message' => 'Camionul nu exista !'];
+
+    $vehicle->info= Yii::$app->request->post('info');
+    
+
+    if ($vehicle->save()) {
+        return ['success' => true];
+    }
+
+    return ['success' => false, 'message' => 'Eroare salvare !'];
+}
 }
