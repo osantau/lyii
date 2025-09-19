@@ -398,13 +398,14 @@ public function actionData()
                 $vehicle->id,
                 $vehicle->regno,   
                 '<span data-id="'.@$vehicle->transportOrder->id.'">'.@$vehicle->transportOrder->documentno.'</span>',
-                $vehicle->start_date,
-                $vehicle->end_date,
+                Yii::$app->formatter->asDate($vehicle->start_date,'dd.MM.yyyy'),
+                Yii::$app->formatter->asDate($vehicle->end_date,'dd.MM.yyyy'),
                 $vehicle->exp_adr_start,
                 $vehicle->exp_adr_end,
                 $vehicle->imp_adr_start,
                 $vehicle->imp_adr_end,
-                $actions
+                $actions,
+                $vehicle->status,
             ];
         }
 
@@ -433,4 +434,42 @@ public function actionData()
 
     return ['success' => false, 'message' => 'Eroare salvare !'];
 }
+
+//dates edit
+public function actionDates($id, $tip)
+{
+    Yii::$app->response->format = Response::FORMAT_JSON;    
+        $model=$this->findModel($id);   
+        return $this->renderAjax('_dates', [
+        'model' => $model,'tip'=>$tip
+    ]);
+}
+
+   public function actionDatesAjax()
+{
+    Yii::$app->response->format = Response::FORMAT_JSON;
+
+    $id = Yii::$app->request->post('id');
+    $tip= Yii::$app->request->post('tip');
+    $vehicle = Vehicle::findOne($id);
+
+    if (!$vehicle) return ['success' => false, 'message' => 'Camionul nu exista !'];
+    $dataID = Yii::$app->formatter->asDate(Yii::$app->request->post('dataID'),'yyyy-MM-dd');
+    $year =  Yii::$app->formatter->asDate($dataID,'yyyy');
+     
+    if($tip==='di')
+    {
+
+        $vehicle->start_date= $year==='1970'?null:Yii::$app->formatter->asDate($dataID,'yyyy-MM-dd');
+    } else if($tip==='de') {
+             $vehicle->end_date= $year==='1970'?null:Yii::$app->formatter->asDate($dataID,'yyyy-MM-dd');
+    }
+
+    if ($vehicle->save()) {
+        return ['success' => true];
+    }
+
+    return ['success' => false, 'message' => 'Eroare salvare !'];
+}
+
 }

@@ -5,7 +5,7 @@ use yii\bootstrap5\ActiveForm;
 /** @var app\models\Vehicle $model */
 
 ?>
-<form id="editInfoForm"></form>
+<form id="editInfoForm">
 <input type="hidden" name="id" value="<?= $model->id ?>">
 <div class="vehicle-form">
     <h4>Vehicul: <?= $model->regno ?></h4>

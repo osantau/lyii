@@ -16,6 +16,12 @@ $this->registerCss("
          #vehicleTable tbody td:nth-child(3)  {
         cursor: pointer;
     }
+           #vehicleTable tbody td:nth-child(4)  {
+        cursor: pointer;
+    }
+           #vehicleTable tbody td:nth-child(5)  {
+        cursor: pointer;
+    }
 ");
 ?>
 <div class="site-index">
@@ -37,6 +43,7 @@ $this->registerCss("
             <th>Adresa Incarcare</th>
             <th>Adresa Descarcare</th>
             <th>Actions</th>
+            <th>Status</th>
         </tr>
     </thead>
 </table>
@@ -66,9 +73,28 @@ $this->registerJs(<<<JS
         {data: 6}, // Adresa Descarcare Exp
         {data: 7}, // Adresa incarcare Imp
         {data: 8}, // Adresa descarcare Imp
-        {data: 9} // actions
+        {data: 9}, // actions
+        {data: 10, visible:false}
+
 
   ]  ,
+  "rowCallback": function(row, data, index){
+    // $(row).css('font-weight','bold');
+        var cond = data[10];
+        switch (cond) {
+           
+          case 1:
+                   $(row).css('background-color', '#98FB98');
+                break;
+          case 2:
+                   $(row).css('background-color', '#FFA07A');
+                break;
+            default:
+                   
+                break;
+        }
+    }
+  ,
       drawCallback: function(settings) {
         $('#vehicleTable tbody td:nth-child(2)').each(function() { // Nr. inmatriculare column
             var cell = $(this);
@@ -212,6 +238,50 @@ $this->registerJs(<<<JS
         }
     });
 });
+//Editare campuri date
+$('#vehicleTable tbody td:nth-child(4), #vehicleTable tbody td:nth-child(5)').each(function() { // Data Incarcare
+            var cell = $(this);            
+            var rowData = table.row(cell.closest('tr')).data();        
+            var cellIndex = table.cell(cell).index().column;
+            var pTip = cellIndex==4?'di':'de'
+            cell.off('click').on('click', function() {
+            
+        // Load form via Ajax
+        $.ajax({
+            url: 'vehicle/dates',
+            data: { id: rowData[0] , tip:pTip},
+            success: function(html) {
+                $('#editDatesModal .modal-body').html(html);                
+                var modal = new bootstrap.Modal(document.getElementById('editDatesModal'));
+                modal.show();
+            }
+        });
+    }); 
+ 
+
+        });
+     // salveaza data incarcare si descarcare
+  $('#editDatesModal').on('submit', function(e) {
+    e.preventDefault();
+    $.ajax({
+        url: 'vehicle/dates-ajax',
+        method: 'POST',
+        data: $('#editDatesForm').serialize(),
+        success: function(response) {
+            if (response.success) {
+                // Close modal
+                var modalEl = document.getElementById('editDatesModal');
+                var modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+                // Reload DataTable
+                table.ajax.reload(null, false);
+            } else {
+                alert(response.message);
+            }
+        }
+    });
+});
+//end of
     }      
     });
 JS);
@@ -245,6 +315,26 @@ JS);
         <div class="modal-header">
           <h5 class="modal-title" id="editInfoModalLabel">Editare Comanda</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Form fields will be loaded via Ajax -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Inchide</button>
+          <button type="submit" class="btn btn-primary">Salveaza</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Edit Transport Order Modal -->
+<div class="modal fade" id="editDatesModal" tabindex="-1" aria-labelledby="editDatesModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="editDatesForm">
+        <div class="modal-header">
+          <!-- <h5 class="modal-title" id="editDatesModalLabel">Editare Comanda</h5> -->
+          <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
         </div>
         <div class="modal-body">
           <!-- Form fields will be loaded via Ajax -->
