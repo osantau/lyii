@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use Yii;
 use yii\web\Response;
+use yii\helpers\ArrayHelper;
 /**
  * TransportOrderController implements the CRUD actions for TransportOrder model.
  */
@@ -182,4 +183,54 @@ class TransportOrderController extends Controller
 
     return ['content'=>$content];
 }
+
+public function actionInfo($id, $cId)
+{
+     Yii::$app->response->format = Response::FORMAT_JSON;    
+       $orders = ArrayHelper::map(
+    TransportOrder::find()->where(['status' => 0])->all(),
+    'id',
+    'documentno'
+);
+        return $this->renderAjax('info', [
+        'c_id' => $cId,'v_id'=>$id,'orders'=>$orders
+    ]);
+}
+
+public function actionInfoAjax()
+{
+    Yii::$app->response->format = Response::FORMAT_JSON;
+
+    $o_old_id =Yii::$app->request->post('id'); 
+    $v_id = Yii::$app->request->post('v_id');
+    $o_id = Yii::$app->request->post('transport_order_id');
+    $vehicle = Vehicle::findOne($v_id);
+    $order = TransportOrder::findOne($o_id);
+    if ($order !==null)
+    {                          
+            $vehicle->status=1;
+            $vehicle->transport_order_id=$o_id;
+            $vehicle->save();
+            $order->status=1;
+            $order->save();
+            if(!empty($o_old_id)) {
+            $oldOrder = TransportOrder::findOne($o_old_id);
+            $oldOrder->status=0;
+            $oldOrder->save();     
+            }       
+    } if(empty($o_id)) {
+            $vehicle->status=0;
+            $vehicle->transport_order_id=null;
+            $vehicle->save();
+               if(!empty($o_old_id)) {
+            $oldOrder = TransportOrder::findOne($o_old_id);
+            $oldOrder->status=0;
+            $oldOrder->save();     
+            } 
+    }       
+    
+
+    return ['success' => true];
+}
+
 }
