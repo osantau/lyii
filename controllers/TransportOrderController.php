@@ -220,7 +220,14 @@ public function actionInfoAjax()
             }       
     } if(empty($o_id)) {
             $vehicle->status=0;
-            $vehicle->transport_order_id=null;
+              $vehicle->transport_order_id=null;
+                $vehicle->start_date=null;
+                $vehicle->end_date=null;
+                $vehicle->exp_adr_start=null;
+                $vehicle->exp_adr_end=null;                
+                $vehicle->imp_adr_start=null;
+                $vehicle->imp_adr_end=null;                
+                $vehicle->info=null;
             $vehicle->save();
                if(!empty($o_old_id)) {
             $oldOrder = TransportOrder::findOne($o_old_id);
