@@ -7,7 +7,11 @@ $this->registerCssFile('https://cdn.datatables.net/1.13.6/css/jquery.dataTables.
 $this->registerJsFile('https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 // $this->registerCssFile('https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css');
 // $this->registerJsFile('https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
-
+$this->registerCss("
+    #vehicleTable tbody td:nth-child(2) {
+        cursor: pointer;
+    }
+");
 ?>
 <div class="site-index">
 <h1>Camioane</h1>
@@ -72,7 +76,7 @@ $this->registerJs("
             cell.tooltip('dispose');
 
             // On mouse enter, fetch tooltip content
-         cell.off('mouseenter').on('mouseenter', function() {
+         cell.off('mouseenter').on('mouseenter', function() {         
                 hoverTimeout = setTimeout(function() {
                     $.ajax({
                         url: 'vehicle/summary',
