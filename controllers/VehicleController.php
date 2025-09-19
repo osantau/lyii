@@ -465,6 +465,13 @@ public function actionDates($id, $tip)
              $vehicle->end_date= $year==='1970'?null:Yii::$app->formatter->asDate($dataID,'yyyy-MM-dd');
     }
 
+        if(isset($vehicle->start_date) && isset($vehicle->end_date))
+        {
+            if($vehicle->start_date> $vehicle->end_date)
+            {
+                  return ['success' => false, 'message' => 'Data incarcare > Data descarcare !'];
+            }
+        }
     if ($vehicle->save()) {
         return ['success' => true];
     }
