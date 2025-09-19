@@ -71,11 +71,21 @@
             });
         });
     }
+function initVehicleUI() {
+    // Initialize Bootstrap popovers
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+    popoverTriggerList.map(function(el) {
+        return new bootstrap.Popover(el);
+    });
 
+    // Example: reapply Select2 or any other dynamic plugin if needed
+    // $('.select2').select2({ ... }); // if you use Select2 outside EditableColumn
+}
     // Init pe încărcarea paginii
     jQuery(function() {
         initCustomClick();
         initPopovers();
+        initVehicleUI();
     });
 
     // Re-init după PJAX
@@ -83,5 +93,9 @@
         initCustomClick();
         initPopovers();
     });
+    // Re-initialize after every PJAX request
+jQuery(document).on('pjax:end', function() {
+    initVehicleUI();
+});
 
 })(jQuery);
