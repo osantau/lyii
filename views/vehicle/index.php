@@ -138,24 +138,26 @@ $this->registerJs(<<<JS
 });
 
  $('#vehicleTable tbody td:nth-child(3)').each(function() { // Comanda Transport
-            var cell = $(this);
-            var rowNode = cell.closest('tr'); 
+            var cell = $(this);            
             var rowData = table.row(cell.closest('tr')).data();
-           // var span = $('td', rowNode).eq(2).find('span#action-' + rowData[2]) ;
+            var rowNode = cell.closest('tr');  
+            var span = rowNode.find('td').eq(2).find('span');
+            var orderId=span.attr('data-id');
             var hoverTimeout;                        
+            
             cell.attr('data-bs-toggle', 'tooltip')
                 .attr('title', ''); // temporary placeholder
 
             // Remove any existing tooltip
             cell.tooltip('dispose');
-           
+            if(orderId.length>0) {
             // On mouse enter, fetch tooltip content
-         cell.off('mouseenter').on('mouseenter', function() {                      
-                //console.log(span);
+            cell.off('mouseenter').on('mouseenter', function() {  
+                                                              
                 hoverTimeout = setTimeout(function() {
                     $.ajax({
                         url: 'transport-order/summary',
-                        data: { id: rowData[0] },
+                        data: { id: rowData[0], cId: orderId },
                         success: function(response) {
                             cell.attr('title', response.content)
                                 .tooltip('dispose')
@@ -165,13 +167,14 @@ $this->registerJs(<<<JS
                     });
                 }, 300); // delay in milliseconds
             });
-
+             
+        }
             // On mouse leave, hide tooltip
             cell.off('mouseleave').on('mouseleave', function() {
                 clearTimeout(hoverTimeout);     
                 cell.tooltip('hide');
             });       
-            
+              
         cell.off('click').on('click', function() {
         // Load form via Ajax
         $.ajax({
