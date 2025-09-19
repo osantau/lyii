@@ -173,9 +173,9 @@ class TransportOrderController extends Controller
         return json_encode($query);    
     }
 
-   public function actionSummary($id,$cId) {
+   public function actionSummary($id, $cId) {
     Yii::$app->response->format = Response::FORMAT_JSON;
-          $model=$this->findModel($id);        
+          $model=$this->findModel($cId);        
       $content=   $this->renderPartial('_popover', [
         'model' => $model,
     ]);
