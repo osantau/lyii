@@ -469,7 +469,7 @@ public function actionDates($id, $tip)
         {
             if($vehicle->start_date> $vehicle->end_date)
             {
-                  return ['success' => false, 'message' => 'Data incarcare > Data descarcare !'];
+                  return ['success' => false, 'message' => 'Atentie! Data incarcare > Data descarcare !'];
             }
         }
     if ($vehicle->save()) {
