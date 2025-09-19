@@ -352,11 +352,13 @@ public function actionFinalizeOrder($id)
 
 }
 public function actionSummary($id) {
-    
-    $model=$this->findModel($id);         
-        return $this->renderPartial('_popover', [
+    Yii::$app->response->format = Response::FORMAT_JSON;
+          $model=$this->findModel($id);         
+      $content=   $this->renderPartial('_popover', [
         'model' => $model,
     ]);
+
+    return ['content'=>$content];
 }
 public function actionData()
     {
