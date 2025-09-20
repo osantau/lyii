@@ -19,7 +19,12 @@ use Yii;
  * @property int|null $updated_by
  *
  * @property User $createdBy
- */
+ * @property Countries $Country
+ * @property States $State
+ * @property Cities $City
+ * 
+
+*/
 class Location extends \yii\db\ActiveRecord
 {
 
@@ -46,7 +51,7 @@ class Location extends \yii\db\ActiveRecord
     {
         return [
             [['created_by', 'updated_by'], 'default', 'value' => null],
-            [['countries_id', 'states_id', 'cities_id', 'address', 'created_at', 'updated_at'], 'required'],
+            [['countries_id', 'states_id', 'cities_id', 'address'], 'required'],
             [['countries_id', 'states_id', 'cities_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['address'], 'string', 'max' => 255],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
@@ -88,6 +93,19 @@ class Location extends \yii\db\ActiveRecord
     public static function find()
     {
         return new LocationQuery(get_called_class());
+    }
+
+     public function getCountry()
+    {
+        return $this->hasOne(Countries::class, ['id' => 'countries_id']);
+    }
+    public function getState()
+    {
+        return $this->hasOne(States::class, ['id' => 'states_id']);
+    }
+    public function getCity()
+    {
+        return $this->hasOne(Cities::class, ['id' => 'cities_id']);
     }
 
 }
