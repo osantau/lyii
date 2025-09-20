@@ -12,6 +12,7 @@ use Yii;
  * @property int $countries_id
  * @property int $states_id
  * @property int $cities_id
+ * @property int $partner_id
  * @property string $address
  * @property int $created_at
  * @property int $updated_at
@@ -22,6 +23,7 @@ use Yii;
  * @property Countries $country
  * @property States $ctate
  * @property Cities $city
+ * @property  Partner $partner
  * 
 
 */
@@ -51,8 +53,8 @@ class Location extends \yii\db\ActiveRecord
     {
         return [
             [['created_by', 'updated_by'], 'default', 'value' => null],
-            [['countries_id', 'states_id', 'cities_id', 'address'], 'required'],
-            [['countries_id', 'states_id', 'cities_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['countries_id', 'states_id', 'cities_id', 'address','partner_id'], 'required'],
+            [['countries_id', 'states_id', 'cities_id', 'created_at', 'updated_at', 'created_by', 'updated_by','partner_id'], 'integer'],
             [['address'], 'string', 'max' => 255],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
         ];
@@ -73,6 +75,7 @@ class Location extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
+            'partner_id' => 'Firma',
         ];
     }
 
@@ -106,6 +109,10 @@ class Location extends \yii\db\ActiveRecord
     public function getCity()
     {
         return $this->hasOne(Cities::class, ['id' => 'cities_id']);
+    }
+
+    public function getPartner(){
+        return $this->hasOne(Partner::class,['id'=>'partner_id']);
     }
 
 }

@@ -1,5 +1,6 @@
 <?php
 
+use yii\db\Query;
 use yii\helpers\Html;
 use yii\bootstrap5\ActiveForm;
 use kartik\select2\Select2;
@@ -16,7 +17,10 @@ use yii\helpers\Url;
      <?= $form->errorSummary($model) ?>
     
 <?= $form->field($model, 'countries_id')->widget(Select2::class, [
-    'data' => \yii\helpers\ArrayHelper::map(\app\models\Countries::find()->where(['region_id'=>4])->orderBy('name')->all(), 'id', 'name'),
+    'data' => \yii\helpers\ArrayHelper::map((new Query())
+    ->select(['id','name'])
+    ->from('countries_eu')  
+    ->orderBy('name')->all(), 'id', 'name'),
     'options' => ['id' => 'countries-id', 'placeholder' => 'Selectati o tara ...','label'=>'Tara'],
     'pluginOptions' => [
         'allowClear' => true
@@ -41,6 +45,16 @@ use yii\helpers\Url;
         'depends' => ['states-id'], 
         'placeholder' => 'Selectati localitate ...',
         'url' => Url::to(['/location/cities']) // controller action to fetch cities
+    ]
+]); ?> 
+
+<?= $form->field($model, 'partner_id')->widget(DepDrop::class, [
+      'type' => DepDrop::TYPE_SELECT2, 
+    'options' => ['id' => 'partner-id'],
+    'pluginOptions' => [
+        'depends' => ['cities-id'], 
+        'placeholder' => 'Selectati Firma ...',
+        'url' => Url::to(['/location/partners']) // controller action to fetch cities
     ]
 ]); ?> 
 

@@ -5,11 +5,14 @@ namespace app\controllers;
 use app\models\Cities;
 use app\models\Location;
 use app\models\LocationSearch;
+use app\models\Partner;
 use app\models\States;
+use yii\db\Query;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\web\Response;
 
 /**
@@ -180,16 +183,40 @@ class LocationController extends Controller
         if ($parents != null) {
             $country_id = $parents[0];
 
-            $cities = States::find()
+            $states =(new Query())
                 ->where(['country_id' => $country_id])
+                ->select(['id','name'])
+                ->from('states_eu')
+                ->orderBy('name')                
+                ->all();
+
+            $out = [];
+            foreach ($states as $state) {
+                $out[] = ['id' => $state['id'], 'name' => $state['name']];
+            }
+
+            return ['output' => $out, 'selected' => ''];
+        }
+    }
+    return ['output' => '', 'selected' => ''];
+    }
+        public function actionPartners() {
+         \Yii::$app->response->format = Response::FORMAT_JSON;
+
+    $out = [];
+    if (isset($_POST['depdrop_parents'])) {
+        $parents = $_POST['depdrop_parents'];
+        if ($parents != null) {            
+
+            $partners = Partner::find()        
                 ->select(['id','name'])
                 ->orderBy('name')
                 ->asArray()
                 ->all();
 
             $out = [];
-            foreach ($cities as $city) {
-                $out[] = ['id' => $city['id'], 'name' => $city['name']];
+            foreach ($partners as $partner) {
+                $out[] = ['id' => $partner['id'], 'name' => $partner['name']];
             }
 
             return ['output' => $out, 'selected' => ''];
