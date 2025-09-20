@@ -19,9 +19,9 @@ use Yii;
  * @property int|null $updated_by
  *
  * @property User $createdBy
- * @property Countries $Country
- * @property States $State
- * @property Cities $City
+ * @property Countries $country
+ * @property States $ctate
+ * @property Cities $city
  * 
 
 */
