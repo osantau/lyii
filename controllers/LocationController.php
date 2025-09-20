@@ -2,12 +2,15 @@
 
 namespace app\controllers;
 
+use app\models\Cities;
 use app\models\Location;
 use app\models\LocationSearch;
+use app\models\States;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\web\Response;
 
 /**
  * LocationController implements the CRUD actions for Location model.
@@ -79,7 +82,7 @@ class LocationController extends Controller
     public function actionCreate()
     {
         $model = new Location();
-
+        
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -141,5 +144,57 @@ class LocationController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    public function actionCities() {
+         \Yii::$app->response->format = Response::FORMAT_JSON;
+
+    $out = [];
+    if (isset($_POST['depdrop_parents'])) {
+        $parents = $_POST['depdrop_parents'];
+        if ($parents != null) {
+            $state_id = $parents[0];
+
+            $cities = Cities::find()
+                ->where(['state_id' => $state_id])
+                ->select(['id','name'])
+                ->orderBy('name')
+                ->asArray()
+                ->all();
+
+            $out = [];
+            foreach ($cities as $city) {
+                $out[] = ['id' => $city['id'], 'name' => $city['name']];
+            }
+
+            return ['output' => $out, 'selected' => ''];
+        }
+    }
+    return ['output' => '', 'selected' => ''];
+    }
+      public function actionStates() {
+         \Yii::$app->response->format = Response::FORMAT_JSON;
+
+    $out = [];
+    if (isset($_POST['depdrop_parents'])) {
+        $parents = $_POST['depdrop_parents'];
+        if ($parents != null) {
+            $country_id = $parents[0];
+
+            $cities = States::find()
+                ->where(['country_id' => $country_id])
+                ->select(['id','name'])
+                ->orderBy('name')
+                ->asArray()
+                ->all();
+
+            $out = [];
+            foreach ($cities as $city) {
+                $out[] = ['id' => $city['id'], 'name' => $city['name']];
+            }
+
+            return ['output' => $out, 'selected' => ''];
+        }
+    }
+    return ['output' => '', 'selected' => ''];
     }
 }

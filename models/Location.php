@@ -31,6 +31,13 @@ class Location extends \yii\db\ActiveRecord
     {
         return 'location';
     }
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
+            BlameableBehavior::class,
+        ];
+    }
 
     /**
      * {@inheritdoc}
@@ -53,10 +60,10 @@ class Location extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'countries_id' => 'Countries ID',
-            'states_id' => 'States ID',
-            'cities_id' => 'Cities ID',
-            'address' => 'Address',
+            'countries_id' => 'Tara',
+            'states_id' => 'Regiune',
+            'cities_id' => 'Localitate',
+            'address' => 'Adresa',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
@@ -82,11 +89,5 @@ class Location extends \yii\db\ActiveRecord
     {
         return new LocationQuery(get_called_class());
     }
-public function behaviors()
-    {
-        return [
-            TimestampBehavior::class,
-            BlameableBehavior::class,
-        ];
-    }
+
 }
