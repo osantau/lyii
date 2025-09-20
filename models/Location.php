@@ -1,7 +1,8 @@
 <?php
 
 namespace app\models;
-
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use Yii;
 
 /**
@@ -81,5 +82,11 @@ class Location extends \yii\db\ActiveRecord
     {
         return new LocationQuery(get_called_class());
     }
-
+public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
+            BlameableBehavior::class,
+        ];
+    }
 }
