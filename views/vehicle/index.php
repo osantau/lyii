@@ -9,7 +9,7 @@ $this->registerCssFile('https://cdn.datatables.net/1.13.6/css/jquery.dataTables.
 $this->registerJsFile('https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 // $this->registerCssFile('https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css');
 // $this->registerJsFile('https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
-$this->registerCss("
+$this->registerCss(" 
     #vehicleTable tbody td:nth-child(2)  {
         cursor: pointer;
     }
@@ -22,15 +22,22 @@ $this->registerCss("
            #vehicleTable tbody td:nth-child(5)  {
         cursor: pointer;
     }
+     
 ");
 ?>
 <div class="site-index">
 <h1>Camioane</h1>
 <p>
         <?= Html::a('Adauga', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-<table id="vehicleTable" class="display" style="width:100%">
-    <thead>
+    </p>   
+<table id="vehicleTable" class="display cell-border" style="width:100%">
+    <thead>      
+       <tr>
+                <th colspan="6">Detalii Comanda</th>
+                <th colspan="2">Export</th>
+                <th colspan="2">Import</th>
+                <th colspan="2"></th>
+            </tr>
         <tr>
             <th>Id</th>          
             <th>#</th>  
@@ -42,7 +49,7 @@ $this->registerCss("
             <th>Adresa Descarcare</th>
             <th>Adresa Incarcare</th>
             <th>Adresa Descarcare</th>
-            <th>Actions</th>
+            <th></th>
             <th>Status</th>
         </tr>
     </thead>
