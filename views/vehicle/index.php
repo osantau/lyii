@@ -30,7 +30,8 @@ $this->registerCss("
 <p>
         <?= Html::a('Adauga', ['create'], ['class' => 'btn btn-success']) ?>
     </p>   
-<table id="vehicleTable" class="display cell-border" style="width:100%">
+<?php echo Html::input('hidden','vehicleDataUrl',Url::to('vehicle/data',true),['id'=>'vehicleDataUrl']);?>
+    <table id="vehicleTable" class="display cell-border" style="width:100%">
     <thead>      
        <tr>
                 <th colspan="6">Detalii Comanda</th>
@@ -51,19 +52,22 @@ $this->registerCss("
             <th>Adresa Descarcare</th>
             <th></th>
             <th>Status</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
 </table>
 
 <?php
-
-
 $this->registerJs(<<<JS
-  var table=  $('#vehicleTable').DataTable({        
+  const docUrl = $('#vehicleDataUrl').val();  
+var table=  $('#vehicleTable').DataTable({        
         processing: true,
         serverSide: true,
         ordering: false,
-        ajax: 'vehicle/data',            
+        ajax: docUrl,            
      columns: [  
         {data: 0, visible: false },   //ID      
         {data: null,  // Contor
@@ -81,8 +85,11 @@ $this->registerJs(<<<JS
         {data: 7}, // Adresa incarcare Imp
         {data: 8}, // Adresa descarcare Imp
         {data: 9}, // actions
-        {data: 10, visible:false}
-
+        {data: 10, visible:false},
+        {data: 11, visible:false},
+        {data: 12, visible:false},
+        {data: 13, visible:false},
+        {data: 14, visible:false}
 
   ]  ,
   "rowCallback": function(row, data, index){
