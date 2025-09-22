@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Partner $model */
 
-$this->title = 'Adauga Firma';
+$this->title = 'Adauga Client';
 /*$this->params['breadcrumbs'][] = ['label' => 'Firma', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title; */
 ?>

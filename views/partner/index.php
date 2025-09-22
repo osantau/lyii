@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 /** @var app\models\PartnerSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Firme';
+$this->title = 'Clienti';
 // $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="partner-index">
@@ -18,7 +18,7 @@ $this->title = 'Firme';
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Adauga Firma', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Adauga Client', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
