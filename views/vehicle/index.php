@@ -30,7 +30,10 @@ $this->registerCss("
 <p>
         <?= Html::a('Adauga', ['create'], ['class' => 'btn btn-success']) ?>
     </p>   
-<?php echo Html::input('hidden','vehicleDataUrl',Url::to('vehicle/data',true),['id'=>'vehicleDataUrl']);?>
+<?php 
+echo Html::input('hidden','baseUrl',Url::base(true),['id'=>'baseUrl']);
+
+?>
     <table id="vehicleTable" class="display cell-border" style="width:100%">
     <thead>      
        <tr>
@@ -62,12 +65,12 @@ $this->registerCss("
 
 <?php
 $this->registerJs(<<<JS
-  const docUrl = $('#vehicleDataUrl').val();  
+  const baseUrl = $('#baseUrl').val();  
 var table=  $('#vehicleTable').DataTable({        
         processing: true,
         serverSide: true,
         ordering: false,
-        ajax: docUrl,            
+        ajax: baseUrl+'/vehicle/data',            
      columns: [  
         {data: 0, visible: false },   //ID      
         {data: null,  // Contor
@@ -124,7 +127,7 @@ var table=  $('#vehicleTable').DataTable({
          cell.off('mouseenter').on('mouseenter', function() {         
                 hoverTimeout = setTimeout(function() {
                     $.ajax({
-                        url: 'vehicle/summary',
+                        url: baseUrl+'/vehicle/summary',
                         data: { id: rowData[0] },
                         success: function(response) {
                             cell.attr('title', response.content)
@@ -145,7 +148,7 @@ var table=  $('#vehicleTable').DataTable({
         cell.off('click').on('click', function() {
         // Load form via Ajax
         $.ajax({
-            url: 'vehicle/info',
+            url: baseUrl+'/vehicle/info',
             data: { id: rowData[0] },
             success: function(html) {
                 $('#editInfoModal .modal-body').html(html);                
@@ -160,7 +163,7 @@ var table=  $('#vehicleTable').DataTable({
     $('#editInfoModal').on('submit', function(e) {
     e.preventDefault();
     $.ajax({
-        url: 'vehicle/info-ajax',
+        url: baseUrl+'/vehicle/info-ajax',
         method: 'POST',
         data: $('#editInfoForm').serialize(),
         success: function(response) {
@@ -196,7 +199,7 @@ var table=  $('#vehicleTable').DataTable({
                                                               
                 hoverTimeout = setTimeout(function() {
                     $.ajax({
-                        url: 'transport-order/summary',
+                        url: baseUrl+'/transport-order/summary',
                         data: { id: rowData[0], cId: orderId },
                         success: function(response) {
                             cell.attr('title', response.content)
@@ -218,7 +221,7 @@ var table=  $('#vehicleTable').DataTable({
         cell.off('click').on('click', function() {
         // Load form via Ajax
         $.ajax({
-            url: 'transport-order/info',
+            url: baseUrl+'/transport-order/info',
             data: { id: rowData[0],cId:(orderId.length>0?orderId:'0') },
             success: function(html) {
                 $('#editComandaModal .modal-body').html(html);                
@@ -235,7 +238,7 @@ var table=  $('#vehicleTable').DataTable({
           $('#editComandaModal').on('submit', function(e) {
     e.preventDefault();
     $.ajax({
-        url: 'transport-order/info-ajax',
+        url: baseUrl+'/transport-order/info-ajax',
         method: 'POST',
         data: $('#editComandaForm').serialize(),
         success: function(response) {
@@ -262,7 +265,7 @@ $('#vehicleTable tbody td:nth-child(4), #vehicleTable tbody td:nth-child(5)').ea
             
         // Load form via Ajax
         $.ajax({
-            url: 'vehicle/dates',
+            url: baseUrl+'/vehicle/dates',
             data: { id: rowData[0] , tip:pTip},
             success: function(html) {
                 $('#editDatesModal .modal-body').html(html);                
@@ -278,13 +281,77 @@ $('#vehicleTable tbody td:nth-child(4), #vehicleTable tbody td:nth-child(5)').ea
   $('#editDatesModal').on('submit', function(e) {
     e.preventDefault();
     $.ajax({
-        url: 'vehicle/dates-ajax',
+        url: baseUrl+'/vehicle/dates-ajax',
         method: 'POST',
         data: $('#editDatesForm').serialize(),
         success: function(response) {
             if (response.success) {
                 // Close modal
                 var modalEl = document.getElementById('editDatesModal');
+                var modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+                // Reload DataTable
+                table.ajax.reload(null, false);
+            } else {
+                alert(response.message);
+            }
+        }
+    });
+});
+//end of
+//adrese
+$('#vehicleTable tbody td:nth-child(6), #vehicleTable tbody td:nth-child(7),#vehicleTable tbody td:nth-child(8), #vehicleTable tbody td:nth-child(9)').each(function() { 
+            var cell = $(this);            
+            var rowData = table.row(cell.closest('tr')).data();                                           
+            var cellIndex = table.cell(cell).index().column;   
+            var pTip ='';
+            var adrId=0;  
+             switch (cellIndex) {
+                    case 6:{
+                        pTip='exp_ai';
+                        adrId=rowData[11];
+                    }break;
+                  case 7:{
+                        pTip='exp_ad';
+                        adrId=rowData[12];
+                    }break;
+                     case 8:{
+                        pTip='imp_ai';
+                        adrId=rowData[13];
+                    }break;
+                    case 9:{
+                        pTip='imp_ad';
+                        adrId=rowData[14];
+                    }break;
+                    default:
+                      adrId=0;
+                  }
+            cell.off('click').on('click', function() {                                                                                      
+                // Load form via Ajax
+        $.ajax({
+            url: baseUrl +'/location/adrese',
+            data: { vid: rowData[0] , tip:pTip, aid:adrId},
+            success: function(html) {
+                $('#editAdreseModal .modal-body').html(html);                
+                var modal = new bootstrap.Modal(document.getElementById('editAdreseModal'));
+                modal.show();
+            }
+        }); 
+    }); 
+ 
+
+        });
+     // salveaza adrese
+  $('#editAdreseModal').on('submit', function(e) {
+    e.preventDefault();
+    $.ajax({
+        url: baseUrl+'/location/adrese-ajax',
+        method: 'POST',
+        data: $('#editAdreseForm').serialize(),
+        success: function(response) {
+            if (response.success) {
+                // Close modal
+                var modalEl = document.getElementById('editAdreseModal');
                 var modal = bootstrap.Modal.getInstance(modalEl);
                 modal.hide();
                 // Reload DataTable
@@ -346,6 +413,26 @@ JS);
   <div class="modal-dialog">
     <div class="modal-content">
       <form id="editDatesForm">
+        <div class="modal-header">
+          <!-- <h5 class="modal-title" id="editDatesModalLabel">Editare Comanda</h5> -->
+          <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+        </div>
+        <div class="modal-body">
+          <!-- Form fields will be loaded via Ajax -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Inchide</button>
+          <button type="submit" class="btn btn-primary">Salveaza</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Adauga / Editeaza Adresa -->
+<div class="modal fade" id="editAdreseModal" tabindex="-1" aria-labelledby="editAdreseModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="editAdreseForm">
         <div class="modal-header">
           <!-- <h5 class="modal-title" id="editDatesModalLabel">Editare Comanda</h5> -->
           <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->

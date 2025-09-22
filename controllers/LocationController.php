@@ -7,6 +7,10 @@ use app\models\LocationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
+use yii\filters\AccessControl;
+use Yii;
+use app\models\Vehicle;
 
 /**
  * LocationController implements the CRUD actions for Location model.
@@ -16,18 +20,28 @@ class LocationController extends Controller
     /**
      * @inheritDoc
      */
-    public function behaviors()
+ public function behaviors()
     {
         return array_merge(
             parent::behaviors(),
             [
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
                 ],
-            ]
+            ],
+             ['access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        // allow only the specific user (by username)
+                        'allow' => true,
+                        'roles' => ['@'], // logged-in users                        
+                    ],
+                ],
+            ],],
         );
     }
 
@@ -131,4 +145,33 @@ class LocationController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+public function actionAdrese($vid, $tip,$aid=0)
+{
+    Yii::$app->response->format = Response::FORMAT_JSON;
+    
+     $model=Location::findOne(['id'=>$aid])??new Location();                  
+        return $this->renderAjax('_adresa', [
+        'model' => $model,'tip'=>$tip,'vid'=>$vid,'aid'=>$aid
+    ]);
+}
+
+  public function actionAdreseAjax()
+{
+    Yii::$app->response->format = Response::FORMAT_JSON;
+
+    $vid = Yii::$app->request->post('vid');
+    $tip= Yii::$app->request->post('tip');
+    $aid = Yii::$app->request->post('aid');
+    $vehicle = Vehicle::findOne($vid);
+    
+    $location = Location::findOne(['id'=>$aid])??new Location();
+if ($location->isNewRecord)
+{
+      return ['success' => true, 'message' => 'Locatie naoua!'];
+}
+
+
+    return ['success' => false, 'message' => 'Eroare salvare !'];
+}
 }
