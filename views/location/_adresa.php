@@ -30,31 +30,27 @@ use kartik\select2\Select2;
             break;
     }
 ?>
-    <h4><?=$title?></h4>
-    <?php $form = ActiveForm::begin(['id'=>'editAdreseForm']); ?>
+    <h4><?=$title?></h4>    
+    <?php $form  = ActiveForm::begin(['id'=>'editAdreseForm', 'enableAjaxValidation' => false,
+    'enableClientValidation' => true,])?>
     <input type="hidden" name="vid" id="vid" value="<?= $vid?>">
     <input type="hidden" name="tip" id="tip" value="<?= $tip?>">
     <input type="hidden" name="aid" id="aid" value="<?= $aid?>">
-    <?= $form->field($model, 'company')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'company')->textInput(['maxlength' => true,'name'=>'company','id'=>'company']) ?>
+   <?= $form->field($model, 'country')->textInput(['list' => 'countries','id'=>'country','name'=>'country']) ?>
+    <datalist id="countries" >
+       <?= $tariList?>
+        </datalist>
+    </datalist>
+    <?= $form->field($model, 'region')->textInput(['maxlength' => true,'name'=>'region','id'=>'region']) ?>
 
-    <?= $form->field($model, 'countries_id')->widget(Select2::class, [
-    'data' => \yii\helpers\ArrayHelper::map((new Query())
-    ->select(['id','name'])
-    ->from('countries_eu')  
-    ->orderBy('name')->all(), 'id', 'name'),
-    'options' => ['placeholder' => 'Selectati o tara ...','label'=>'Tara'],
-    'pluginOptions' => [
-        'allowClear' => true,
-           'minimumResultsForSearch' => 'Infinity',
-    ],
-]); ?>
-    
-    <?= $form->field($model, 'region')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'city')->textInput(['maxlength' => true,'name'=>'city','id'=>'city']) ?>
 
-    <?= $form->field($model, 'city')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'address')->textArea(['maxlength' => true,'rows'=>2,'cols'=>10]) ?>   
-
+    <?= $form->field($model, 'address')->textArea(['maxlength' => true,'rows'=>2,'cols'=>10,'name'=>'address','id'=>'address']) ?>       
+  <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Inchide</button>
+          <button type="submit" class="btn btn-primary">Salveaza</button>
+        </div>
     <?php ActiveForm::end(); ?>
 
 </div>

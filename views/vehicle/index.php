@@ -70,6 +70,8 @@ var table=  $('#vehicleTable').DataTable({
         processing: true,
         serverSide: true,
         ordering: false,
+        autoWidth: true,
+        scrollX:true,
         ajax: baseUrl+'/vehicle/data',            
      columns: [  
         {data: 0, visible: false },   //ID      
@@ -365,6 +367,9 @@ $('#vehicleTable tbody td:nth-child(6), #vehicleTable tbody td:nth-child(7),#veh
 //end of
     }      
     });
+     $('#editInfoModal, #editComandaModal, #editDatesModal, #editAdreseModal').on('shown.bs.modal', function () {
+        table.columns.adjust().draw();
+    });
 JS);
 ?>
 </div>
@@ -408,7 +413,7 @@ JS);
     </div>
   </div>
 </div>
-<!-- Edit Transport Order Modal -->
+<!-- Edit Dates Modal -->
 <div class="modal fade" id="editDatesModal" tabindex="-1" aria-labelledby="editDatesModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -432,19 +437,12 @@ JS);
 <div class="modal fade" id="editAdreseModal" tabindex="-1" aria-labelledby="editAdreseModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form id="editAdreseForm">
-        <div class="modal-header">
-          <!-- <h5 class="modal-title" id="editDatesModalLabel">Editare Comanda</h5> -->
-          <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+      
+        <div class="modal-header">          
         </div>
         <div class="modal-body">
           <!-- Form fields will be loaded via Ajax -->
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Inchide</button>
-          <button type="submit" class="btn btn-primary">Salveaza</button>
-        </div>
-      </form>
-    </div>
+        </div>        
+      </div>
   </div>
 </div>

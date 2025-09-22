@@ -11,7 +11,7 @@ class m250920_142827_create_table_location extends Migration
     {
            $this->createTable('{{%location}}', [
              'id' => $this->primaryKey(),
-             'countries_id' =>$this->integer()->notNull(),
+             'countries_id' =>$this->integer()->notNull()->defaultValue(0),
              'states_id'=>$this->integer()->notNull()->defaultValue(0),   
              'cities_id'=>$this->integer()->notNull()->defaultValue(0),    
              'partner_id'=>$this->integer(11)->notNull()->defaultValue(0),

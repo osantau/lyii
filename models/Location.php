@@ -54,7 +54,7 @@ class Location extends \yii\db\ActiveRecord
             [['created_by', 'updated_by'], 'default', 'value' => null],
             [['partner_id'], 'default', 'value' => 0],
             [['address'], 'default', 'value' => ''],
-            [['company','countries_id', 'city','address'], 'required'],
+            [['company', 'city','address','country'], 'required'],
             [['countries_id', 'states_id', 'cities_id', 'partner_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['company', 'country', 'city'], 'string', 'max' => 100],
             [['region'], 'string', 'max' => 50],
@@ -104,11 +104,11 @@ class Location extends \yii\db\ActiveRecord
     {
         return new LocationQuery(get_called_class());
     }
-   public function beforeSave($insert){
+   /*public function beforeSave($insert){
         if(parent::beforeSave($insert)){
-            $this->country=Countries::find()->where(['id'=>$this->countries_id])->one()->name;
+            $this->countries_id=Countries::find()->where(['name'=>$this->country])->one()->id;
             return true;
         }
         return false;
-    }
+    } */
 }

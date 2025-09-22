@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Countries;
 use app\models\Location;
 use app\models\LocationSearch;
 use yii\web\Controller;
@@ -11,7 +12,8 @@ use yii\web\Response;
 use yii\filters\AccessControl;
 use Yii;
 use app\models\Vehicle;
-
+use yii\helpers\VarDumper;
+use yii\db\Query;
 /**
  * LocationController implements the CRUD actions for Location model.
  */
@@ -148,29 +150,83 @@ class LocationController extends Controller
 
 public function actionAdrese($vid, $tip,$aid=0)
 {
-    Yii::$app->response->format = Response::FORMAT_JSON;
+    // Yii::$app->response->format = Response::FORMAT_JSON;
     
-     $model=Location::findOne(['id'=>$aid])??new Location();                  
-        return $this->renderAjax('_adresa', [
-        'model' => $model,'tip'=>$tip,'vid'=>$vid,'aid'=>$aid
+    $model=Location::findOne(['id'=>$aid])??new Location(); 
+    $tari=(new yii\db\Query())
+    ->select(['name'])
+    ->from('countries_eu')  
+    ->orderBy(['name'=>SORT_ASC])->all();
+    $tariList=''; 
+    foreach ($tari as $tara) {
+        $tariList .= '<option value="' . $tara['name'] . '">';
+    }
+    
+    return $this->renderAjax('_adresa', [
+        'model' => $model,'tip'=>$tip,'vid'=>$vid,'aid'=>$aid,'tariList'=>$tariList
     ]);
+
+
 }
 
   public function actionAdreseAjax()
 {
     Yii::$app->response->format = Response::FORMAT_JSON;
-
-    $vid = Yii::$app->request->post('vid');
-    $tip= Yii::$app->request->post('tip');
-    $aid = Yii::$app->request->post('aid');
-    $vehicle = Vehicle::findOne($vid);
     
-    $location = Location::findOne(['id'=>$aid])??new Location();
-if ($location->isNewRecord)
-{
-      return ['success' => true, 'message' => 'Locatie naoua!'];
-}
+    $vid =  Yii::$app->request->post('vid');
+    $tip=  Yii::$app->request->post('tip');
+    $aid =  Yii::$app->request->post('aid');
+    $vehicle=Vehicle::findOne(['id'=>$vid]);
+    $location=Location::findOne(['id'=>$aid])??new Location();   
+    
+     $location->country =  Yii::$app->request->post('country');
+     $location->region =  Yii::$app->request->post('region');
+     $location->city =  Yii::$app->request->post('city');
+     $location->company= Yii::$app->request->post('company');
+     $location->address= Yii::$app->request->post('address');
+     $location->save();
+       
+       
+            $adresaStr = $location->company.','.$location->address.', '.$location->city.(!empty($location->region)?', '.$location->region:'')
+            .', '.$location->country;               
+             $adresaId=$location->id;
 
+           if ($location->save()) { 
+            switch ($tip) {
+                case 'exp_ai':
+                   {
+                     $vehicle->exp_adr_start=$adresaStr;
+                     $vehicle->exp_adr_start_id=$adresaId;
+                      $vehicle->save();
+                   }break;
+                case 'exp_ad':
+                   {
+                     $vehicle->exp_adr_end=$adresaStr;
+                     $vehicle->exp_adr_end_id=$adresaId;
+                      $vehicle->save();
+                   } break;
+                case 'imp_ai':
+                   {
+                     $vehicle->imp_adr_start=$adresaStr;
+                     $vehicle->imp_adr_start_id=$adresaId;
+                      $vehicle->save();
+                   }break;
+                case 'imp_ad':
+                   {
+                     $vehicle->imp_adr_end=$adresaStr;
+                     $vehicle->imp_adr_end_id=$adresaId;
+                      $vehicle->save();
+                   }
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+        
+          return ['success'=>true];             
+
+    } 
 
     return ['success' => false, 'message' => 'Eroare salvare !'];
 }
