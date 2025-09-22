@@ -1,9 +1,10 @@
 <?php
 
 namespace app\models;
+
+use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-use Yii;
 
 /**
  * This is the model class for table "location".
@@ -13,6 +14,10 @@ use Yii;
  * @property int $states_id
  * @property int $cities_id
  * @property int $partner_id
+ * @property string $company
+ * @property string $country
+ * @property string $region
+ * @property string $city
  * @property string $address
  * @property int $created_at
  * @property int $updated_at
@@ -20,13 +25,7 @@ use Yii;
  * @property int|null $updated_by
  *
  * @property User $createdBy
- * @property Countries $country
- * @property States $ctate
- * @property Cities $city
- * @property  Partner $partner
- * 
-
-*/
+ */
 class Location extends \yii\db\ActiveRecord
 {
 
@@ -38,7 +37,7 @@ class Location extends \yii\db\ActiveRecord
     {
         return 'location';
     }
-    public function behaviors()
+        public function behaviors()
     {
         return [
             TimestampBehavior::class,
@@ -53,8 +52,12 @@ class Location extends \yii\db\ActiveRecord
     {
         return [
             [['created_by', 'updated_by'], 'default', 'value' => null],
-            [['countries_id', 'states_id', 'cities_id', 'address','partner_id'], 'required'],
-            [['countries_id', 'states_id', 'cities_id', 'created_at', 'updated_at', 'created_by', 'updated_by','partner_id'], 'integer'],
+            [['partner_id'], 'default', 'value' => 0],
+            [['address'], 'default', 'value' => ''],
+            [['company','countries_id', 'city','address'], 'required'],
+            [['countries_id', 'states_id', 'cities_id', 'partner_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['company', 'country', 'city'], 'string', 'max' => 100],
+            [['region'], 'string', 'max' => 50],
             [['address'], 'string', 'max' => 255],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
         ];
@@ -68,14 +71,18 @@ class Location extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'countries_id' => 'Tara',
-            'states_id' => 'Regiune',
-            'cities_id' => 'Localitate',
+            'states_id' => 'States ID',
+            'cities_id' => 'Cities ID',
+            'partner_id' => 'Firma',
+            'company' => 'Firma',
+            'country' => 'Tara',
+            'region' => 'Regiune',
+            'city' => 'Oras',
             'address' => 'Adresa',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
-            'partner_id' => 'Firma',
         ];
     }
 
@@ -97,22 +104,11 @@ class Location extends \yii\db\ActiveRecord
     {
         return new LocationQuery(get_called_class());
     }
-
-     public function getCountry()
-    {
-        return $this->hasOne(Countries::class, ['id' => 'countries_id']);
+   public function beforeSave($insert){
+        if(parent::beforeSave($insert)){
+            $this->country=Countries::find()->where(['id'=>$this->countries_id])->one()->name;
+            return true;
+        }
+        return false;
     }
-    public function getState()
-    {
-        return $this->hasOne(States::class, ['id' => 'states_id']);
-    }
-    public function getCity()
-    {
-        return $this->hasOne(Cities::class, ['id' => 'cities_id']);
-    }
-
-    public function getPartner(){
-        return $this->hasOne(Partner::class,['id'=>'partner_id']);
-    }
-
 }

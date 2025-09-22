@@ -17,8 +17,8 @@ class LocationSearch extends Location
     public function rules()
     {
         return [
-            [['id', 'countries_id', 'states_id', 'cities_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-            [['address'], 'safe'],
+            [['id', 'countries_id', 'states_id', 'cities_id', 'partner_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['company', 'country', 'region', 'city', 'address'], 'safe'],
         ];
     }
 
@@ -63,13 +63,18 @@ class LocationSearch extends Location
             'countries_id' => $this->countries_id,
             'states_id' => $this->states_id,
             'cities_id' => $this->cities_id,
+            'partner_id' => $this->partner_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
         ]);
 
-        $query->andFilterWhere(['like', 'address', $this->address]);
+        $query->andFilterWhere(['like', 'company', $this->company])
+            ->andFilterWhere(['like', 'country', $this->country])
+            ->andFilterWhere(['like', 'region', $this->region])
+            ->andFilterWhere(['like', 'city', $this->city])
+            ->andFilterWhere(['like', 'address', $this->address]);
 
         return $dataProvider;
     }

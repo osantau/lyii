@@ -2,18 +2,11 @@
 
 namespace app\controllers;
 
-use app\models\Cities;
 use app\models\Location;
 use app\models\LocationSearch;
-use app\models\Partner;
-use app\models\States;
-use yii\db\Query;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-use yii\helpers\ArrayHelper;
-use yii\web\Response;
 
 /**
  * LocationController implements the CRUD actions for Location model.
@@ -23,28 +16,18 @@ class LocationController extends Controller
     /**
      * @inheritDoc
      */
-  public function behaviors()
+    public function behaviors()
     {
         return array_merge(
             parent::behaviors(),
             [
                 'verbs' => [
-                    'class' => VerbFilter::class,
+                    'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
                     ],
                 ],
-            ],
-             ['access' => [
-                'class' => AccessControl::class,
-                'rules' => [
-                    [
-                        // allow only the specific user (by username)
-                        'allow' => true,
-                        'roles' => ['@'], // logged-in users                        
-                    ],
-                ],
-            ],],
+            ]
         );
     }
 
@@ -85,7 +68,7 @@ class LocationController extends Controller
     public function actionCreate()
     {
         $model = new Location();
-        
+
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -147,81 +130,5 @@ class LocationController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-    public function actionCities() {
-         \Yii::$app->response->format = Response::FORMAT_JSON;
-
-    $out = [];
-    if (isset($_POST['depdrop_parents'])) {
-        $parents = $_POST['depdrop_parents'];
-        if ($parents != null) {
-            $state_id = $parents[0];
-
-            $cities = Cities::find()
-                ->where(['state_id' => $state_id])
-                ->select(['id','name'])
-                ->orderBy('name')
-                ->asArray()
-                ->all();
-
-            $out = [];
-            foreach ($cities as $city) {
-                $out[] = ['id' => $city['id'], 'name' => $city['name']];
-            }
-
-            return ['output' => $out, 'selected' => ''];
-        }
-    }
-    return ['output' => '', 'selected' => ''];
-    }
-      public function actionStates() {
-         \Yii::$app->response->format = Response::FORMAT_JSON;
-
-    $out = [];
-    if (isset($_POST['depdrop_parents'])) {
-        $parents = $_POST['depdrop_parents'];
-        if ($parents != null) {
-            $country_id = $parents[0];
-
-            $states =(new Query())
-                ->where(['country_id' => $country_id])
-                ->select(['id','name'])
-                ->from('states_eu')
-                ->orderBy('name')                
-                ->all();
-
-            $out = [];
-            foreach ($states as $state) {
-                $out[] = ['id' => $state['id'], 'name' => $state['name']];
-            }
-
-            return ['output' => $out, 'selected' => ''];
-        }
-    }
-    return ['output' => '', 'selected' => ''];
-    }
-        public function actionPartners() {
-         \Yii::$app->response->format = Response::FORMAT_JSON;
-
-    $out = [];
-    if (isset($_POST['depdrop_parents'])) {
-        $parents = $_POST['depdrop_parents'];
-        if ($parents != null) {            
-
-            $partners = Partner::find()        
-                ->select(['id','name'])
-                ->orderBy('name')
-                ->asArray()
-                ->all();
-
-            $out = [];
-            foreach ($partners as $partner) {
-                $out[] = ['id' => $partner['id'], 'name' => $partner['name']];
-            }
-
-            return ['output' => $out, 'selected' => ''];
-        }
-    }
-    return ['output' => '', 'selected' => ''];
     }
 }

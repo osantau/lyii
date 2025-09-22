@@ -26,7 +26,17 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'cities_id') ?>
 
-    <?= $form->field($model, 'address') ?>
+    <?= $form->field($model, 'partner_id') ?>
+
+    <?php // echo $form->field($model, 'company') ?>
+
+    <?php // echo $form->field($model, 'country') ?>
+
+    <?php // echo $form->field($model, 'region') ?>
+
+    <?php // echo $form->field($model, 'city') ?>
+
+    <?php // echo $form->field($model, 'address') ?>
 
     <?php // echo $form->field($model, 'created_at') ?>
 

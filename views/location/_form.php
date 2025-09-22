@@ -1,22 +1,22 @@
 <?php
 
-use yii\db\Query;
 use yii\helpers\Html;
 use yii\bootstrap5\ActiveForm;
+use yii\db\Query;
 use kartik\select2\Select2;
-use kartik\depdrop\DepDrop;
-use yii\helpers\Url;
+
 /** @var yii\web\View $this */
 /** @var app\models\Location $model */
-/** @var yii\widgets\ActiveForm $form */
+/** @var yii\bootstrap5\ActiveForm $form */
 ?>
 
 <div class="location-form form-control w-50">
 
     <?php $form = ActiveForm::begin(); ?>
-     <?= $form->errorSummary($model) ?>
-    
-<?= $form->field($model, 'countries_id')->widget(Select2::class, [
+
+    <?= $form->field($model, 'company')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'countries_id')->widget(Select2::class, [
     'data' => \yii\helpers\ArrayHelper::map((new Query())
     ->select(['id','name'])
     ->from('countries_eu')  
@@ -26,44 +26,17 @@ use yii\helpers\Url;
         'allowClear' => true
     ],
 ]); ?>
+    
+    <?= $form->field($model, 'region')->textInput(['maxlength' => true]) ?>
 
-<?= $form->field($model, 'states_id')->widget(DepDrop::class, [
-      'type' => DepDrop::TYPE_SELECT2, 
-    'options' => ['id' => 'states-id'],
-    'pluginOptions' => [
-        'depends' => ['countries-id'], 
-        'placeholder' => 'Selectati o regiune ...',
-        'url' => Url::to(['/location/states']) // controller action to fetch cities
-    ]
-]); ?>
+    <?= $form->field($model, 'city')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
 
-<?= $form->field($model, 'cities_id')->widget(DepDrop::class, [
-      'type' => DepDrop::TYPE_SELECT2, 
-    'options' => ['id' => 'cities-id'],
-    'pluginOptions' => [
-        'depends' => ['states-id'], 
-        'placeholder' => 'Selectati localitate ...',
-        'url' => Url::to(['/location/cities']) // controller action to fetch cities
-    ]
-]); ?> 
-
-<?= $form->field($model, 'partner_id')->widget(DepDrop::class, [
-      'type' => DepDrop::TYPE_SELECT2, 
-    'options' => ['id' => 'partner-id'],
-    'pluginOptions' => [
-        'depends' => ['cities-id'], 
-        'placeholder' => 'Selectati Firma ...',
-        'url' => Url::to(['/location/partners']) // controller action to fetch cities
-    ]
-]); ?> 
-
-<?= $form->field($model, 'address')->textarea(['maxlength' => true,'rows'=>1,'cols'=>10]) ?>
-
-  
+    <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-   
- 
+    </div>
+
     <?php ActiveForm::end(); ?>
 
 </div>
