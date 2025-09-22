@@ -24,6 +24,10 @@ use Yii;
  * @property User $updatedBy
  * @property string $info
  * @property TransportOrder $transportOrder
+ * @property int $exp_adr_start_id
+ * @property int $exp_adr_end_id
+ * @property int $imp_adr_start_id
+ * @property int $imp_adr_end_id
  */
 class Vehicle extends \yii\db\ActiveRecord
 {
@@ -49,7 +53,8 @@ class Vehicle extends \yii\db\ActiveRecord
         return [
             [['regno'], 'required'],
             [['regno'], 'unique'],
-            [['created_at', 'updated_at', 'created_by', 'updated_by','transport_order_id'], 'integer'],
+            [['created_at', 'updated_at', 'created_by', 'updated_by','transport_order_id','exp_adr_start_id','exp_adr_end_id','imp_adr_end_id','imp_adr_start_id'],
+             'integer'],
             [['regno'], 'string', 'max' => 50],
             [['info','exp_adr_start', 'exp_adr_end', 'imp_adr_start', 'imp_adr_end'],'string', 'max'=>100],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],

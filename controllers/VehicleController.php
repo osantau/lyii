@@ -406,9 +406,14 @@ public function actionData()
                 $vehicle->imp_adr_end,
                 $actions,
                 $vehicle->status,
+                $vehicle->exp_adr_start_id,
+                $vehicle->exp_adr_end_id,                
+                $vehicle->imp_adr_start_id,
+                $vehicle->imp_adr_end_id,
+                                
             ];
         }
-
+        
         return [
             "draw" => intval(\Yii::$app->request->get('draw')),
             "recordsTotal" => $total,
