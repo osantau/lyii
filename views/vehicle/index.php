@@ -367,9 +367,9 @@ $('#vehicleTable tbody td:nth-child(6), #vehicleTable tbody td:nth-child(7),#veh
 //end of
     }      
     });
-     $('#editInfoModal, #editComandaModal, #editDatesModal, #editAdreseModal').on('shown.bs.modal', function () {
+     /*$('#editInfoModal, #editComandaModal, #editDatesModal, #editAdreseModal').on('shown.bs.modal', function () {
         table.columns.adjust().draw();
-    });
+    }); */
 JS);
 ?>
 </div>
