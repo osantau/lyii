@@ -229,5 +229,33 @@ public function actionAdrese($vid, $tip,$aid=0)
     } 
 
     return ['success' => false, 'message' => 'Eroare salvare !'];
+} 
+
+public function actionAddressList($q=null) {
+    Yii::$app->response->format = Response::FORMAT_JSON;
+        $query = location::find()->select(['id', 'address as text']);
+        if($q)
+        {
+            $query->andWhere(['like','country',$q])->orWhere(['like','company',$q])->orWhere(['like','region',$q])
+              ->orWhere(['like','city',$q]);
+         }
+          $locations = $query->limit(20)->asArray()->all();
+        return ['results' => $locations];
+}
+
+public function actionAddressInfo($id)
+{
+     Yii::$app->response->format = Response::FORMAT_JSON;
+        $location = Location::findOne($id);
+        if ($location) {
+            return [
+                'country' => $location->country,
+                'city' => $location->city,
+                'address'=>$location->address,
+                'region'=>$location->region,
+                'company'=>$location->company,
+            ];
+        }
+        return [];
 }
 }

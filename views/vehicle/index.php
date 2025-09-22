@@ -370,6 +370,20 @@ $('#vehicleTable tbody td:nth-child(6), #vehicleTable tbody td:nth-child(7),#veh
      /*$('#editInfoModal, #editComandaModal, #editDatesModal, #editAdreseModal').on('shown.bs.modal', function () {
         table.columns.adjust().draw();
     }); */
+    /*$('#editAdreseModal').on('shown.bs.modal', function () {
+    $(this).find('.select2').each(function() {
+        $(this).select2({
+            allowClear: true,
+            minimumInputLength: 2,
+            ajax: {
+                url: '/location/address-list',
+                dataType: 'json',
+                data: function (params) { return {q: params.term}; },
+                processResults: function (data) { return data; }
+            }
+        });
+    });
+}); */
 JS);
 ?>
 </div>

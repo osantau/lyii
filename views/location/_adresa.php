@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\bootstrap5\ActiveForm;
 use yii\db\Query;
 use kartik\select2\Select2;
+use yii\web\JsExpression;
 
 /** @var yii\web\View $this */
 /** @var app\models\Location $model */
@@ -30,14 +31,33 @@ use kartik\select2\Select2;
             break;
     }
 ?>
-    <h4><?=$title?></h4>    
+    <h4><?=$title?></h4> 
+    <?php
+   echo Select2::widget([
+    'name' => 'address_id', // input name
+    'value' => null,        // initial value
+    'options' => ['placeholder' => 'Cauta o adresa...','id'=>'address_id','class'=>'select2'],
+    'pluginOptions' => [
+        'width' => '100%',
+        'allowClear' => true,
+        'minimumInputLength' => 2,
+        'ajax' => [
+            'url' => \yii\helpers\Url::to(['location/address-list']),
+            'dataType' => 'json',
+            'data' => new JsExpression('function(params) { return {q:params.term}; }'),
+            'processResults' => new JsExpression('function(data) { return data; }'),
+        ],
+            'dropdownParent' => new \yii\web\JsExpression('$("#editAdreseModal")'),
+    ],
+]); 
+    ?>
     <?php $form  = ActiveForm::begin(['id'=>'editAdreseForm', 'enableAjaxValidation' => false,
     'enableClientValidation' => true,])?>
     <input type="hidden" name="vid" id="vid" value="<?= $vid?>">
     <input type="hidden" name="tip" id="tip" value="<?= $tip?>">
     <input type="hidden" name="aid" id="aid" value="<?= $aid?>">
     <?= $form->field($model, 'company')->textInput(['maxlength' => true,'name'=>'company','id'=>'company']) ?>
-   <?= $form->field($model, 'country')->textInput(['list' => 'countries','id'=>'country','name'=>'country']) ?>
+    <?= $form->field($model, 'country')->textInput(['list' => 'countries','id'=>'country','name'=>'country']) ?>
     <datalist id="countries" >
        <?= $tariList?>
         </datalist>
@@ -54,3 +74,34 @@ use kartik\select2\Select2;
     <?php ActiveForm::end(); ?>
 
 </div>
+<?php 
+$this->registerJs("
+
+    $('#address_id').on('select2:select', function(e) {
+    var addressId = e.params.data.id;
+
+    $.ajax({
+        url: '/location/address-info',
+        data: { id: addressId },
+        dataType: 'json',
+        success: function(data) {
+            $('#company').val(data.company);
+            $('#city').val(data.city);
+            $('#address').val(data.address);
+            $('#country').val(data.country);
+            $('#region').val(data.region);
+        }
+    });
+});
+
+// Optional: clear fields when selection is cleared
+$('#address_id').on('select2:clear', function() {
+    $('#company').val('');
+            $('#city').val('');
+            $('#address').val('');
+            $('#country').val('');
+            $('#region').val('');
+});
+
+");
+?>
