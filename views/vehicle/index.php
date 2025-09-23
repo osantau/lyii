@@ -343,7 +343,28 @@ $('#vehicleTable tbody td:nth-child(6), #vehicleTable tbody td:nth-child(7),#veh
  
 
         });
-     // salveaza adrese
+ 
+
+
+//end of
+    }      
+    });
+
+    $(document).on('click','.btnEditStatus', function(e){        
+        let vehicleId = $(this).data('id');    
+         $.ajax({
+            url: baseUrl +'/vehicle/edit-status',
+            data: { id:vehicleId },
+            success: function(html) {
+                $('#statusModal .modal-body').html(html);                
+                var modal = new bootstrap.Modal(document.getElementById('statusModal'));
+                modal.show();
+            }
+        });
+
+});
+
+    // salveaza adrese
   $('#editAdreseModal').on('submit', function(e) {
     e.preventDefault();
     $.ajax({
@@ -363,25 +384,6 @@ $('#vehicleTable tbody td:nth-child(6), #vehicleTable tbody td:nth-child(7),#veh
             }
         }
     });
-});
-
-
-//end of
-    }      
-    });
-
-    $(document).on('click','.btnEditStatus', function(e){        
-        let vehicleId = $(this).data('id');    
-         $.ajax({
-            url: baseUrl +'/vehicle/edit-status',
-            data: { id:vehicleId },
-            success: function(html) {
-                $('#statusModal .modal-body').html(html);                
-                var modal = new bootstrap.Modal(document.getElementById('statusModal'));
-                modal.show();
-            }
-        });
-
 });
 
   $('#statusModal').on('submit', function(e) {
