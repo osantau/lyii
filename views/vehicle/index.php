@@ -386,6 +386,20 @@ $('#vehicleTable tbody td:nth-child(6), #vehicleTable tbody td:nth-child(7),#veh
     });
 });
 
+ $('#editAdreseModal').on('reset', function(e) {
+    e.preventDefault();
+    $('#aid').val('0');
+    $('#company').val('');
+    $('#country').val('');
+    $('#region').val('');
+    $('#address').val('');
+    $('#city').val('');
+});
+
+ $('#btnVehDelAdr').on('click', function(e) {
+    e.preventDefault();
+    console.log('aaa');
+});
   $('#statusModal').on('submit', function(e) {
     e.preventDefault();
     $.ajax({

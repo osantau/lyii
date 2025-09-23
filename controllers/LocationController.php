@@ -177,15 +177,24 @@ public function actionAdrese($vid, $tip,$aid=0)
     $tip=  Yii::$app->request->post('tip');
     $aid =  Yii::$app->request->post('aid');
     $vehicle=Vehicle::findOne(['id'=>$vid]);
-    $location=Location::findOne(['id'=>$aid])??new Location();   
+    $location=Location::findOne(['id'=>$aid]);
+    if($location===null)
+    {
+        $location=Location::find()->where(['country'=>Yii::$app->request->post('country')
+                                          ,'region'=> Yii::$app->request->post('region')
+                                          ,'city'=>Yii::$app->request->post('city')
+                                          ,'address'=>Yii::$app->request->post('address')])->one();
+    } 
     
+    if ($location===null) {
+    $location = new Location();
      $location->country =  Yii::$app->request->post('country');
      $location->region =  Yii::$app->request->post('region');
      $location->city =  Yii::$app->request->post('city');
      $location->company= Yii::$app->request->post('company');
      $location->address= Yii::$app->request->post('address');
      $location->save();
-       
+    }
        
             $adresaStr = $location->company.','.$location->address.', '.$location->city.(!empty($location->region)?', '.$location->region:'')
             .', '.$location->country;               
@@ -233,11 +242,11 @@ public function actionAdrese($vid, $tip,$aid=0)
 
 public function actionAddressList($q=null) {
     Yii::$app->response->format = Response::FORMAT_JSON;
-        $query = location::find()->select(['id', 'address as text']);
+        $query = location::find()->select(['id', "concat(address,',',city,',',country) as text"]);
         if($q)
         {
             $query->andWhere(['like','country',$q])->orWhere(['like','company',$q])->orWhere(['like','region',$q])
-              ->orWhere(['like','city',$q]);
+              ->orWhere(['like','city',$q])->orderBy(['id'=>SORT_DESC]);
          }
           $locations = $query->limit(20)->asArray()->all();
         return ['results' => $locations];
