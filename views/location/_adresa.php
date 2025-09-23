@@ -71,7 +71,7 @@ use yii\web\JsExpression;
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Inchide</button>
           <button type="submit" class="btn btn-primary">Salveaza</button>
           <button type="reset" class="btn btn-warning">Reseteaza</button>
-          <button type="button" class="btn btn-danger btnVehDelAdr">Sterge</button>
+          <button type="button" class="btn btn-danger btnDelAdr" data-id="<?=$vid?>" id="btnDelAdr">Sterge</button>
         </div>
     <?php ActiveForm::end(); ?>
 

@@ -396,10 +396,28 @@ $('#vehicleTable tbody td:nth-child(6), #vehicleTable tbody td:nth-child(7),#veh
     $('#city').val('');
 });
 
- $('#btnVehDelAdr').on('click', function(e) {
-    e.preventDefault();
-    console.log('aaa');
+$('#editAdreseModal').on('click', '#btnDelAdr', function () {
+    let vehicleId = $(this).data('id');   
+    let pTip = $('#editAdreseModal #tip').val(  );
+    
+     $.ajax({
+        url: baseUrl+'/location/delete-ajax',        
+        data:{id:vehicleId, tip:pTip},
+        success: function(response) {
+            if (response.success) {
+                // Close modal
+                var modalEl = document.getElementById('editAdreseModal');
+                var modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+                // Reload DataTable
+                table.ajax.reload(null, false);
+            } else {
+                alert(response.message);
+            }
+        }
+    });
 });
+
   $('#statusModal').on('submit', function(e) {
     e.preventDefault();
     $.ajax({

@@ -178,6 +178,7 @@ public function actionAdrese($vid, $tip,$aid=0)
     $aid =  Yii::$app->request->post('aid');
     $vehicle=Vehicle::findOne(['id'=>$vid]);
     $location=Location::findOne(['id'=>$aid]);
+
     if($location===null)
     {
         $location=Location::find()->where(['country'=>Yii::$app->request->post('country')
@@ -195,12 +196,14 @@ public function actionAdrese($vid, $tip,$aid=0)
      $location->address= Yii::$app->request->post('address');
      $location->save();
     }
+
+    
        
             $adresaStr = $location->company.','.$location->address.', '.$location->city.(!empty($location->region)?', '.$location->region:'')
             .', '.$location->country;               
              $adresaId=$location->id;
-
-           if ($location->save()) { 
+                     
+           if ($adresaId>0) { 
             switch ($tip) {
                 case 'exp_ai':
                    {
@@ -266,5 +269,42 @@ public function actionAddressInfo($id)
             ];
         }
         return [];
+}
+
+public function actionDeleteAjax($id,$tip)
+{  Yii::$app->response->format = Response::FORMAT_JSON;
+    $vehicle = Vehicle::findOne(['id'=>$id]);
+      switch ($tip) {
+                case 'exp_ai':
+                   {
+                     $vehicle->exp_adr_start=null;
+                     $vehicle->exp_adr_start_id=0;
+                      $vehicle->save();
+                   }break;
+                case 'exp_ad':
+                   {
+                     $vehicle->exp_adr_end='';
+                     $vehicle->exp_adr_end_id=0;
+                      $vehicle->save();
+                   } break;
+                case 'imp_ai':
+                   {
+                     $vehicle->imp_adr_start='';
+                     $vehicle->imp_adr_start_id=0;
+                      $vehicle->save();
+                   }break;
+                case 'imp_ad':
+                   {
+                     $vehicle->imp_adr_end='';
+                     $vehicle->imp_adr_end_id=0;
+                      $vehicle->save();
+                   }
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+      return ['success' => true];
 }
 }
