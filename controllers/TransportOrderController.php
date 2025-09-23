@@ -219,19 +219,7 @@ public function actionInfoAjax()
             $oldOrder->save();     
             }       
     } if(empty($o_id)) {
-            $vehicle->status=0;
-              $vehicle->transport_order_id=null;
-                $vehicle->start_date=null;
-                $vehicle->end_date=null;
-                $vehicle->exp_adr_start=null;
-                $vehicle->exp_adr_end=null;                
-                $vehicle->imp_adr_start=null;
-                $vehicle->imp_adr_end=null;                
-                $vehicle->info=null;
-                $vehicle->exp_adr_start_id=0;
-                $vehicle->exp_adr_end_id=0;
-                 $vehicle->imp_adr_start_id=0;
-                $vehicle->imp_adr_end_id=0;
+            $vehicle->status=0;              
                 
             $vehicle->save();
                if(!empty($o_old_id)) {

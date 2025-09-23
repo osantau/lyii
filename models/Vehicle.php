@@ -128,6 +128,21 @@ class Vehicle extends \yii\db\ActiveRecord
     public function beforeSave($insert){
         if(parent::beforeSave($insert)){
             $this->regno=trim(strtoupper($this->regno));
+            if($this->status==0)
+            {
+                $this->transport_order_id=null;
+                $this->start_date=null;
+                $this->end_date=null;
+                $this->exp_adr_start=null;
+                $this->exp_adr_end=null;                
+                $this->imp_adr_start=null;
+                $this->imp_adr_end=null;                
+                $this->info=null;
+                $this->exp_adr_start_id=0;
+                $this->exp_adr_end_id=0;
+                 $this->imp_adr_start_id=0;
+                $this->imp_adr_end_id=0;
+            }
             return true;
         }
         return false;
@@ -136,7 +151,7 @@ class Vehicle extends \yii\db\ActiveRecord
     public static function getStatusList() {
         return[
             self::STATUS_LIBER=>'Liber',
-            self::STATUS_OCUPAT=> 'In Cursa',
+            self::STATUS_OCUPAT=> 'Ocupat',
             self::STATUS_OPRIT=> 'Oprit',
         ];
     }

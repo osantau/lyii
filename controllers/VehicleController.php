@@ -389,11 +389,8 @@ public function actionData()
 
         $data = [];
         foreach ($vehicles as $vehicle) {
-             $actions = '
-            <a href="'.\yii\helpers\Url::to(['vehicle/view', 'id' => $vehicle->id]).'" class="btn btn-sm btn-primary">View</a>
-            <a href="'.\yii\helpers\Url::to(['vehicle/update', 'id' => $vehicle->id]).'" class="btn btn-sm btn-warning">Edit</a>
-            <a href="'.\yii\helpers\Url::to(['vehicle/delete', 'id' => $vehicle->id]).'" class="btn btn-sm btn-danger" data-method="post" data-confirm="Are you sure?">Delete</a>
-        ';
+             $actions = '<button data-id="'.$vehicle->id.'" class="btn btn-sm btn-secondary btnEditStatus">'.$vehicle->getStatusName().'</button><br>
+            <a href="'.\yii\helpers\Url::to(['vehicle/update', 'id' => $vehicle->id]).'" class="btn btn-sm btn-warning"><i class="fa fa-pencil"></i></a>';
             $data[] = [
                 $vehicle->id,
                 $vehicle->regno,   
@@ -409,13 +406,13 @@ public function actionData()
                 $vehicle->exp_adr_start_id,
                 $vehicle->exp_adr_end_id,                
                 $vehicle->imp_adr_start_id,
-                $vehicle->imp_adr_end_id,
+                $vehicle->imp_adr_end_id,                
                                 
             ];
         }
         
         return [
-            "draw" => intval(\Yii::$app->request->get('draw')),
+            "draw" => intval(Yii::$app->request->get('draw')),
             "recordsTotal" => $total,
             "recordsFiltered" => $filtered,
             "data" => $data,
@@ -482,6 +479,23 @@ public function actionDates($id, $tip)
     }
 
     return ['success' => false, 'message' => 'Eroare salvare !'];
+}
+
+public function actionEditStatus($id)
+{
+    $model = Vehicle::findOne(['id'=>$id]);
+    return $this->renderAjax('_status',['model'=>$model]);
+}
+public function actionStatusAjax()
+{
+    Yii::$app->response->format = Response::FORMAT_JSON;
+    $id = Yii::$app->request->post('id');
+    $model = Vehicle::findOne(['id'=>$id]);
+    $model->status=Yii::$app->request->post('estatus');
+    if($model->save()){
+      return ['success' => true];
+    }
+     return ['success' => false, 'message' => 'Eroare salvare !'];
 }
 
 }

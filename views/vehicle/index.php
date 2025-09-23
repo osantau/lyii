@@ -364,9 +364,46 @@ $('#vehicleTable tbody td:nth-child(6), #vehicleTable tbody td:nth-child(7),#veh
         }
     });
 });
+
+
 //end of
     }      
     });
+
+    $(document).on('click','.btnEditStatus', function(e){        
+        let vehicleId = $(this).data('id');    
+         $.ajax({
+            url: baseUrl +'/vehicle/edit-status',
+            data: { id:vehicleId },
+            success: function(html) {
+                $('#statusModal .modal-body').html(html);                
+                var modal = new bootstrap.Modal(document.getElementById('statusModal'));
+                modal.show();
+            }
+        });
+
+});
+
+  $('#statusModal').on('submit', function(e) {
+    e.preventDefault();
+    $.ajax({
+        url: baseUrl+'/vehicle/status-ajax',
+        method: 'POST',
+        data: $('#statusForm').serialize(),
+        success: function(response) {
+            if (response.success) {
+                // Close modal
+                var modalEl = document.getElementById('statusModal');
+                var modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+                // Reload DataTable
+                table.ajax.reload(null, false);
+            } else {
+                alert(response.message);
+            }
+        }
+    });
+});
      /*$('#editInfoModal, #editComandaModal, #editDatesModal, #editAdreseModal').on('shown.bs.modal', function () {
         table.columns.adjust().draw();
     }); */
@@ -452,6 +489,18 @@ JS);
   <div class="modal-dialog">
     <div class="modal-content">
       
+        <div class="modal-header">          
+        </div>
+        <div class="modal-body">
+          <!-- Form fields will be loaded via Ajax -->
+        </div>        
+      </div>
+  </div>
+</div>
+<!-- Editare Stare vehicul-->
+ <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">      
         <div class="modal-header">          
         </div>
         <div class="modal-body">
