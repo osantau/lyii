@@ -66,6 +66,9 @@ echo Html::input('hidden','baseUrl',Url::base(true),['id'=>'baseUrl']);
 <?php
 $this->registerJs(<<<JS
   const baseUrl = $('#baseUrl').val();  
+  function warnStatus() {
+    alert('Selectati o Comanda !');
+  }
 var table=  $('#vehicleTable').DataTable({        
         processing: true,
         serverSide: true,
@@ -124,9 +127,12 @@ var table=  $('#vehicleTable').DataTable({
 
             // Remove any existing tooltip
             cell.tooltip('dispose');
-
             // On mouse enter, fetch tooltip content
-         cell.off('mouseenter').on('mouseenter', function() {         
+         cell.off('mouseenter').on('mouseenter', function() {  
+                if(rowData[10]==0) 
+                    {                        
+                        return;
+                    }       
                 hoverTimeout = setTimeout(function() {
                     $.ajax({
                         url: baseUrl+'/vehicle/summary',
@@ -147,7 +153,12 @@ var table=  $('#vehicleTable').DataTable({
                 cell.tooltip('hide');
             });       
       
+            
         cell.off('click').on('click', function() {
+             if(rowData[10]==0) 
+                    {                                                
+                        return;
+                    }
         // Load form via Ajax
         $.ajax({
             url: baseUrl+'/vehicle/info',
@@ -258,11 +269,16 @@ var table=  $('#vehicleTable').DataTable({
     });
 });
 //Editare campuri date
-$('#vehicleTable tbody td:nth-child(4), #vehicleTable tbody td:nth-child(5)').each(function() { // Data Incarcare
+$('#vehicleTable tbody td:nth-child(4), #vehicleTable tbody td:nth-child(5)').each(function() { // Data Incarcare / Descarcare
+    
             var cell = $(this);            
             var rowData = table.row(cell.closest('tr')).data();        
             var cellIndex = table.cell(cell).index().column;
             var pTip = cellIndex==4?'di':'de'
+             if(rowData[10]==0) 
+                    {                                                
+                        return;
+                    }
             cell.off('click').on('click', function() {
             
         // Load form via Ajax
@@ -308,6 +324,10 @@ $('#vehicleTable tbody td:nth-child(6), #vehicleTable tbody td:nth-child(7),#veh
             var cellIndex = table.cell(cell).index().column;   
             var pTip ='';
             var adrId=0;  
+             if(rowData[10]==0) 
+                    {                                                
+                        return;
+                    }
              switch (cellIndex) {
                     case 6:{
                         pTip='exp_ai';
