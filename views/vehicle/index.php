@@ -67,7 +67,7 @@ echo Html::input('hidden','baseUrl',Url::base(true),['id'=>'baseUrl']);
             <th class="right-border">Adresa Descarcare</th>
             <th>Adresa<br>Incarcare</th>
             <th class="right-border">Adresa Descarcare</th>
-            <th>Actiuni</th>
+            <th class="right-border">Actiuni</th>
             <th>Status</th>
             <th></th>
             <th></th>
@@ -101,29 +101,29 @@ var table=  $('#vehicleTable').DataTable({
         },
         ajax: baseUrl+'/vehicle/data',            
      columns: [  
-        {data: 0, visible: false },   //ID      
-        {data: null,  // Contor
-        defaultContent: '', // Set default content to empty      
+        {data: 0, visible: false,orderable: false },   //ID      
+        {data: null, orderable: false // Contor
+        ,defaultContent: '', // Set default content to empty      
       render: function (data, type, row, meta) {
         // 'meta.row' is the zero-based index of the row
         return meta.row + 1;
       }},    
-        {data: 1,}, // Nr. inmatriculare
-        {data: 2}, // comanda transport
-        {data: 3}, // Data incarcare
-        {data: 4}, //Data descarcare 
-        {data: 5}, // Adresa incarcare Exp
-        {data: 6}, // Adresa Descarcare Exp
-        {data: 7}, // Adresa incarcare Imp
-        {data: 8}, // Adresa descarcare Imp
-        {data: 9}, // actions
-        {data: 10, visible:false},
-        {data: 11, visible:false},
-        {data: 12, visible:false},
-        {data: 13, visible:false},
-        {data: 14, visible:false}
+        {data: 1}, // Nr. inmatriculare
+        {data: 2,orderable: false}, // comanda transport
+        {data: 3,orderable: false}, // Data incarcare
+        {data: 4,orderable: false}, //Data descarcare 
+        {data: 5,orderable: false}, // Adresa incarcare Exp
+        {data: 6,orderable: false}, // Adresa Descarcare Exp
+        {data: 7,orderable: false}, // Adresa incarcare Imp
+        {data: 8,orderable: false}, // Adresa descarcare Imp
+        {data: 9,orderable: false}, // actions
+        {data: 10, visible:false,orderable: false},
+        {data: 11, visible:false,orderable: false},
+        {data: 12, visible:false,orderable: false},
+        {data: 13, visible:false,orderable: false},
+        {data: 14, visible:false,orderable: false}
 
-  ]  ,
+  ]  ,    
   "rowCallback": function(row, data, index){
     // $(row).css('font-weight','bold');
         var cond = data[10];

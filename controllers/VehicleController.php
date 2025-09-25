@@ -375,7 +375,8 @@ public function actionData()
         $start = Yii::$app->request->get('start', 0);
         $length =Yii::$app->request->get('length', 10);
         $order = Yii::$app->request->get('order', []);
-        $columns = ['regno', 'end_date']; // map column indexes → DB fields
+        $columns = ['id','','regno', 'transport_order','start_date','end_date','exp_adr_start','exp_adr_end','imp_adr_start','imp_adr_end'
+        ,'','','','','','']; // map column indexes → DB fields
 
     if (!empty($order)) {
         $colIndex = $order[0]['column']; // which column index
