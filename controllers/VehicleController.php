@@ -389,8 +389,24 @@ public function actionData()
 
         $data = [];
         foreach ($vehicles as $vehicle) {
-             $actions = '<button data-id="'.$vehicle->id.'" class="btn btn-sm btn-secondary btnEditStatus">'.$vehicle->getStatusName().'</button><br>
-            <a href="'.\yii\helpers\Url::to(['vehicle/update', 'id' => $vehicle->id]).'" class="btn btn-sm btn-warning"><i class="fa fa-pencil"></i></a>';
+            $statusText = '';
+            switch ($vehicle->status) {
+                case 0:
+                    $statusText='<i class="fa fa-unlock"></i>';
+                    break;
+                case 1:
+                     $statusText='<i class="fa fa-lock" style="color: black;"></i>';
+                     break;
+                case 2:
+                     $statusText='<i class="fa fa-stop" style="color: red;"></i>';
+                     break;
+                default:
+                    # code...
+                    break;
+            }             
+             $actions = '<button data-id="'.$vehicle->id.'" class="btn btnEditStatus" title="Editeaza Starea">'.$statusText.'</button>&nbsp;
+            <a href="'.\yii\helpers\Url::to(['vehicle/update', 'id' => $vehicle->id]).'"><i class="fa fa-pencil"></i></a>&nbsp;'
+            .'<a href="'.\yii\helpers\Url::to(['vehicle/delete', 'id' => $vehicle->id]).'" data-method="post" data-confirm="Sigur stergeti '.$vehicle->regno.'?"><i class="fa fa-xs fa-trash"></i></a>';
             $data[] = [
                 $vehicle->id,
                 $vehicle->regno,   

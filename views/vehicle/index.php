@@ -65,9 +65,9 @@ echo Html::input('hidden','baseUrl',Url::base(true),['id'=>'baseUrl']);
             <th class="right-border">Data Descarcare</th>
             <th>Adresa Incarcare</th>
             <th class="right-border">Adresa Descarcare</th>
-            <th>Adresa Incarcare</th>
+            <th>Adresa<br>Incarcare</th>
             <th class="right-border">Adresa Descarcare</th>
-            <th class="right-border"></th>
+            <th>Actiuni</th>
             <th>Status</th>
             <th></th>
             <th></th>
@@ -86,8 +86,9 @@ $this->registerJs(<<<JS
 var table=  $('#vehicleTable').DataTable({        
         processing: true,
         serverSide: true,
-        ordering: false,
+        ordering: true,
         autoWidth: true,
+        responsive: true,
         scrollX:true,
         language: {
              search: "<span class='me-2'>🔍 Cautare:</span>",
@@ -107,7 +108,7 @@ var table=  $('#vehicleTable').DataTable({
         // 'meta.row' is the zero-based index of the row
         return meta.row + 1;
       }},    
-        {data: 1}, // Nr. inmatriculare
+        {data: 1,}, // Nr. inmatriculare
         {data: 2}, // comanda transport
         {data: 3}, // Data incarcare
         {data: 4}, //Data descarcare 
@@ -129,10 +130,10 @@ var table=  $('#vehicleTable').DataTable({
         switch (cond) {
            
           case 1:
-                   $(row).css('background-color', '#98FB98');
+                   $(row).css('background-color', '#cefad0');
                 break;
           case 2:
-                   $(row).css('background-color', '#FFA07A');
+                   $(row).css('background-color', '#FFCCCB');
                 break;
             default:
                    
