@@ -471,7 +471,7 @@ public function actionDates($id, $tip)
         {
             if($vehicle->start_date> $vehicle->end_date)
             {
-                  return ['success' => false, 'message' => 'Atentie! Data incarcare MAI MICA DECAT Data descarcare !'];
+                  return ['success' => false, 'message' => 'Atentie! Data Descarcare MAI MICA DECAT Data incarcare !'];
             }
         }
     if ($vehicle->save()) {
