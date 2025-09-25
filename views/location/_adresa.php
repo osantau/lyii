@@ -98,11 +98,8 @@ $this->registerJs("
 
 // Optional: clear fields when selection is cleared
 $('#address_id').on('select2:clear', function() {
-    $('#company').val('');
-            $('#city').val('');
-            $('#address').val('');
-            $('#country').val('');
-            $('#region').val('');
+    $('#company').val('');     
+    $('#aid').val('0');       
 });
 
 ");
