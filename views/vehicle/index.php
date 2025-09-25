@@ -22,7 +22,21 @@ $this->registerCss("
            #vehicleTable tbody td:nth-child(5)  {
         cursor: pointer;
     }
-     
+        .right-border {
+            border-right: 1px solid lightgray;    
+        }
+    .left-border {
+            border-left: 1px solid lightgray;    
+        }
+            .right-border {
+            border-right: 1px solid lightgray;    
+        }  
+        .top-border {
+            border-top: 1px solid lightgray;    
+        }    
+        #vehicleTable_filter{
+        margin-bottom:2px; 
+        }
 ");
 ?>
 <div class="site-index">
@@ -37,23 +51,23 @@ echo Html::input('hidden','baseUrl',Url::base(true),['id'=>'baseUrl']);
     <table id="vehicleTable" class="display cell-border" style="width:100%">
     <thead>      
        <tr>
-                <th colspan="6">Detalii Comanda</th>
-                <th colspan="2">Export</th>
-                <th colspan="2">Import</th>
-                <th colspan="2"></th>
+                <th colspan="6" class="left-border right-border top-border">Detalii Comanda</th>
+                <th colspan="2" class="right-border top-border">Export</th>
+                <th colspan="2" class="right-border top-border">Import</th>
+                <th colspan="2" class="right-border top-border"></th>
             </tr>
         <tr>
             <th>Id</th>          
-            <th>#</th>  
+            <th class="right-border left-border">#</th>  
             <th>Nr. Inmatriculare</th> 
             <th>Comanda Transport</th>
             <th>Data Incarcare</th>           
-            <th>Data Descarcare</th>
+            <th class="right-border">Data Descarcare</th>
             <th>Adresa Incarcare</th>
-            <th>Adresa Descarcare</th>
+            <th class="right-border">Adresa Descarcare</th>
             <th>Adresa Incarcare</th>
-            <th>Adresa Descarcare</th>
-            <th></th>
+            <th class="right-border">Adresa Descarcare</th>
+            <th class="right-border"></th>
             <th>Status</th>
             <th></th>
             <th></th>
@@ -75,6 +89,15 @@ var table=  $('#vehicleTable').DataTable({
         ordering: false,
         autoWidth: true,
         scrollX:true,
+        language: {
+             search: "<span class='me-2'>🔍 Cautare:</span>",
+             lengthMenu: "Afisare <strong>_MENU_</strong> inregistrari",
+             info: "Afisare _START_ din _END_ din _TOTAL_ inregistrari",
+              paginate: {
+                    previous: "<span class='me-1'>&laquo;</span> Prec",
+                    next: "Urm <span class='ms-1'>&raquo;</span>"
+    }
+        },
         ajax: baseUrl+'/vehicle/data',            
      columns: [  
         {data: 0, visible: false },   //ID      
