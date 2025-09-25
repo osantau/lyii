@@ -178,7 +178,16 @@ public function actionAdrese($vid, $tip,$aid=0)
     $aid =  Yii::$app->request->post('aid');
     $vehicle=Vehicle::findOne(['id'=>$vid]);
     $location=Location::findOne(['id'=>$aid]);
+    
+    if($aid>0)
+    {   $location->country =  Yii::$app->request->post('country');
+     $location->region =  Yii::$app->request->post('region');
+     $location->city =  Yii::$app->request->post('city');
+     $location->company= Yii::$app->request->post('company');
+     $location->address= Yii::$app->request->post('address');
+     $location->save();
 
+    }
     if($location===null)
     {
         $location=Location::find()->where(['country'=>Yii::$app->request->post('country')
@@ -188,7 +197,7 @@ public function actionAdrese($vid, $tip,$aid=0)
     } 
     
     if ($location===null) {
-    $location = new Location();
+     $location = new Location();
      $location->country =  Yii::$app->request->post('country');
      $location->region =  Yii::$app->request->post('region');
      $location->city =  Yii::$app->request->post('city');
