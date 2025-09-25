@@ -10,4 +10,7 @@ return [
     'enableSchemaCache' => true,
     'schemaCacheDuration' => 3600,
     'schemaCache' => 'cache',
+      'attributes' => [
+            PDO::ATTR_PERSISTENT => true, // Persistent connection
+        ],
 ];
