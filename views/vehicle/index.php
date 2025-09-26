@@ -65,7 +65,7 @@ echo Html::input('hidden','baseUrl',Url::base(true),['id'=>'baseUrl']);
             <th class="right-border">Data Descarcare</th>
             <th>Adresa Incarcare</th>
             <th class="right-border">Adresa Descarcare</th>
-            <th>Adresa<br>Incarcare</th>
+            <th>Adresa Incarcare</th>
             <th class="right-border">Adresa Descarcare</th>
             <th class="right-border">Actiuni</th>
             <th>Status</th>

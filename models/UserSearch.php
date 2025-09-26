@@ -17,8 +17,8 @@ class UserSearch extends User
     public function rules()
     {
         return [
-            [['id', 'created_at', 'updated_at', 'is_admin'], 'integer'],
-            [['username', 'email', 'password_hash', 'auth_key','created_by','updated_by'], 'safe'],
+            [[ 'is_admin'], 'integer'],
+            [['username', 'email'], 'safe'],
         ];
     }
 
