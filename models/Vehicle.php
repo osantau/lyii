@@ -130,8 +130,10 @@ class Vehicle extends \yii\db\ActiveRecord
             $this->regno=trim(strtoupper($this->regno));
             if($this->status==0)
             {
+                if($this->transportOrder !=null) {
                 $this->transportOrder->status=2;
                 $this->transportOrder->save();
+                }
                 $this->transport_order_id=null;
                 $this->start_date=null;
                 $this->end_date=null;
