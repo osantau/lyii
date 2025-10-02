@@ -487,6 +487,38 @@ $('#editAdreseModal').on('click', '#btnDelAdr', function () {
         }
     });
 });
+    $(document).on('click','.btnEditDriver', function(e){        
+        let vehicleId = $(this).data('id');    
+         $.ajax({
+            url: baseUrl +'/vehicle/edit-driver',
+            data: { id:vehicleId },
+            success: function(html) {
+                $('#driverModal .modal-body').html(html);                
+                var modal = new bootstrap.Modal(document.getElementById('driverModal'));
+                modal.show();
+            }
+        });        
+});
+  $('#driverModal').on('submit', function(e) {
+    e.preventDefault();
+    $.ajax({
+        url: baseUrl+'/vehicle/driver-ajax',
+        method: 'POST',
+        data: $('#driverForm').serialize(),
+        success: function(response) {
+            if (response.success) {
+                // Close modal
+                var modalEl = document.getElementById('driverModal');
+                var modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+                // Reload DataTable
+                table.ajax.reload(null, false);
+            } else {
+                alert(response.message);
+            }
+        }
+    });
+});
      /*$('#editInfoModal, #editComandaModal, #editDatesModal, #editAdreseModal').on('shown.bs.modal', function () {
         table.columns.adjust().draw();
     }); */
@@ -582,6 +614,18 @@ JS);
 </div>
 <!-- Editare Stare vehicul-->
  <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">      
+        <div class="modal-header">          
+        </div>
+        <div class="modal-body">
+          <!-- Form fields will be loaded via Ajax -->
+        </div>        
+      </div>
+  </div>
+</div>
+<!-- Editare Soferi vehicul-->
+ <div class="modal fade" id="driverModal" tabindex="-1" aria-labelledby="driverModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">      
         <div class="modal-header">          

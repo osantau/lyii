@@ -397,24 +397,25 @@ public function actionData()
             $statusText = '';
             switch ($vehicle->status) {
                 case 0:
-                    $statusText='<i class="fa fa-sm fa-unlock" style="color: gray;"></i>';
+                    $statusText='<i class="fa fa fa-unlock" style="color: gray;"></i>';
                     break;
                 case 1:
-                     $statusText='<i class="fa fa-sm fa-lock" style="color: black;"></i>';
+                     $statusText='<i class="fa fa fa-lock" style="color: black;"></i>';
                      break;
                 case 2:
-                     $statusText='<i class="fa fa-sm fa-stop" style="color: red;"></i>';
+                     $statusText='<i class="fa fa fa-stop" style="color: red;"></i>';
                      break;
                 case 3:
-                     $statusText='<i class="fa fa-sm fa-warehouse" style="color: black;"></i>';
+                     $statusText='<i class="fa fa-warehouse" style="color: black;"></i>';
                      break;
                 default:
                     # code...
                     break;
             }             
              $actions = '<a href="javascript:void(0)" data-id="'.$vehicle->id.'" class="btnEditStatus" title="Editeaza Starea">'.$statusText.'</a>&nbsp;
+              <a href="javascript:void(0)" data-id="'.$vehicle->id.'" class="btnEditDriver" title="Informatii soferi"><i class="fa-solid fa-lg fa-person"></i></a>&nbsp;
             <a href="'.\yii\helpers\Url::to(['vehicle/update', 'id' => $vehicle->id]).'"><i class="fa fa-pencil"></i></a>&nbsp;'
-            .'<a href="'.\yii\helpers\Url::to(['vehicle/delete', 'id' => $vehicle->id]).'" data-method="post" data-confirm="Sigur stergeti '.$vehicle->regno.'?"><i class="fa fa-xs fa-trash"></i></a>';
+            .'<a href="'.\yii\helpers\Url::to(['vehicle/delete', 'id' => $vehicle->id]).'" data-method="post" data-confirm="Sigur stergeti '.$vehicle->regno.'?"><i class="fa fa-sm fa-trash"></i></a>';
             $data[] = [
                 $vehicle->id,
                 $vehicle->regno,   
@@ -521,5 +522,20 @@ public function actionStatusAjax()
     }
      return ['success' => false, 'message' => 'Eroare salvare !'];
 }
-
+public function actionEditDriver($id)
+{
+    $model = Vehicle::findOne(['id'=>$id]);
+    return $this->renderAjax('_driver',['model'=>$model]);
+}
+public function actionDriverAjax()
+{
+    Yii::$app->response->format = Response::FORMAT_JSON;
+    $id = Yii::$app->request->post('id');
+    $model = Vehicle::findOne(['id'=>$id]);
+    $model->driver=Yii::$app->request->post('driver');
+    if($model->save()){
+      return ['success' => true];
+    }
+     return ['success' => false, 'message' => 'Eroare salvare !'];
+}
 }

@@ -28,6 +28,7 @@ use Yii;
  * @property int $exp_adr_end_id
  * @property int $imp_adr_start_id
  * @property int $imp_adr_end_id
+ * @property string|null $driver
  */
 class Vehicle extends \yii\db\ActiveRecord
 {
@@ -58,6 +59,7 @@ class Vehicle extends \yii\db\ActiveRecord
              'integer'],
             [['regno'], 'string', 'max' => 50],
             [['info','exp_adr_start', 'exp_adr_end', 'imp_adr_start', 'imp_adr_end'],'string', 'max'=>100],
+            [['driver'],'string', 'max'=>255],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updated_by' => 'id']],
             [['status'],'integer'],
