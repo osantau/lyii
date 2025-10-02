@@ -17,7 +17,10 @@ if (isset($model->end_date)) {
             . $model->imp_adr_end . '</div>';
     } */
 }
-
+if (isset($model->driver))
+{
+    $popoverContent .= '<div><strong>Sofer:</strong> '.$model->driver.'</div>';   
+}
 $popoverContent .= '</div>';
 echo $popoverContent;
 ?>
