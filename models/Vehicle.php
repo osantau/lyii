@@ -36,6 +36,7 @@ class Vehicle extends \yii\db\ActiveRecord
     const STATUS_OCUPAT=1;
 
     const STATUS_OPRIT=2;
+    const STATUS_MARFA_GARAJ=3;
 
     /**
      * {@inheritdoc}
@@ -128,7 +129,7 @@ class Vehicle extends \yii\db\ActiveRecord
     public function beforeSave($insert){
         if(parent::beforeSave($insert)){
             $this->regno=trim(strtoupper($this->regno));
-            if($this->status==0)
+          /*  if($this->status==0)
             {
                 if($this->transportOrder !=null) {
                 $this->transportOrder->status=2;
@@ -144,9 +145,9 @@ class Vehicle extends \yii\db\ActiveRecord
                 $this->info=null;
                 $this->exp_adr_start_id=0;
                 $this->exp_adr_end_id=0;
-                 $this->imp_adr_start_id=0;
+                $this->imp_adr_start_id=0;
                 $this->imp_adr_end_id=0;
-            }
+            } */
             return true;
         }
         return false;
@@ -157,6 +158,7 @@ class Vehicle extends \yii\db\ActiveRecord
             self::STATUS_LIBER=>'Liber',
             self::STATUS_OCUPAT=> 'Ocupat',
             self::STATUS_OPRIT=> 'Oprit',
+            self::STATUS_MARFA_GARAJ=>'Marfuri La Garaj',
         ];
     }
 
@@ -172,6 +174,12 @@ class Vehicle extends \yii\db\ActiveRecord
     public function getTransportOrder()
     {
         return $this->hasOne(TransportOrder::class, ['id' => 'transport_order_id']);
+    }
+
+    public function getCityInfo($adrId)
+    {
+        $location = Location::findOne(['id'=>$adrId]);
+        return $location->city??'';
     }
     
 }

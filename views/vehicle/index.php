@@ -22,6 +22,17 @@ $this->registerCss("
            #vehicleTable tbody td:nth-child(5)  {
         cursor: pointer;
     }
+              #vehicleTable tbody td:nth-child(6)  {
+        cursor: pointer;
+    }   
+                #vehicleTable tbody td:nth-child(7)  {
+        cursor: pointer;
+    }  
+                #vehicleTable tbody td:nth-child(8)  {
+        cursor: pointer;
+    }          #vehicleTable tbody td:nth-child(9)  {
+        cursor: pointer;
+    }  
         .right-border {
             border-right: 1px solid lightgray;    
         }
@@ -99,6 +110,7 @@ var table=  $('#vehicleTable').DataTable({
                     next: "Urm <span class='ms-1'>&raquo;</span>"
     }
         },
+        order:[[10,'asc']],
         ajax: baseUrl+'/vehicle/data',            
      columns: [  
         {data: 0, visible: false,orderable: false },   //ID      
@@ -111,13 +123,13 @@ var table=  $('#vehicleTable').DataTable({
         {data: 1}, // Nr. inmatriculare
         {data: 2,orderable: false}, // comanda transport
         {data: 3,orderable: false}, // Data incarcare
-        {data: 4,orderable: false}, //Data descarcare 
+        {data: 4,orderable: true}, //Data descarcare 
         {data: 5,orderable: false}, // Adresa incarcare Exp
         {data: 6,orderable: false}, // Adresa Descarcare Exp
         {data: 7,orderable: false}, // Adresa incarcare Imp
         {data: 8,orderable: false}, // Adresa descarcare Imp
         {data: 9,orderable: false}, // actions
-        {data: 10, visible:false,orderable: false},
+        {data: 10, visible:false}, //status
         {data: 11, visible:false,orderable: false},
         {data: 12, visible:false,orderable: false},
         {data: 13, visible:false,orderable: false},
@@ -135,6 +147,13 @@ var table=  $('#vehicleTable').DataTable({
           case 2:
                    $(row).css('background-color', '#FFCCCB');
                 break;
+         case 3:{
+            $('td:eq(5)', row).css('background-color', '#f9fabaff');
+            $('td:eq(6)', row).css('background-color', '#f9fabaff');
+            $('td:eq(7)', row).css('background-color', '#f9fabaff');
+            $('td:eq(8)', row).css('background-color', '#f9fabaff');
+         } break;
+
             default:
                    
                 break;
@@ -153,10 +172,7 @@ var table=  $('#vehicleTable').DataTable({
             cell.tooltip('dispose');
             // On mouse enter, fetch tooltip content
          cell.off('mouseenter').on('mouseenter', function() {  
-                if(rowData[10]==0) 
-                    {                        
-                        return;
-                    }       
+                    
                 hoverTimeout = setTimeout(function() {
                     $.ajax({
                         url: baseUrl+'/vehicle/summary',
@@ -178,11 +194,7 @@ var table=  $('#vehicleTable').DataTable({
             });       
       
             
-        cell.off('click').on('click', function() {
-             if(rowData[10]==0) 
-                    {                                                
-                        return;
-                    }
+        cell.off('click').on('click', function() {            
         // Load form via Ajax
         $.ajax({
             url: baseUrl+'/vehicle/info',
@@ -298,11 +310,7 @@ $('#vehicleTable tbody td:nth-child(4), #vehicleTable tbody td:nth-child(5)').ea
             var cell = $(this);            
             var rowData = table.row(cell.closest('tr')).data();        
             var cellIndex = table.cell(cell).index().column;
-            var pTip = cellIndex==4?'di':'de'
-             if(rowData[10]==0) 
-                    {                                                
-                        return;
-                    }
+            var pTip = cellIndex==4?'di':'de';        
             cell.off('click').on('click', function() {
             
         // Load form via Ajax
@@ -348,11 +356,8 @@ $('#vehicleTable tbody td:nth-child(6), #vehicleTable tbody td:nth-child(7),#veh
             var cellIndex = table.cell(cell).index().column;   
             var pTip ='';
             var adrId=0;  
-             if(rowData[10]==0) 
-                    {                                                
-                        return;
-                    }
-             switch (cellIndex) {
+            
+            switch (cellIndex) {
                     case 6:{
                         pTip='exp_ai';
                         adrId=rowData[11];

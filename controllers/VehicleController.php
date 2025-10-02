@@ -333,7 +333,7 @@ public function actionFinalizeOrder($id)
             $transportOrder->save();
             // free vehicle
             $model->status=0;
-             $model->transport_order_id=null;
+            $model->transport_order_id=null;
             $model->start_date=null;
             $model->end_date=null;
             $model->exp_adr_start=null;
@@ -366,7 +366,11 @@ public function actionData()
         $search = \Yii::$app->request->get('search')['value'] ?? null;
         if ($search) {
             $query->andFilterWhere(['like', 'regno', $search])
-                  ->orFilterWhere(['like', 'end_date', $search]);
+                  ->orFilterWhere(['like', 'end_date', $search])
+                  ->orFilterWhere(['like', 'exp_adr_start', $search])
+                  ->orFilterWhere(['like', 'exp_adr_end', $search])
+                  ->orFilterWhere(['like', 'imp_adr_start', $search])
+                  ->orFilterWhere(['like', 'imp_adr_end', $search]);
         }
 
         $filtered = $query->count();
@@ -376,7 +380,7 @@ public function actionData()
         $length =Yii::$app->request->get('length', 10);
         $order = Yii::$app->request->get('order', []);
         $columns = ['id','','regno', 'transport_order','start_date','end_date','exp_adr_start','exp_adr_end','imp_adr_start','imp_adr_end'
-        ,'','','','','','']; // map column indexes → DB fields
+        ,'status','','','','','']; // map column indexes → DB fields
 
     if (!empty($order)) {
         $colIndex = $order[0]['column']; // which column index
@@ -401,6 +405,9 @@ public function actionData()
                 case 2:
                      $statusText='<i class="fa fa-sm fa-stop" style="color: red;"></i>';
                      break;
+                case 3:
+                     $statusText='<i class="fa fa-sm fa-warehouse" style="color: black;"></i>';
+                     break;
                 default:
                     # code...
                     break;
@@ -414,10 +421,10 @@ public function actionData()
                 '<span data-id="'.@$vehicle->transportOrder->id.'">'.@$vehicle->transportOrder->documentno.'</span>',
                 Yii::$app->formatter->asDate($vehicle->start_date,'dd.MM.yyyy'),
                 Yii::$app->formatter->asDate($vehicle->end_date,'dd.MM.yyyy'),
-                $vehicle->exp_adr_start,
-                $vehicle->exp_adr_end,
-                $vehicle->imp_adr_start,
-                $vehicle->imp_adr_end,
+                $vehicle->getCityInfo($vehicle->exp_adr_start_id), 
+                $vehicle->getCityInfo($vehicle->exp_adr_end_id), 
+                $vehicle->getCityInfo($vehicle->imp_adr_start_id), 
+                $vehicle->getCityInfo($vehicle->imp_adr_end_id), 
                 $actions,
                 $vehicle->status,
                 $vehicle->exp_adr_start_id,
