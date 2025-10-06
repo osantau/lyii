@@ -81,8 +81,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public static function getAdminList()
     {
         return [
-            0 => 'Utilizator',
+            0 => 'Dispecer',
             1 => 'Administrator',
+            2 => 'Contabil'
         ];
     }
 
