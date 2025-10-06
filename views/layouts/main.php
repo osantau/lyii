@@ -57,7 +57,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 : '<li class="nav-item">'
                     . Html::beginForm(['/site/logout'])
                     . Html::submitButton(
-                        '<i class="fa fa-sign-out"></i> Deconectare (' . ucfirst($current_user->identity->username) .' - '.($current_user->identity->getStatusName()). ')',
+                        '<i class="fa fa-sign-out"></i> Deconectare [ ' . $current_user->identity->username.' ]',
                         ['class' => 'nav-link btn btn-link logout']
                     )
                     . Html::endForm()

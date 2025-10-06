@@ -38,9 +38,9 @@ $this->title = 'Utilizatori';
             [
                 'attribute' => 'is_admin',
                 'value' => function ($model) {
-                        return $model->is_admin ? 'Da' : 'Nu';
+                        return $model->getStatusName();
                     },
-                'filter' => [1 => 'Admin', 0 => 'User'],
+                'filter' => [1 => 'Administrator', 0 => 'Dispecer',2=>'Contabil'],
             ],
             [
                 'attribute' => 'created_by',
