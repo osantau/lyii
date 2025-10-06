@@ -10,6 +10,7 @@ use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
 
+$current_user = Yii::$app->user;
 AppAsset::register($this);
 
 $this->registerCsrfMetaTags();
@@ -41,22 +42,22 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'items' => [
             // ['label' => 'Acasa', 'url' => ['/site/index']],  
             // !Yii::$app->user->isGuest ?['label' => 'Conducatori auto', 'url' => ['/driver']]:'', 
-            !Yii::$app->user->isGuest ?['label' => '<i class="fa fa-truck"></i> Camioane', 'url' => ['/vehicle']]:'', 
-            !Yii::$app->user->isGuest ?['label' => '<i class="fa fa-building"></i> Clienti', 'url' => ['/partner']]:'', 
-            !Yii::$app->user->isGuest ?['label' => '<i class="fa fa-file-invoice"></i> Comenzi', 'url' => ['/transport-order']]:'',
-            !Yii::$app->user->isGuest && (Yii::$app->user->identity->isAdmin() || Yii::$app->user->identity->isContabil()) ? ['label' => '<i class="fa fa-money-bill"></i> Contabilitate',
+            !$current_user->isGuest ?['label' => '<i class="fa fa-truck"></i> Camioane', 'url' => ['/vehicle']]:'', 
+            !$current_user->isGuest ?['label' => '<i class="fa fa-building"></i> Clienti', 'url' => ['/partner']]:'', 
+            !$current_user->isGuest ?['label' => '<i class="fa fa-file-invoice"></i> Comenzi', 'url' => ['/transport-order']]:'',
+            !$current_user->isGuest && ($current_user->identity->isAdmin() || $current_user->identity->isContabil()) ? ['label' => '<i class="fa fa-money-bill"></i> Contabilitate',
                 'items' => [                
-                ['label' => '<i class="fa fa-credit-card"></i> Plati Parteneri', 'url' => ['/services/mobile']],
+                ['label' => '<i class="fa fa-credit-card"></i> Plati Parteneri', 'url' => ['/payment']],
                /*  '<hr class="dropdown-divider">',
                 ['label' => 'Consulting', 'url' => ['/services/consulting']],*/
             ],]:'',            
-            ( !Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin())?  ['label' => 'Utilizatori', 'url' => ['/user']]:'',                        
-            Yii::$app->user->isGuest
+            ( !$current_user->isGuest && $current_user->identity->isAdmin())?  ['label' => 'Utilizatori', 'url' => ['/user']]:'',                        
+            $current_user->isGuest
                 ? ['label' => '<i class="fa fa-sign-in"></i> Intră în cont', 'url' => ['/site/login']]
                 : '<li class="nav-item">'
                     . Html::beginForm(['/site/logout'])
                     . Html::submitButton(
-                        '<i class="fa fa-sign-out"></i> Deconectare (' . ucfirst(Yii::$app->user->identity->username) . ')',
+                        '<i class="fa fa-sign-out"></i> Deconectare (' . ucfirst($current_user->identity->username) .' - '.($current_user->identity->getStatusName()). ')',
                         ['class' => 'nav-link btn btn-link logout']
                     )
                     . Html::endForm()
