@@ -170,6 +170,15 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return $this->is_admin == 1;
     }
+
+    public function isContabil()
+    {
+        return $this->is_admin == 2;
+    }
+    public function isDispecer()
+    {
+        return $this->is_admin == 0;
+    }
     public function getCreatedBy()
     {
         return $this->hasOne(User::class, ['id' => 'created_by']);
@@ -178,5 +187,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function getUpdatedBy()
     {
         return $this->hasOne(User::class, ['id' => 'updated_by']);
+    }
+
+     public function getStatusName(){
+        return $this->getAdminList()[$this->is_admin]??'Necunoscut';
     }
 }
