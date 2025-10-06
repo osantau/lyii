@@ -15,6 +15,9 @@ use yii\bootstrap5\ActiveForm;
     <?= $form->field($model, 'regno')->textInput(['maxlength' => true,'oninput'=>'this.value=this.value.toUpperCase()','autofocus'=>true
     ,'class'=>'form-control w-25']) ?>
 </div>
+<div class="form-group">
+    <?= $form->field($model, 'driver')->textarea(['maxlength' => true,'rows'=>3,'cols'=>10,'class'=>'form-control w-25']) ?>
+</div>
     <div class="form-group">
         <?= Html::submitButton('Salveaza', ['class' => 'btn btn-success']) ?>
           <?= Html::a('Renunta',['index'], ['class' => 'btn btn-primary']) ?>

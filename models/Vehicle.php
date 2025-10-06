@@ -90,6 +90,7 @@ class Vehicle extends \yii\db\ActiveRecord
             'start_date' => 'Data Incarcare',
             'end_date' => 'Data Descarcare',
             'transport_order_id'=>'Comanda Transport',
+            'driver'=>'Sofer',
         ];
     }
   public function behaviors()
