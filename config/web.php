@@ -24,12 +24,12 @@ $config = [
             'database' => 0,
         ],
         'session'=>[
-               'class'=>'yii\web\DbSession',
-             //'class' => 'yii\redis\Session',
+            //    'class'=>'yii\web\DbSession',
+               'class' => 'yii\redis\Session',
                       ],
         'cache' => [
-               'class' => 'yii\caching\FileCache',
-               //'class' => 'yii\redis\Cache',
+            //    'class' => 'yii\caching\FileCache',
+               'class' => 'yii\redis\Cache',
         ],
         'user' => [
             'identityClass' => 'app\models\User',
