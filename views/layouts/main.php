@@ -43,7 +43,13 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             // !Yii::$app->user->isGuest ?['label' => 'Conducatori auto', 'url' => ['/driver']]:'', 
             !Yii::$app->user->isGuest ?['label' => '<i class="fa fa-truck"></i> Camioane', 'url' => ['/vehicle']]:'', 
             !Yii::$app->user->isGuest ?['label' => '<i class="fa fa-building"></i> Clienti', 'url' => ['/partner']]:'', 
-            !Yii::$app->user->isGuest ?['label' => '<i class="fa fa-file-invoice"></i> Comenzi', 'url' => ['/transport-order']]:'', 
+            !Yii::$app->user->isGuest ?['label' => '<i class="fa fa-file-invoice"></i> Comenzi', 'url' => ['/transport-order']]:'',
+            !Yii::$app->user->isGuest && (Yii::$app->user->identity->isAdmin() || Yii::$app->user->identity->isContabil()) ? ['label' => '<i class="fa fa-money-bill"></i> Contabilitate',
+                'items' => [                
+                ['label' => '<i class="fa fa-credit-card"></i> Plati Parteneri', 'url' => ['/services/mobile']],
+               /*  '<hr class="dropdown-divider">',
+                ['label' => 'Consulting', 'url' => ['/services/consulting']],*/
+            ],]:'',            
             ( !Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin())?  ['label' => 'Utilizatori', 'url' => ['/user']]:'',                        
             Yii::$app->user->isGuest
                 ? ['label' => '<i class="fa fa-sign-in"></i> Intră în cont', 'url' => ['/site/login']]
