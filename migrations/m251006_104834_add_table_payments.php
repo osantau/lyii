@@ -14,6 +14,7 @@ class m251006_104834_add_table_payments extends Migration
              'is_receipt'=>$this->char(1)->notNull()->defaultValue('N'),
              'dateinvoiced'=>$this->date()->notNull(),
              'duedate'=>$this->date()->notNull(),
+             'duedays'=>$this->integer()->notNull()->defaultValue(0),
              'nr_cmd_trs'=>$this->string(50)->notNull(),
              'nr_factura'=>$this->string(50)->notNull(),
              'partener'=>$this->string(100)->notNull(),

@@ -10,15 +10,15 @@ use yii\widgets\Pjax;
 /** @var app\models\PaymentSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Payments';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Plati Parteneri';
+// $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="payment-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Payment', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Creeaza Plata', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>

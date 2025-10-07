@@ -2,7 +2,10 @@
 
 namespace app\models;
 
+use DateTime;
 use Yii;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "payment".
@@ -11,6 +14,7 @@ use Yii;
  * @property string $is_receipt
  * @property string $dateinvoiced
  * @property string $duedate
+ * @property int $duedays
  * @property string $nr_cmd_trs
  * @property string $nr_factura
  * @property string $partener
@@ -53,15 +57,16 @@ class Payment extends \yii\db\ActiveRecord
         return [
             [['paymentdate', 'mentiuni', 'created_by', 'updated_by'], 'default', 'value' => null],
             [['is_receipt'], 'default', 'value' => 'N'],
+            [['duedays'], 'default', 'value' => 0],
             [['sold_eur'], 'default', 'value' => 0.00],
             [['ron'], 'default', 'value' => 'RON'],
             [['eur'], 'default', 'value' => 'EUR'],
             [['bank'], 'default', 'value' => ''],
-            [['dateinvoiced', 'duedate', 'nr_cmd_trs', 'nr_factura', 'partener', 'created_at', 'updated_at'], 'required'],
+            [['dateinvoiced', 'duedate', 'nr_cmd_trs', 'nr_factura', 'partener'], 'required'],
             [['dateinvoiced', 'duedate', 'paymentdate'], 'safe'],
+            [['duedays', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['valoare_ron', 'suma_achitata_ron', 'sold_ron', 'valoare_eur', 'suma_achitata_eur', 'sold_eur'], 'number'],
             [['mentiuni'], 'string'],
-            [['created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['is_receipt'], 'string', 'max' => 1],
             [['nr_cmd_trs', 'nr_factura'], 'string', 'max' => 50],
             [['partener', 'bank'], 'string', 'max' => 100],
@@ -80,16 +85,17 @@ class Payment extends \yii\db\ActiveRecord
             'id' => 'ID',
             'is_receipt' => 'Incasare',
             'dateinvoiced' => 'Data Factura',
-            'duedate' => 'Data Scadenta',
+            'duedate' => 'Data Scandenta',
+            'duedays' => 'Zile scadenta',
             'nr_cmd_trs' => 'Nr Cmd Trs',
             'nr_factura' => 'Nr Factura',
-            'partener' => 'Furnizor',
+            'partener' => 'Partener',
             'valoare_ron' => 'Valoare RON',
-            'suma_achitata_ron' => 'Suma Achitata',
-            'sold_ron' => 'Sold',
-            'valoare_eur' => 'Valoare EURO',
-            'suma_achitata_eur' => 'Suma Achitata',
-            'sold_eur' => 'Sold',
+            'suma_achitata_ron' => 'Suma Achitata RON',
+            'sold_ron' => 'Sold RON',
+            'valoare_eur' => 'Valoare EUR',
+            'suma_achitata_eur' => 'Suma Achitata EUR',
+            'sold_eur' => 'Sold EUR',
             'ron' => 'RON',
             'eur' => 'EUR',
             'paymentdate' => 'Data Achitarii',
@@ -102,6 +108,13 @@ class Payment extends \yii\db\ActiveRecord
         ];
     }
 
+     public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
+            BlameableBehavior::class,
+        ];
+    }
     /**
      * Gets query for [[CreatedBy]].
      *
@@ -129,6 +142,26 @@ class Payment extends \yii\db\ActiveRecord
     public static function find()
     {
         return new PaymentQuery(get_called_class());
+    }
+
+     public function beforeSave($insert){
+        if(!parent::beforeSave($insert)){
+            
+            return false;
+        }
+        
+        $inv_date = new DateTime($this->dateinvoiced);
+        $due_date = new DateTime($this->duedate);
+        $diff = $due_date->diff($inv_date);
+
+    if ($insert) {
+        // Code for INSERT (new record)
+        $this->duedays = $diff->days;
+    } else {
+        // Code for UPDATE (existing record)
+        $this->duedays = $diff->days;
+    }
+        return true;
     }
 
 }
