@@ -102,13 +102,14 @@ var table=  $('#vehicleTable').DataTable({
         responsive: true,
         scrollX:true,
         language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/ro.json',
              search: "<span class='me-2'>🔍 Cautare:</span>",
-             lengthMenu: "Afisare <strong>_MENU_</strong> inregistrari",
+             /*lengthMenu: "Afisare <strong>_MENU_</strong> inregistrari",
              info: "Afisare _START_ din _END_ din _TOTAL_ inregistrari",
               paginate: {
                     previous: "<span class='me-1'>&laquo;</span> Prec",
                     next: "Urm <span class='ms-1'>&raquo;</span>"
-    }
+    } */
         },
         order:[[10,'asc']],
         ajax: baseUrl+'/vehicle/data',            
