@@ -42,9 +42,20 @@ $baseUrl = Url::base(true);
           <thead>
             <tr>
               <th>ID</th>
-              <th>Partener</th>
-              <th>Suma</th>
-              <th>Data Creării</th>
+              <th>Data Factura</th>
+              <th>Data Scadenta</th>
+              <th>Nr CMD TRS</th>
+              <th>Numar Factura</th>
+              <th>FURNIZOR</th>
+              <th>Valoare RON</th>
+              <th>Suma Achitata RON</th>
+              <th>Sold RON</th>
+              <th>Valoare EUR</th>
+              <th>Suma Achitata EUR</th>
+              <th>Sold EUR</th>
+              <th>Data Achitarii</th>
+              <th>Banca</th>
+              <th>Mentiuni</th>
             </tr>
           </thead>
         </table>
@@ -55,43 +66,50 @@ $baseUrl = Url::base(true);
 <?php 
 $this->registerJs(<<<JS
  $(document).ready(function() {
-    const baseUrl = '$baseUrl';
-      // Initialize DataTables
-    const initTable = (days) => {
+    const baseUrl = '$baseUrl';  
+    const tables= {};
+    function initTable (days) {
     return $('#dt' + days + 'Table').DataTable({
+      processing: true,
+      serverSide: true,
       ajax: baseUrl + '/payment/data?days=' + days,
+      ordering: true,
       columns: [
-        { data: 'id' },
-        { data: 'partner' },
-        { data: 'amount' },
-        { data: 'created_at' }
+        { data : 'id' , visible:false},
+        { data : 'dateinvoiced' },
+        { data : 'duedate' },        
+        { data : 'nr_cmd_trs'},
+        { data : 'nr_factura'},
+        { data : 'partener'},
+        { data : 'valoare_ron',orderable: false},
+        { data : 'suma_achitata_ron',orderable: false},
+        { data : 'sold_ron' ,orderable: false},
+        { data : 'valoare_eur',orderable: false},
+        { data : 'suma_achitata_eur' ,orderable: false},
+        { data : 'sold_eur',orderable: false},
+        { data : 'paymentdate',orderable: false },
+        { data : 'bank',orderable: false},
+        { data : 'mentiuni',orderable: false}
       ],
       pageLength: 10,
+        order: [[2, 'asc']],
       language: {
         url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/ro.json'
       }
     });
   };
-   let tables = { 15: initTable(15) };    
+    tables[15] =  initTable(15) ;    
    // Lazy-load tables when tabs are clicked
   $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
-    const days = $(e.target).data('bs-target').replace('#dt', '');
+   const days = $(e.target).data('bs-target').replace('#dt', '');
     if (!tables[days]) {
       tables[days] = initTable(days);
     } else {
       tables[days].ajax.reload(null, false);
     }
-
     $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
   });
-});
-
-
-      // Recalculate column widths when switching tabs
-      $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
-        $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
-      });
-    });
+});          
 JS);
 
 ?>

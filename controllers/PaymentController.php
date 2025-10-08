@@ -9,6 +9,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use Yii;
+use yii\web\Response;
 
 /**
  * PaymentController implements the CRUD actions for Payment model.
@@ -148,4 +149,83 @@ class PaymentController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionData($days){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $request = Yii::$app->request;
+        // --- DataTables parameters ---
+        $draw = $request->get('draw');
+        $start = $request->get('start', 0);
+        $length = $request->get('length', 10);
+        $searchValue = $request->get('search')['value'] ?? '';
+        $columns = ['id','dateinvoiced','duedate','nr_cmd_trs','nr_factura','partener','valoare_ron','suma_achitata_ron','sold_ron','valoare_eur',
+                    'suma_achitata_eur','sold_eur','paymentdate','bank','mentiuni'];
+        $query = Payment::find();
+        switch ($days) {
+            case 15:
+                $query->where(['<=','duedays',$days]);
+                break;
+            case 30:
+                $query->where(['>','duedays',15])->andWhere(['<=','duedays',$days]);
+                break;
+            case 45:
+                $query->where(['>','duedays',30])->andWhere(['<=','duedays',$days]);
+                break;
+            case 60:
+                $query->where(['>','duedays',45])->andWhere(['<=','duedays',$days]);
+                break;
+            default:                
+                break;
+        }
+
+  if (!empty($searchValue)) {
+        $query->andFilterWhere(['or',            
+            ['like', 'partener', $searchValue],
+            ['like', 'nr_factura', $searchValue],
+            ['like', 'nr_cmd_trs', $searchValue],
+        ]);
+    }
+ $order = $request->get('order', []);
+    if (!empty($order)) {
+        $colIndex = $order[0]['column'] ?? 0;
+        $colDir   = $order[0]['dir'] ?? 'asc';
+        if (isset($columns[$colIndex])) {
+            $query->orderBy([$columns[$colIndex] => ($colDir === 'desc' ? SORT_DESC : SORT_ASC)]);
+        }
+    } else {
+        $query->orderBy(['dateinvoiced' => SORT_DESC]); // default order
+    }
+    $totalRecords = (clone $query)->count();
+    $payments = $query       
+        ->offset($start)
+        ->limit($length)
+        ->all();
+     $data = [];
+    foreach ($payments as $p) {
+        $data[] = [
+            'id' => $p->id,           
+            'dateinvoiced' => Yii::$app->formatter->asDate($p->dateinvoiced,'dd.MM.yyyy'),
+            'duedate' => Yii::$app->formatter->asDate($p->duedate,'dd.MM.yyyy'),        
+            'nr_cmd_trs' => $p->nr_cmd_trs,
+            'nr_factura' => $p->nr_factura,
+            'partener' =>   $p->partener ?? '(Fără partener)',
+            'valoare_ron'=> $p->valoare_ron,
+            'suma_achitata_ron'=> $p->suma_achitata_ron,
+            'sold_ron' => $p->sold_ron,
+            'valoare_eur'=> $p->valoare_eur,
+            'suma_achitata_eur' => $p->suma_achitata_eur,
+            'sold_eur'=> $p->sold_eur,
+            'paymentdate' => Yii::$app->formatter->asDate($p->paymentdate,'dd.MM.yyyy'),
+            'bank'=> $p->bank,
+            'mentiuni'=> $p->mentiuni,
+        ];
+    }
+
+    return [
+        'draw' => intval($draw),
+        'recordsTotal' => intval($totalRecords),
+        'recordsFiltered' => intval($totalRecords),
+        'data' => $data,
+    ];
+}
 }
