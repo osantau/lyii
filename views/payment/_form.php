@@ -18,7 +18,7 @@ use yii\bootstrap5\ActiveForm;
     </div>
     <div class="row">
         <div class="col-md-4">
-            <?= $form->field($model, 'nr_factura')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'nr_factura')->textInput(['maxlength' => true,'autofocus'=>true]) ?>
         </div>
         <div class="col-md-4">
             <?= $form->field($model, 'dateinvoiced')->input('date') ?>
