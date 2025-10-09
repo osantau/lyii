@@ -88,7 +88,7 @@ $this->registerJs(<<<JS
         { data : 'valoare_eur',orderable: false},
         { data : 'suma_achitata_eur' ,orderable: false},
         { data : 'sold_eur',orderable: false},
-        { data : 'paymentdate',orderable: false },
+        { data : 'paymentdate',orderable: false},
         { data : 'bank',orderable: false},
         { data : 'mentiuni',orderable: false},
         {data: null, orderable: false,
@@ -103,6 +103,10 @@ $this->registerJs(<<<JS
                 +'</div>';
               }}
       ],
+      createdRow: function(row, data, dataIndex) {
+    // Add data attributes for easy identification
+          $(row).attr('data-id', data.id);
+          },
       pageLength: 10,
         order: [[2, 'asc']],
       language: {
@@ -122,6 +126,90 @@ $this->registerJs(<<<JS
     $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
   });
 }); 
+const editableColumns = {
+  'dateinvoiced':'date', 
+  'duedate':'date',         
+  'nr_cmd_trs':'text',
+  'nr_factura':'text',
+  'partener':'text',
+  'valoare_ron':'number',
+  'suma_achitata_ron':'number',
+  'sold_ron':'number', 
+  'valoare_eur':'number',
+  'suma_achitata_eur':'number',
+  'sold_eur':'number',
+  'paymentdate':'date', 
+  'bank':'text',
+  'mentiuni':'text'
+};
+// Editare inline
+$(document).on('dblclick', '#dataTabsContent td', function () {
+  const baseUrl = '$baseUrl';  
+  const cell = $(this);
+  const table = cell.closest('table').DataTable();
+  const cellIndex = table.cell(this).index();
+  const rowData = table.row(this).data();
+  const colName = table.settings().init().columns[cellIndex.column].data;
+
+  // Skip non-editable columns
+  const nonEditable = ['id', null,'dateinvoiced','duedate']; // adjust as needed
+  if (nonEditable.includes(colName)) return;
+  const type = editableColumns[colName];
+  // Get current value
+  const oldValue = cell.text().trim();
+
+  // Create input field
+  let input;
+  if(type==='text'){
+     input = $('<input type="text" class="form-control form-control-sm">').val(oldValue);
+  }else if (type === 'date') {
+    input = $('<input type="date" class="form-control form-control-sm">').val(oldValue);
+  } else if(type==='number')
+  {
+    input = $('<input type="number" class="form-control form-control-sm">').val(oldValue);
+  }  
+
+  cell.html(input);
+  input.focus();
+
+  // When losing focus or pressing Enter, save
+  input.on('blur keypress', function (e) {
+    if (e.type === 'blur' || e.which === 13) {
+      const newValue = input.val();
+      if (newValue === oldValue) {
+        cell.text(oldValue);
+        return;
+      }
+
+      // AJAX save
+      $.ajax({
+        url: baseUrl + '/payment/update-inline',
+        type: 'POST',
+        data: {
+          id: rowData.id,
+          field: colName,
+          value: newValue,
+          _csrf: yii.getCsrfToken()
+        },
+        success: function (res) {
+          if (res.success) {
+            cell.text(newValue);
+             cell.css('background-color', '#d4edda');
+            setTimeout(() => cell.css('background-color', ''), 600);
+          } else {
+            alert('Eroare: ' + res.message);
+            cell.text(oldValue);
+          }
+        },
+        error: function () {
+          alert('Eroare la actualizare.');
+          cell.text(oldValue);
+        }
+      });
+    }
+  });
+});
+
 $(document).on('click','.duplicate-btn', function(){
   const id = $(this).data('id');
   const baseUrl = $('#baseUrl').val();    

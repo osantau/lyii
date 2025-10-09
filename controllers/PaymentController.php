@@ -258,4 +258,31 @@ Yii::$app->response->format = Response::FORMAT_JSON;
 
     return ['success' => false, 'message' => 'Eroare la salvare.'];
 }
+
+public function actionUpdateInline()
+{
+    Yii::$app->response->format = Response::FORMAT_JSON;
+
+    $id = Yii::$app->request->post('id');
+    $field = Yii::$app->request->post('field');
+    $value = Yii::$app->request->post('value');
+
+    $model = Payment::findOne($id);
+    if (!$model) {
+        return ['success' => false, 'message' => 'Plata nu a fost găsită.'];
+    }
+
+    // Validate safe attributes only
+    if (!in_array($field, $model->safeAttributes())) {
+        return ['success' => false, 'message' => 'Câmp nepermis.'];
+    }
+
+    $model->$field = $value;
+
+    if ($model->save(false, [$field])) {
+        return ['success' => true];
+    }
+
+    return ['success' => false, 'message' => 'Eroare la salvare.'];
+}
 }
