@@ -19,6 +19,9 @@ $baseUrl = Url::base(true);
     <h1><?= Html::encode($this->title) ?></h1>
     <p>
         <?= Html::a('Creeaza Plata', ['create'], ['class' => 'btn btn-success']) ?>
+         <button id="refreshAll" class="btn btn-primary">
+    <i class="fa fa-sync"></i> Reîncarcă
+  </button>
     </p>
 <?php echo Html::input('hidden','baseUrl',Url::base(true),['id'=>'baseUrl']);?>
  <ul class="nav nav-tabs" id="dataTabs" role="tablist">
@@ -125,6 +128,18 @@ $this->registerJs(<<<JS
     }
     $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
   });
+  $('#refreshAll').on('click', function () {
+  const btn = $(this);
+  btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Reîncarcă...');
+
+  const activeTab = $('#dataTabs .nav-link.active');
+  const days = activeTab.data('bs-target').replace('#dt', '');  
+  if (tables[days]) {
+    tables[days].ajax.reload(() => {
+      btn.prop('disabled', false).html('<i class="fa fa-sync"></i> Reîncarcă');
+    }, false);
+  }
+});
 }); 
 const editableColumns = {
   'dateinvoiced':'date', 
@@ -254,8 +269,4 @@ $(document).on('click', '.delete-btn', function() {
     }
   });
 });
-JS);
-
-
-
-?>
+JS);?>
