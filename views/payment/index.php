@@ -56,6 +56,7 @@ $baseUrl = Url::base(true);
               <th>Data Achitarii</th>
               <th>Banca</th>
               <th>Mentiuni</th>
+              <th>Actiuni</th>
             </tr>
           </thead>
         </table>
@@ -89,7 +90,18 @@ $this->registerJs(<<<JS
         { data : 'sold_eur',orderable: false},
         { data : 'paymentdate',orderable: false },
         { data : 'bank',orderable: false},
-        { data : 'mentiuni',orderable: false}
+        { data : 'mentiuni',orderable: false},
+        {data: null, orderable: false,
+           render: function(data, type, row) {  
+            const baseUrl = $('#baseUrl').val();  
+            const editUrl = baseUrl + '/payment/update?id=' + row.id;
+            const deleteUrl = baseUrl + '/payment/delete?id=' + row.id;                 
+          return '<div class="btn-group" role="group">'
+                +'<a href="'+editUrl+'" class="btn btn-sm btn-warning"><i class="fa fa-pencil" title="Editeaza"></i></a>'
+                +'<button class="btn btn-sm btn-primary duplicate-btn" data-id="'+row.id+'" title="Duplicheaza"><i class="fa fa-copy"></i></button>'
+                +'<button class="btn btn-sm btn-danger delete-btn" data-id="'+row.id+'" title="Sterge"><i class="fa fa-trash"></i></button>'
+                +'</div>';
+              }}
       ],
       pageLength: 10,
         order: [[2, 'asc']],
@@ -109,7 +121,53 @@ $this->registerJs(<<<JS
     }
     $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
   });
-});          
+}); 
+$(document).on('click','.duplicate-btn', function(){
+  const id = $(this).data('id');
+  const baseUrl = $('#baseUrl').val();    
+  if (!confirm('Sigur doriți să duplicați această plată?')) return;
+  $.ajax({
+    url: baseUrl + '/payment/duplicate',
+    type: 'POST',
+    data: { id: id, _csrf: yii.getCsrfToken() },
+    success: function(response) {
+      if (response.success) {
+        alert('Plata a fost duplicată cu succes.');
+        $.fn.dataTable.tables({visible: true, api: true}).ajax.reload(null, false);
+      } else {
+        alert('Eroare: ' + response.message);
+      }
+    },
+    error: function() {
+      alert('A apărut o eroare la duplicare.');
+    }
+  });
+});
+$(document).on('click', '.delete-btn', function() {
+  const id = $(this).data('id');
+  const baseUrl = $('#baseUrl').val();
+
+  if (!confirm('Sigur doriți să ștergeți această plată? Aceasta acțiune este ireversibilă.')) return;
+
+  $.ajax({
+    url: baseUrl + '/payment/delete',
+    type: 'POST',
+    data: { id: id, _csrf: yii.getCsrfToken() },
+    success: function(response) {
+      if (response.success) {
+        alert('Plata a fost ștearsă cu succes.');
+        $.fn.dataTable.tables({visible: true, api: true}).ajax.reload(null, false);
+      } else {
+        alert('Eroare: ' + response.message);
+      }
+    },
+    error: function() {
+      alert('A apărut o eroare la ștergere.');
+    }
+  });
+});
 JS);
+
+
 
 ?>

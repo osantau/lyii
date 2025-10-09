@@ -112,7 +112,7 @@ class PaymentController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [
@@ -127,11 +127,21 @@ class PaymentController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete()
     {
-        $this->findModel($id)->delete();
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $id = Yii::$app->request->post('id');
+        $model = Payment::findOne($id);
+        if (!$model) {
+            return ['success' => false, 'message' => 'Plata nu a fost găsită.'];
+    }
 
-        return $this->redirect(['index']);
+    try {
+        $model->delete();
+        return ['success' => true];
+    } catch (\Throwable $e) {
+        return ['success' => false, 'message' => 'Eroare la ștergere: ' . $e->getMessage()];
+    }
     }
 
     /**
@@ -227,5 +237,25 @@ class PaymentController extends Controller
         'recordsFiltered' => intval($totalRecords),
         'data' => $data,
     ];
+}
+
+public function actionDuplicate() {
+Yii::$app->response->format = Response::FORMAT_JSON;
+    $id = Yii::$app->request->post('id');
+
+    $model = Payment::findOne($id);
+    if (!$model) {
+        return ['success' => false, 'message' => 'Plata nu a fost găsită.'];
+    }
+
+    $newModel = new Payment();
+    $newModel->attributes = $model->attributes;
+    $newModel->id = null; // ensure a new record
+    
+    if ($newModel->save(false)) {
+        return ['success' => true, 'id' => $newModel->id];
+    }
+
+    return ['success' => false, 'message' => 'Eroare la salvare.'];
 }
 }
