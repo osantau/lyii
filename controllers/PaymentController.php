@@ -182,7 +182,7 @@ class PaymentController extends Controller
                 $query->where(['>','duedays',30])->andWhere(['<=','duedays',$days]);
                 break;
             case 60:
-                $query->where(['>','duedays',45])->andWhere(['<=','duedays',$days]);
+                $query->where(['>','duedays',45])->andWhere(['<=','duedays',$days])->orWhere(['>','duedays',$days]);
                 break;
             default:                
                 break;
