@@ -48,6 +48,8 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             !$current_user->isGuest && ($current_user->identity->isAdmin() || $current_user->identity->isContabil()) ? ['label' => '<i class="fa fa-money-bill"></i> Contabilitate',
                 'items' => [                
                 ['label' => '<i class="fa fa-credit-card"></i> Plati Parteneri', 'url' => ['/payment']],
+                ['label' => '<i class="fa fa-credit-card"></i> Facturi EURO', 'url' => ['/invoice/eur']],
+                ['label' => '<i class="fa fa-credit-card"></i> Facturi RON', 'url' => ['/invoice/eur']],
                /*  '<hr class="dropdown-divider">',
                 ['label' => 'Consulting', 'url' => ['/services/consulting']],*/
             ],]:'',            
