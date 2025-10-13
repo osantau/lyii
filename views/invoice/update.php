@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Invoice $model */
 
-$this->title = 'Update Invoice: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Invoices', 'url' => ['index']];
+$this->title = 'Actualizare Factura: ' . $moneda;
+$this->params['breadcrumbs'][] = ['label' => 'Facturi', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'moneda'=>$moneda,
     ]) ?>
 
 </div>

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use DateTime;
 use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
@@ -59,7 +60,7 @@ class Invoice extends \yii\db\ActiveRecord
             [['diferenta'], 'default', 'value' => 0.00],
             [['moneda'], 'default', 'value' => ''],
             [['is_customer'], 'default', 'value' => 'Y'],
-            [['dateinvoiced', 'duedate', 'nr_factura', 'partener', 'created_at', 'updated_at'], 'required'],
+            [['dateinvoiced', 'duedate', 'nr_factura', 'partener'], 'required'],
             [['dateinvoiced', 'duedate', 'paymentdate'], 'safe'],
             [['duedays', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['valoare_ron', 'suma_achitata_ron', 'sold_ron', 'valoare_eur', 'suma_achitata_eur', 'sold_eur', 'diferenta'], 'number'],
@@ -68,7 +69,7 @@ class Invoice extends \yii\db\ActiveRecord
             [['moneda'], 'string', 'max' => 3],
             [['is_customer'], 'string', 'max' => 1],
             [['mentiuni', 'credit_note'], 'string', 'max' => 4000],
-            [['nr_factura'], 'unique'],
+            // [['nr_factura'], 'unique'],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updated_by' => 'id']],
         ];
@@ -81,10 +82,10 @@ class Invoice extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'dateinvoiced' => 'Dateinvoiced',
-            'duedate' => 'Duedate',
+            'dateinvoiced' => 'Data Factura',
+            'duedate' => 'Data Scadenta',
             'duedays' => 'Duedays',
-            'paymentdate' => 'Paymentdate',
+            'paymentdate' => 'Data Incasare',
             'nr_factura' => 'Nr Factura',
             'partener' => 'Partener',
             'valoare_ron' => 'Valoare Ron',
@@ -138,6 +139,34 @@ class Invoice extends \yii\db\ActiveRecord
     public static function find()
     {
         return new InvoiceQuery(get_called_class());
+    }
+
+       public function beforeSave($insert){
+        if(!parent::beforeSave($insert)){
+            
+            return false;
+        }        
+        $this->calculateDueDays();    
+        return true;
+    }
+
+    public function calculateDueDays()
+    {
+        $inv_date = new DateTime($this->dateinvoiced);
+        $due_date = new DateTime($this->duedate);
+        $diff = $due_date->diff($inv_date);
+        $this->duedays = $diff->days;
+    }
+    public function calculateSold($currency)
+    {
+        if($currency==='RON')
+        {
+            $this->sold_ron = $this->valoare_ron - $this->suma_achitata_ron;
+        }
+        if($currency==='EUR')
+        {
+            $this->sold_eur = $this->valoare_eur - $this->suma_achitata_eur;
+        }
     }
 
 }
