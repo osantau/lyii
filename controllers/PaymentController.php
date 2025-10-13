@@ -193,6 +193,8 @@ class PaymentController extends Controller
             ['like', 'partener', $searchValue],
             ['like', 'nr_factura', $searchValue],
             ['like', 'nr_cmd_trs', $searchValue],
+            ['like', 'ron', $searchValue],
+            ['like', 'eur', $searchValue],
         ]);
     }
  $order = $request->get('order', []);
@@ -228,6 +230,8 @@ class PaymentController extends Controller
             'paymentdate' => Yii::$app->formatter->asDate($p->paymentdate,'dd.MM.yyyy'),
             'bank'=> $p->bank,
             'mentiuni'=> $p->mentiuni,
+            'ron'=>$p->ron,
+            'eur'=>$p->eur,
         ];
     }
 

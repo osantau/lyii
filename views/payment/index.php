@@ -59,6 +59,8 @@ $baseUrl = Url::base(true);
               <th>Data Achitarii</th>
               <th>Banca</th>
               <th>Mentiuni</th>
+              <th>RON</th>
+              <th>EUR</th>
               <th>Actiuni</th>
             </tr>
           </thead>
@@ -94,6 +96,8 @@ $this->registerJs(<<<JS
         { data : 'paymentdate',orderable: false},
         { data : 'bank',orderable: false},
         { data : 'mentiuni',orderable: false},
+        {data : 'ron',orderable:false},
+        {data : 'eur',orderable:false},
         {data: null, orderable: false,
            render: function(data, type, row) {  
             const baseUrl = $('#baseUrl').val();  
