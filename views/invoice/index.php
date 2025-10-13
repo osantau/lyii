@@ -123,7 +123,7 @@ $this->registerJs(<<<JS
                 { data: 'sold_ron' }
             );
         }
-        columns.push( { data : 'paymentdate',orderable: false}); 
+        columns.push( { data : 'paymentdate'}); 
         if(moneda==='eur')
         {
           columns.push( { data : 'diferenta',orderable: false});   

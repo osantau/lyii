@@ -204,9 +204,9 @@ class InvoiceController extends Controller
         if ($days <= 15) {
             // duedays <= 15
             $query->andWhere(['<=', 'duedays', 15]);
-        } elseif ($days > 60) {
+        } elseif ($days >= 60) {
             // duedays > 60
-            $query->andWhere(['>', 'duedays', 60]);
+            $query->andWhere(['>=', 'duedays', 60]);
         } else {
             // duedays between previous and current range
             $query->andWhere(['between', 'duedays', $previous + 1, $days]);
@@ -217,7 +217,7 @@ class InvoiceController extends Controller
                 'or',
                 ['like', 'partener', $searchValue],
                 ['like', 'nr_factura', $searchValue],
-                ['like', 'invoicedate', $searchValue],
+                ['like', 'dateinvoiced', $searchValue],
             ]);
         }
         $order = $request->get('order', []);
