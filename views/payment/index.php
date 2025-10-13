@@ -200,7 +200,7 @@ $(document).on('dblclick', '#dataTabsContent td', function () {
   const colName = table.settings().init().columns[cellIndex.column].data;
 
   // Skip non-editable columns
-  const nonEditable = ['id', null,'dateinvoiced','duedate']; // adjust as needed
+  const nonEditable = ['id', null,'sold_ron','sold_eur']; // adjust as needed
   if (nonEditable.includes(colName)) return;
   const type = editableColumns[colName];
   // Get current value
@@ -222,7 +222,13 @@ $(document).on('dblclick', '#dataTabsContent td', function () {
 
   // When losing focus or pressing Enter, save
   input.on('blur keypress', function (e) {
-    if (e.type === 'blur' || e.which === 13) {
+    console.log(e.key);
+if (e.type === 'keydown' && e.key === 'Escape') {
+        cell.text(oldValue);
+        return;
+    }
+
+    if (e.type === 'blur' || e.key ==='Enter' ) {
       const newValue = input.val();
       if (newValue === oldValue) {
         cell.text(oldValue);
@@ -244,6 +250,10 @@ $(document).on('dblclick', '#dataTabsContent td', function () {
             cell.text(newValue);
              cell.css('background-color', '#d4edda');
             setTimeout(() => cell.css('background-color', ''), 600);
+               if (colName === 'suma_achitata_ron' || colName === 'suma_achitata_eur' ||colName === 'valoare_ron' || colName === 'valoare_eur' ||  colName==='paymentdate' || colName==='dateinvoiced' || colName==='duedate' ) {
+            // Refresh the entire row from the server
+            table.ajax.reload(null, false); 
+    }
           } else {
             alert('Eroare: ' + res.message);
             cell.text(oldValue);
@@ -255,7 +265,11 @@ $(document).on('dblclick', '#dataTabsContent td', function () {
         }
       });
     }
-  });
+  }).on('keydown', function(e){
+    if(e.key === 'Escape'){
+        cell.text(oldValue);
+    }
+});
 });
 
 $(document).on('click','.duplicate-btn', function(){

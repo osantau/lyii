@@ -283,6 +283,23 @@ public function actionUpdateInline()
     }
 
     $model->$field = $value;
+    if($field==='duedate')
+        {
+            $model->calculateDueDays();       
+            $model->save(false,['duedays']);     
+        }    
+    if($field==='suma_achitata_ron' || $field==='suma_achitata_eur' || $field==='valoare_ron' || $field==='valoare_eur' )
+    {
+        if($field==='suma_achitata_ron' || $field==='valoare_ron') {
+           $model->calculateSold('RON');
+           $model->save(false,['sold_ron']);
+        }
+        else if($field==='suma_achitata_eur' || $field==='valoare_eur') {
+           $model->calculateSold('EUR');
+           $model->save(false,['sold_eur']);
+        }    
+    } 
+  
 
     if ($model->save(false, [$field])) {
         return ['success' => true];

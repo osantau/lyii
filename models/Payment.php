@@ -148,20 +148,28 @@ class Payment extends \yii\db\ActiveRecord
         if(!parent::beforeSave($insert)){
             
             return false;
-        }
-        
+        }        
+        $this->calculateDueDays();    
+        return true;
+    }
+
+    public function calculateDueDays()
+    {
         $inv_date = new DateTime($this->dateinvoiced);
         $due_date = new DateTime($this->duedate);
         $diff = $due_date->diff($inv_date);
-
-    if ($insert) {
-        // Code for INSERT (new record)
-        $this->duedays = $diff->days;
-    } else {
-        // Code for UPDATE (existing record)
         $this->duedays = $diff->days;
     }
-        return true;
+    public function calculateSold($currency)
+    {
+        if($currency==='RON')
+        {
+            $this->sold_ron = $this->valoare_ron - $this->suma_achitata_ron;
+        }
+        if($currency==='EUR')
+        {
+            $this->sold_eur = $this->valoare_eur - $this->suma_achitata_eur;
+        }
     }
 
 }
