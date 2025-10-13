@@ -80,6 +80,35 @@ $this->registerJs(<<<JS
       serverSide: true,
       ajax: baseUrl + '/payment/data?days=' + days,
       ordering: true,
+     /* dom: 'Bfrtip',
+          buttons: [
+      {
+        extend: 'excelHtml5',
+        title: 'Plăți '+days+' zile',
+        text: '<i class="fa fa-sm fa-file-excel"></i> Export Excel',
+        className: 'btn btn-success btn-sm'
+      },
+      {
+        extend: 'csvHtml5',
+        title: 'Plăți '+days+' zile',
+        text: '<i class="fa fa-sm fa-file-csv"></i> Export CSV',
+        className: 'btn btn-info btn-sm'
+      },
+      {
+        extend: 'pdfHtml5',
+        title: 'Plăți '+days+' zile',
+        orientation: 'landscape',
+        pageSize: 'A4',
+        text: '<i class="fa fa-sm fa-file-pdf"></i> Export PDF',
+        className: 'btn btn-danger btn-sm'
+      },
+      {
+        extend: 'print',
+        text: '<i class="fa fa-sm fa-print"></i> Tipărește',
+        className: 'btn btn-secondary btn-sm'
+      }
+    ],*/
+
       columns: [
         { data : 'id' , visible:false},
         { data : 'dateinvoiced' },
@@ -274,3 +303,12 @@ $(document).on('click', '.delete-btn', function() {
   });
 });
 JS);?>
+<?php
+$this->registerCssFile('https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css');
+$this->registerJsFile('https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+$this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+$this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+$this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+$this->registerJsFile('https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+$this->registerJsFile('https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+?>
