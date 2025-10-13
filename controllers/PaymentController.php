@@ -195,6 +195,7 @@ class PaymentController extends Controller
             ['like', 'nr_cmd_trs', $searchValue],
             ['like', 'ron', $searchValue],
             ['like', 'eur', $searchValue],
+            ['like', 'bank', $searchValue],
         ]);
     }
  $order = $request->get('order', []);
