@@ -211,7 +211,7 @@ class PaymentController extends Controller
     $totalRecords = (clone $query)->count();
     $payments = $query       
         ->offset($start)
-        ->limit($length)
+        ->limit($length)        
         ->all();
      $data = [];
     foreach ($payments as $p) {

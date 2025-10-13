@@ -56,11 +56,11 @@ $baseUrl = Url::base(true);
               <th>Valoare EUR</th>
               <th>Suma Achitata EUR</th>
               <th>Sold EUR</th>
+              <th>Cont RON</th>
+              <th>Cont EUR</th>
               <th>Data Achitarii</th>
               <th>Banca</th>
-              <th>Mentiuni</th>
-              <th>RON</th>
-              <th>EUR</th>
+              <th>Mentiuni</th>            
               <th>Actiuni</th>
             </tr>
           </thead>
@@ -77,9 +77,12 @@ $this->registerJs(<<<JS
     function initTable (days) {
     return $('#dt' + days + 'Table').DataTable({
       processing: true,
-      serverSide: true,
+      serverSide: true,      
       ajax: baseUrl + '/payment/data?days=' + days,
       ordering: true,
+      autoWidth: true,
+      responsive: true,
+      scrollX:true,       
      /* dom: 'Bfrtip',
           buttons: [
       {
@@ -116,17 +119,17 @@ $this->registerJs(<<<JS
         { data : 'nr_cmd_trs'},
         { data : 'nr_factura'},
         { data : 'partener'},
-        { data : 'valoare_ron',orderable: false},
-        { data : 'suma_achitata_ron',orderable: false},
-        { data : 'sold_ron' ,orderable: false},
-        { data : 'valoare_eur',orderable: false},
-        { data : 'suma_achitata_eur' ,orderable: false},
-        { data : 'sold_eur',orderable: false},
+        { data : 'valoare_ron'},
+        { data : 'suma_achitata_ron'},
+        { data : 'sold_ron' },
+        { data : 'valoare_eur'},
+        { data : 'suma_achitata_eur' },
+        { data : 'sold_eur'},
+        { data : 'ron', orderable:false},
+        { data : 'eur', orderable:false},
         { data : 'paymentdate',orderable: false},
         { data : 'bank',orderable: false},
-        { data : 'mentiuni',orderable: false},
-        {data : 'ron',orderable:false},
-        {data : 'eur',orderable:false},
+        { data : 'mentiuni',orderable: false},       
         {data: null, orderable: false,
            render: function(data, type, row) {  
             const baseUrl = $('#baseUrl').val();  
@@ -143,8 +146,8 @@ $this->registerJs(<<<JS
     // Add data attributes for easy identification
           $(row).attr('data-id', data.id);
           },
-      pageLength: 10,
-        order: [[2, 'asc']],
+      pageLength: 25,
+      order: [[1, 'desc']],
       language: {
         url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/ro.json'
       }
@@ -200,7 +203,7 @@ $(document).on('dblclick', '#dataTabsContent td', function () {
   const colName = table.settings().init().columns[cellIndex.column].data;
 
   // Skip non-editable columns
-  const nonEditable = ['id', null,'sold_ron','sold_eur']; // adjust as needed
+  const nonEditable = ['id', null]; // adjust as needed
   if (nonEditable.includes(colName)) return;
   const type = editableColumns[colName];
   // Get current value

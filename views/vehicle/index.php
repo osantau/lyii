@@ -101,6 +101,7 @@ var table=  $('#vehicleTable').DataTable({
         autoWidth: true,
         responsive: true,
         scrollX:true,
+        pageLength:25,
         language: {
             url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/ro.json',
              /*search: "<span class='me-2'>🔍 Cautare:</span>",

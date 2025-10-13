@@ -60,6 +60,14 @@ use yii\bootstrap5\ActiveForm;
             <?= $form->field($model, 'sold_eur')->textInput(['type' => 'number', 'step' => '0.01', 'maxlength' => true]) ?>
         </div>
     </div>
+     <div class="row">
+        <div class="col-md-6">
+            <?= $form->field($model, 'ron')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'eur')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-6">
             <?= $form->field($model, 'paymentdate')->input('date') ?>
