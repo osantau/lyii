@@ -18,7 +18,7 @@ $baseUrl = Url::base(true);
 <div class="payment-index">
     <h1><?= Html::encode($this->title) ?></h1>
     <p>
-        <?= Html::a('Creeaza Plata', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Adauga Plata', ['create'], ['class' => 'btn btn-success']) ?>
          <button id="refreshAll" class="btn btn-primary">
     <i class="fa fa-sync"></i> Reîncarcă
   </button>
