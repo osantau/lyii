@@ -33,7 +33,8 @@ use yii\behaviors\TimestampBehavior;
  * @property int $updated_at
  * @property int|null $created_by
  * @property int|null $updated_by
- *
+ * @property int |null $partner_id
+ * @property Partner $partner
  * @property User $createdBy
  * @property User $updatedBy
  */
@@ -60,9 +61,9 @@ class Invoice extends \yii\db\ActiveRecord
             [['diferenta'], 'default', 'value' => 0.00],
             [['moneda'], 'default', 'value' => ''],
             [['is_customer'], 'default', 'value' => 'Y'],
-            [['dateinvoiced', 'duedate', 'nr_factura', 'partener'], 'required'],
+            [['dateinvoiced', 'duedate', 'nr_factura', 'partner_id'], 'required'],
             [['dateinvoiced', 'duedate', 'paymentdate'], 'safe'],
-            [['duedays', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['duedays', 'created_at', 'updated_at', 'created_by', 'updated_by','partner_id'], 'integer'],
             [['valoare_ron', 'suma_achitata_ron', 'sold_ron', 'valoare_eur', 'suma_achitata_eur', 'sold_eur', 'diferenta'], 'number'],
             [['nr_factura'], 'string', 'max' => 50],
             [['partener'], 'string', 'max' => 100],
@@ -103,6 +104,7 @@ class Invoice extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
+            'partner_id'=>'Partener',
         ];
     }
   public function behaviors()
@@ -147,6 +149,8 @@ class Invoice extends \yii\db\ActiveRecord
             return false;
         }        
         $this->calculateDueDays();    
+        $mPartner = $this->getPartner()->one();        
+        
         return true;
     }
 
@@ -155,7 +159,8 @@ class Invoice extends \yii\db\ActiveRecord
         $inv_date = new DateTime($this->dateinvoiced);
         $due_date = new DateTime($this->duedate);
         $diff = $due_date->diff($inv_date);
-        $this->duedays = $diff->days;
+        $this->duedays = $diff->days;    
+        $this->partener = $this->partner->name;    
     }
     public function calculateSold($currency)
     {
@@ -167,6 +172,10 @@ class Invoice extends \yii\db\ActiveRecord
         {
             $this->sold_eur = $this->valoare_eur - $this->suma_achitata_eur;
         }
+    }
+      public function getPartner()
+    {
+        return $this->hasOne(Partner::class, ['id' => 'partner_id']);
     }
 
 }

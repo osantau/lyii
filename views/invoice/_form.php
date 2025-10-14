@@ -2,6 +2,9 @@
 
 use yii\helpers\Html;
 use yii\bootstrap5\ActiveForm;
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
+use app\models\Partner;
 
 /** @var yii\web\View $this */
 /** @var app\models\Invoice $model */
@@ -33,7 +36,12 @@ use yii\bootstrap5\ActiveForm;
             <?= $form->field($model, 'nr_factura')->textInput(['maxlength' => true,'autofocus'=>true]) ?>
         </div> 
         <div class="col-md-4">
-            <?= $form->field($model, 'partener')->textInput(['maxlength' => true]) ?>
+            <?php //echo $form->field($model, 'partener')->textInput(['maxlength' => true]) ?>
+              <?= $form->field($model, 'partner_id')->widget(Select2::class,
+    ['data'=>ArrayHelper::map(Partner::find()->all(),'id','name'),
+    'options'=>['placeholder'=>'Selectati un partener...'],
+    'pluginOptions'=>['allowClear'=>true]
+],)->label('Partener') ?>
         </div>      
     </div>
     <?php if($moneda==='eur') { ?>
