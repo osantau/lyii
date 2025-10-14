@@ -191,7 +191,9 @@ const editableColumns = {
   'sold_eur':'number',
   'paymentdate':'date', 
   'bank':'text',
-  'mentiuni':'text'
+  'mentiuni':'text',
+  'credit_note':'text',
+  'diferenta':'number'
 };
 // Editare inline
 $(document).on('dblclick', '#dataTabsContent td', function () {
