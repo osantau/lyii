@@ -160,7 +160,7 @@ class PaymentController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionData($days){
+    public function actionData(){
         Yii::$app->response->format = Response::FORMAT_JSON;
         $request = Yii::$app->request;
         // --- DataTables parameters ---
@@ -170,23 +170,7 @@ class PaymentController extends Controller
         $searchValue = $request->get('search')['value'] ?? '';
         $columns = ['id','dateinvoiced','duedate','nr_cmd_trs','nr_factura','partener','valoare_ron','suma_achitata_ron','sold_ron','valoare_eur',
                     'suma_achitata_eur','sold_eur','paymentdate','bank','mentiuni'];
-        $query = Payment::find();
-        switch ($days) {
-            case 15:
-                $query->where(['<=','duedays',$days]);
-                break;
-            case 30:
-                $query->where(['>','duedays',15])->andWhere(['<=','duedays',$days]);
-                break;
-            case 45:
-                $query->where(['>','duedays',30])->andWhere(['<=','duedays',$days]);
-                break;
-            case 60:
-                $query->where(['>','duedays',45])->andWhere(['<=','duedays',$days])->orWhere(['>','duedays',$days]);
-                break;
-            default:                
-                break;
-        }
+        $query = Payment::find();        
 
   if (!empty($searchValue)) {
         $query->andFilterWhere(['or',            
