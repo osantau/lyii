@@ -17,7 +17,7 @@ use app\models\Partner;
 
   <div class="payment-form">
 
-    <?php $form = ActiveForm::begin(['options' => ['class' => 'w-75 mx-auto p-4 bg-light rounded shadow-sm']]); ?>
+    <?php $form = ActiveForm::begin(['options' => ['class' => 'w-75 mx-auto p-4 bg-light rounded shadow-sm']]); ?>    
     <div class="row">
         <div class="col-md-6">
             <?= $form->errorSummary($model) ?>
@@ -39,7 +39,7 @@ use app\models\Partner;
             <?php //echo $form->field($model, 'partener')->textInput(['maxlength' => true]) ?>
               <?= $form->field($model, 'partner_id')->widget(Select2::class,
     ['data'=>ArrayHelper::map(Partner::find()->all(),'id','name'),
-    'options'=>['placeholder'=>'Selectati un partener...'],
+    'options'=>['placeholder'=>'Selectati un partener...','value'=>$model->partner_id],
     'pluginOptions'=>['allowClear'=>true]
 ],)->label('Partener') ?>
         </div>      
