@@ -514,13 +514,18 @@ public function actionEditStatus($id)
 public function actionStatusAjax()
 {
     Yii::$app->response->format = Response::FORMAT_JSON;
-    $id = Yii::$app->request->post('id');
-    $model = Vehicle::findOne(['id'=>$id]);
-    $model->status=Yii::$app->request->post('estatus');
-    if($model->save()){
-      return ['success' => true];
-    }
-     return ['success' => false, 'message' => 'Eroare salvare !'];
+    $id = Yii::$app->request->post('id');    
+    $estatus=Yii::$app->request->post('estatus');   
+    $sql = "
+    UPDATE vehicle set status=:estatus ". ($estatus==0?",transport_order_id=NULL":"") ." WHERE id=:id;
+    ";       
+    Yii::$app->db->createCommand($sql)   
+            ->bindValue('estatus',$estatus)         
+            ->bindValue(':id',$id)
+            ->execute();
+    return ['success' => true];
+    
+    
 }
 public function actionEditDriver($id)
 {
