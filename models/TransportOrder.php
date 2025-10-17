@@ -41,13 +41,14 @@ class TransportOrder extends \yii\db\ActiveRecord
      */
     public function rules()
     {
-        return [
-            [['documentno', 'dateordered', 'partner_id'], 'required'],
-            [['documentno', 'dateordered', 'partner_id'], 'unique',
-            'targetAttribute'=>['documentno', 'dateordered','partner_id'],'message'=>'Numar comanda, Data Comanda si Partener trebuie sa fie unice'],
-            [['dateordered'], 'safe'],
+        return [            
+           /* [['documentno', 'dateordered', 'partner_id'], 'unique',
+            'targetAttribute'=>['documentno', 'dateordered','partner_id'],'message'=>'Numar comanda, Data Comanda si Partener trebuie sa fie unice'], */
+            [['documentno'], 'safe'],
+            [['dateordered'], 'date', 'format' => 'php:Y-m-d'], // validates proper date
+            [['dateordered'], 'default', 'value' => null],       // default NULL
             [['partner_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-            [['documentno'], 'string', 'max' => 100],
+            [['documentno'], 'string', 'max' => 4000],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
             [['partner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Partner::class, 'targetAttribute' => ['partner_id' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updated_by' => 'id']],

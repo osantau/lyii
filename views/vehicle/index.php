@@ -329,9 +329,30 @@ var table=  $('#vehicleTable').DataTable({
         });
 
         // salveaza comanda
-          $('#editComandaModal').on('submit', function(e) {
+    $('#editComandaModal').on('submit', function(e) {
     e.preventDefault();
     $.ajax({
+        url: baseUrl+'/transport-order/info-ajax',
+        method: 'POST',
+        data: $('#editComandaForm').serialize(),
+        success: function(response) {
+            if (response.success) {
+                // Close modal
+                var modalEl = document.getElementById('editComandaModal');
+                var modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+                // Reload DataTable
+                table.ajax.reload(null, false);
+            } else {
+                alert(response.message);
+            }
+        }
+    });
+});
+   $('#editComandaModal').on('click','#btn-delete-order', function(e) {
+    e.preventDefault();    
+    $('#remove_cmd').val(1);    
+   $.ajax({
         url: baseUrl+'/transport-order/info-ajax',
         method: 'POST',
         data: $('#editComandaForm').serialize(),
@@ -619,6 +640,7 @@ JS);
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Inchide</button>
           <button type="submit" class="btn btn-primary">Salveaza</button>
+          <button type="button" class="btn btn-danger" id="btn-delete-order">Sterge</button>
         </div>
       </form>
     </div>

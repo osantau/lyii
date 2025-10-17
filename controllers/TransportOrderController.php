@@ -187,46 +187,65 @@ class TransportOrderController extends Controller
 public function actionInfo($id, $cId)
 {
      Yii::$app->response->format = Response::FORMAT_JSON;    
-       $orders = ArrayHelper::map(
-    TransportOrder::find()->where(['status' => 0])->all(),
-    'id',
-    'documentno'
-);
+        $order = TransportOrder::findOne($cId)?? new TransportOrder();
         return $this->renderAjax('info', [
-        'c_id' => $cId,'v_id'=>$id,'orders'=>$orders
+        'c_id' => $cId,'v_id'=>$id,'documentno'=>$order->documentno,
     ]);
 }
 
 public function actionInfoAjax()
 {
     Yii::$app->response->format = Response::FORMAT_JSON;
-
-    $o_old_id =Yii::$app->request->post('id'); 
+    $partnerId = null;       // or some integer
+    $userId = Yii::$app->user->id;
+    $cId =Yii::$app->request->post('id'); 
     $v_id = Yii::$app->request->post('v_id');
-    $o_id = Yii::$app->request->post('transport_order_id');
+    $documentno = Yii::$app->request->post('documentno');
     $vehicle = Vehicle::findOne($v_id);
-    $order = TransportOrder::findOne($o_id);
+    $remove_cmd=Yii::$app->request->post('remove_cmd');    
+    if($remove_cmd==1)
+        {
+            $sql="
+            UPDATE vehicle set transport_order_id=null, status=0 WHERE id=:id;            
+            ";
+            Yii::$app->db->createCommand($sql)            
+            ->bindValue(':id',$v_id)
+            ->execute();
+            return ['success'=>true];
+        } 
+        
+    if($cId>0)
+    {
+    $order = TransportOrder::findOne($cId); 
+    } else {
+    $order = TransportOrder::findOne(['documentno'=>$documentno]);   
+    }
     if ($order !==null)
     {                          
-            $vehicle->status=1;
-            $vehicle->transport_order_id=$o_id;
-            $vehicle->save();
-            $order->status=1;
-            $order->save();
-            if(!empty($o_old_id)) {
-            $oldOrder = TransportOrder::findOne($o_old_id);
-            $oldOrder->status=0;
-            $oldOrder->save();     
-            }       
-    } if(empty($o_id)) {
-            $vehicle->status=0;              
-                
-            $vehicle->save();
-               if(!empty($o_old_id)) {
-            $oldOrder = TransportOrder::findOne($o_old_id);
-            $oldOrder->status=0;
-            $oldOrder->save();     
-            } 
+         $sql = "
+         UPDATE `transport_order` set `documentno`=:documentno WHERE `id`=:id;
+         ";
+          Yii::$app->db->createCommand($sql)
+          ->bindValue(':documentno',$documentno)
+          ->bindValue(':id',$cId)
+          ->execute();
+                            
+    } else {
+            $sql = "
+INSERT INTO `transport_order`
+(`documentno`, `dateordered`, `partner_id`, `status`, `created_by`, `created_at`, `updated_by`, `updated_at`)
+VALUES
+(:documentno, NULL, :partner_id, 0, :created_by, UNIX_TIMESTAMP(), NULL, UNIX_TIMESTAMP())
+";
+
+            Yii::$app->db->createCommand($sql)
+                ->bindValue(':documentno', $documentno)
+                ->bindValue(':partner_id', $partnerId)
+                ->bindValue(':created_by', $userId)
+                ->execute();
+            $vehicle->status=1;                              
+            $vehicle->transport_order_id=Yii::$app->db->getLastInsertID();
+            $vehicle->save();         
     }       
     
 
