@@ -48,6 +48,16 @@ $this->registerCss("
         #vehicleTable_filter{
         margin-bottom:2px; 
         }
+        .dataTable tbody tr {
+        transition: filter 0.25s ease-in-out;
+            }
+
+        .dataTable tbody tr:hover {
+            background-color: rgba(110, 50, 180, 0.35) !important; /* deep royal purple */
+            filter: brightness(1.08) saturate(1.4);
+            box-shadow: 0 0 10px rgba(150, 80, 255, 0.5);
+            cursor: pointer;
+            }
 ");
 ?>
 <div class="site-index">

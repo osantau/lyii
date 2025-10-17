@@ -14,6 +14,18 @@ $this->title = 'Facturi ' . strtoupper($moneda);
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerCssFile('https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css');
 $this->registerJsFile('https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+$this->registerCss("
+ .dataTable tbody tr {
+        transition: filter 0.25s ease-in-out;
+            }
+
+        .dataTable tbody tr:hover {
+            background-color: rgba(110, 50, 180, 0.35) !important; /* deep royal purple */
+            filter: brightness(1.08) saturate(1.4);
+            box-shadow: 0 0 10px rgba(150, 80, 255, 0.5);
+            cursor: pointer;
+            }"
+);
 $this->title = 'Facturi ' . strtoupper($moneda);
 $baseUrl = Url::base(true);
 ?>
