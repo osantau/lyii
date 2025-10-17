@@ -18,7 +18,7 @@ $this->title = 'Facturi ' . strtoupper($moneda);
 $baseUrl = Url::base(true);
 ?>
 <div class="invoice-index">
-   <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a('Adauga Factura', ['create?moneda=' . $moneda], ['class' => 'btn btn-success']) ?>
@@ -48,27 +48,64 @@ $baseUrl = Url::base(true);
                 </tr>
             </thead>
         <?php } else if ($moneda === 'eur') { ?>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Data Factura</th>
-                    <th>Data Scadenta</th>
-                    <th>Numar Factura</th>
-                    <th>Partener</th>
-                    <th>Valoare EUR</th>
-                    <th>Suma Achitata EUR</th>
-                    <th>Sold EUR</th>
-                    <th>Valoare RON</th>
-                    <th>Suma Achitata RON</th>
-                    <th>Sold RON</th>
-                    <th>Data Incasare</th>
-                    <th>Diferenta</th>
-                    <th>Credit Note</th>
-                    <th>Actiuni</th>
-                </tr>
-            </thead>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Data Factura</th>
+                        <th>Data Scadenta</th>
+                        <th>Numar Factura</th>
+                        <th>Partener</th>
+                        <th>Valoare</th>
+                        <th>Suma Achitata</th>
+                        <th>Sold</th>
+                        <th>Data Incasare</th>
+                        <th>Diferenta</th>
+                        <th>Credit Note</th>
+                        <th>Actiuni</th>
+                    </tr>
+                </thead>
         <?php } ?>
     </table>
+</div>
+<div class="modal fade" id="inlineEditModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Editează Valori EUR/RON</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="inlineEditForm">
+          <!-- Valoare -->
+          <div class="mb-2">
+            <label>Valoare EUR</label>
+            <input type="number"  min="0" class="form-control" id="editValoareEUR">
+            <label class="mt-1">Valoare RON</label>
+            <input type="number" min="0" class="form-control" id="editValoareRON">
+          </div>
+          <!-- Suma Achitata -->
+          <div class="mb-2">
+            <label>Suma Achitata EUR</label>
+            <input type="number"  min="0" class="form-control" id="editSumaAchitataEUR">
+            <label class="mt-1">Suma Achitata RON</label>
+            <input type="number" min="0" class="form-control" id="editSumaAchitataRON">
+          </div>
+          <!-- Sold -->
+          <div class="mb-2">
+            <label>Sold EUR</label>
+            <input type="number" min="0" class="form-control" id="editSoldEUR">
+            <label class="mt-1">Sold RON</label>
+            <input type="number" min="0" class="form-control" id="editSoldRON">
+          </div>
+          <input type="hidden" id="editRowId">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anulează</button>
+        <button type="button" class="btn btn-primary" id="saveInlineEdit">Salvează</button>
+      </div>
+    </div>
+  </div>
 </div>
 <?php
 $this->registerJs(<<<JS
@@ -97,14 +134,24 @@ $(document).ready(function() {
     ];
 
     if (moneda === 'eur') {
-        columns.push(
-            { data: 'valoare_eur' },
-            { data: 'suma_achitata_eur' },
-            { data: 'sold_eur' },
-            { data: 'valoare_ron' },
-            { data: 'suma_achitata_ron' },
-            { data: 'sold_ron' }
-        );
+         columns.push({
+        data: null,
+        render: function(row) {
+            return 'EUR: '+row.valoare_eur+'<br>RON: '+row . valoare_ron+'';
+        }
+    });
+    columns.push({
+        data: null,
+        render: function(row) {
+            return 'EUR: '+row . suma_achitata_eur+'<br>RON: '+row . suma_achitata_ron+'';
+        }
+    });
+    columns.push({
+        data: null,
+        render: function(row) {
+            return 'EUR: '+row . sold_eur+'<br>RON: '+row . sold_ron+'';
+        }
+    });
     } else {
         columns.push(
             { data: 'valoare_ron' },
@@ -170,26 +217,76 @@ $(document).ready(function() {
         table.ajax.reload();
     });
     // Inline editing (same as before)
-    const editableColumns = {
+    const editableColumns = {        
         'dateinvoiced': 'date',
         'duedate': 'date',
-        'nr_factura': 'text',
-        'valoare_ron': 'number',
-        'suma_achitata_ron': 'number',
-        'sold_ron': 'number',
-        'valoare_eur': 'number',
-        'suma_achitata_eur': 'number',
-        'sold_eur': 'number',
+        'nr_factura': 'text',        
         'paymentdate': 'date',
-        'mentiuni': 'text'
+        'mentiuni': 'text',
+        'credit_note': 'text',
     };
 
     $(document).on('dblclick', '#invoiceTable td', function() {
+        const moneda = $('#moneda').val();  
         const cell = $(this);
         const cellIndex = table.cell(this).index();
         const rowData = table.row(this).data();
         const colName = table.settings().init().columns[cellIndex.column].data;
-        if (!editableColumns[colName]) return;
+        if (!editableColumns[colName] && !moneda) return;
+
+            // Check if cell contains EUR+RON
+        const combinedCell = $(cell).html().includes('EUR');        
+   if (combinedCell) {
+      const id = $('#editRowId').val(rowData.id);
+        // Fill modal inputs with current values
+        $('#editValoareEUR').val(rowData.valoare_eur);
+        $('#editValoareRON').val(rowData.valoare_ron);
+
+        $('#editSumaAchitataEUR').val(rowData.suma_achitata_eur);
+        $('#editSumaAchitataRON').val(rowData.suma_achitata_ron);
+
+        $('#editSoldEUR').val(rowData.sold_eur);
+        $('#editSoldRON').val(rowData.sold_ron);
+        
+
+        // Show modal
+        const modal = new bootstrap.Modal(document.getElementById('inlineEditModal'));
+        modal.show();
+     
+        // Save handler
+        $('#saveInlineEdit').off('click').on('click', function() {                       
+     
+            const payload = {
+                valoare_eur: $('#editValoareEUR').val()===''?'0':$('#editValoareEUR').val(),
+                valoare_ron: $('#editValoareRON').val()===''?'0':$('#editValoareRON').val(),
+                suma_achitata_eur: $('#editSumaAchitataEUR').val()===''?'0':$('#editSumaAchitataEUR').val(),
+                suma_achitata_ron: $('#editSumaAchitataRON').val()===''?'0':$('#editSumaAchitataRON').val(),
+                sold_eur: $('#editSoldEUR').val()===''?'0':$('#editSoldEUR').val(),
+                sold_ron: $('#editSoldRON').val()===''?'0':$('#editSoldRON').val()
+            };
+            const id = $('#editRowId').val();
+
+            $.ajax({
+                url: baseUrl + '/invoice/update-inline',
+                type: 'POST',
+                data: { id: id, field: 'combined_all', value: payload, _csrf: yii.getCsrfToken() },
+                success: function(res) {
+                    if (res.success) {
+                        table.ajax.reload(null, false);
+                        modal.hide();
+                    } else {
+                        alert('Eroare: ' + res.message);
+                    }
+                },
+                error: function() {
+                    alert('Eroare la actualizare.');
+                }
+            });
+        });
+
+        return; // stop regular inline editing
+    }
+
         const type = editableColumns[colName];
         const oldValue = cell.text().trim();
         let input = $('<input type="' + (type === 'text' ? 'text' : type) + '" class="form-control form-control-sm">').val(oldValue);

@@ -287,6 +287,14 @@ public function actionUpdateInline()
         return ['success' => false, 'message' => 'Factura nu a fost găsită.'];
     }
 
+    if ($field === 'combined_all' && is_array($value)) {
+               $model->load(['Invoice' => $value], 'Invoice'); 
+   if ($model->save()) {
+            return ['success' => true];
+        } else {
+            return ['success' => false, 'message' => 'Eroare la salvare.'];
+        } 
+    } 
     // Validate safe attributes only
     if (!in_array($field, $model->safeAttributes())) {
         return ['success' => false, 'message' => 'Câmp nepermis.'];
@@ -308,12 +316,13 @@ public function actionUpdateInline()
            $model->calculateSold('EUR');
            $model->save(false,['sold_eur']);
         }    
-    } 
-  
+    }
+ 
 
     if ($model->save(false, [$field])) {
         return ['success' => true];
-    }
+    
+}
 
     return ['success' => false, 'message' => 'Eroare la salvare.'];
 }
