@@ -78,7 +78,9 @@ use yii\bootstrap5\ActiveForm;
     </div>
     <div class="form-group">
         <?= Html::submitButton('Salveaza', ['class' => 'btn btn-success px-4']) ?>
+         <?= Html::a('Renunta',['/payment'], ['class' => 'btn btn-primary']) ?>
     </div>
+    
 
     <?php ActiveForm::end(); ?>
 

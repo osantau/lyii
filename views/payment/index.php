@@ -13,9 +13,9 @@ $baseUrl = Url::base(true);
     <h1><?= Html::encode($this->title) ?></h1>
     <p>
         <?= Html::a('Adauga Plata', ['create'], ['class' => 'btn btn-success']) ?>
-        <button id="refreshAll" class="btn btn-primary">
+        <!-- <button id="refreshAll" class="btn btn-primary">
             <i class="fa fa-sync"></i> Reîncarcă
-        </button>
+        </button> -->
     </p>
     
     <?php echo Html::input('hidden','baseUrl',Url::base(true),['id'=>'baseUrl']);?>
