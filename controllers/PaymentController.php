@@ -170,8 +170,25 @@ class PaymentController extends Controller
         $searchValue = $request->get('search')['value'] ?? '';
         $columns = ['id','dateinvoiced','duedate','nr_cmd_trs','nr_factura','partener','valoare_ron','suma_achitata_ron','sold_ron','valoare_eur',
                     'suma_achitata_eur','sold_eur','paymentdate','bank','mentiuni'];
+        $dateinvoiced = $request->get('dateinvoiced');      
+        $duedate = $request->get('duedate');
+        $partener = $request->get('partener');
+        $nr_cmd_trs = $request->get('nr_cmd_trs');
         $query = Payment::find();        
-
+        //apply filters 
+         if (!empty($dateinvoiced)) {
+        $query->andWhere(['dateinvoiced' => $dateinvoiced]);
+    }
+    if (!empty($duedate)) {
+        $query->andWhere(['duedate' => $duedate]);
+    }
+    if (!empty($partener)) {
+        $query->andFilterWhere(['like', 'partener', $partener]);
+    }
+     if (!empty($nr_cmd_trs)) {
+        $query->andFilterWhere(['like', 'nr_cmd_trs', $nr_cmd_trs]);
+    }
+        // global search
   if (!empty($searchValue)) {
         $query->andFilterWhere(['or',            
             ['like', 'partener', $searchValue],

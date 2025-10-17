@@ -41,7 +41,7 @@ $baseUrl = Url::base(true);
               <th>Banca</th>
               <th>Mentiuni</th>            
               <th>Actiuni</th>
-            </tr>
+            </tr>    
         </thead>
     </table>
 </div>
@@ -49,11 +49,29 @@ $baseUrl = Url::base(true);
 $this->registerJs(<<<JS
 $(document).ready(function() {
     const baseUrl = '$baseUrl';
-    
+        $('#paymentTable thead').append('<tr class="filter-row"></tr>');
+    $('#paymentTable thead tr:eq(0) th').each(function(i) {
+        const colName = $(this).text().trim();
+        let input = '';
+        if (colName === 'Data Factura' || colName === 'Data Scadenta') {
+            input = '<input type="date" class="form-control form-control-sm column-filter" placeholder="'+colName+'" />';
+        } else if (colName === 'FURNIZOR') {
+            input = '<input type="text" class="form-control form-control-sm column-filter" placeholder="Caută partener..." />';
+        } else {
+            input = '';
+        }
+        $('#paymentTable thead tr.filter-row').append('<th>' + input + '</th>');
+    });
     const table = $('#paymentTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: baseUrl + '/payment/data', // server-side URL
+        ajax:{url: baseUrl + '/payment/data',
+          data: function(d){
+             d.dateinvoiced = $('input.column-filter[placeholder="Data Factura"]').val();
+             d.duedate = $('input.column-filter[placeholder="Data Scadenta"]').val();
+             d.partener = $('input.column-filter[placeholder="Caută partener..."]').val();
+          }
+        }, // server-side URL
         ordering: true,
         autoWidth: false,
         responsive: true,        
@@ -92,7 +110,9 @@ $(document).ready(function() {
             url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/ro.json'
         }
     });
-
+  $(document).on('change keyup', '.column-filter', function() {
+        table.ajax.reload();
+    });
     const editableColumns = {
   /*'dateinvoiced':'date', 
   'duedate':'date',   */      
