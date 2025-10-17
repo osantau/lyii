@@ -173,7 +173,8 @@ var table=  $('#vehicleTable').DataTable({
     }
   ,
       drawCallback: function(settings) {
-        $('#vehicleTable tbody td:nth-child(2)').each(function() { // Nr. inmatriculare column
+
+         $('#vehicleTable tbody td:nth-child(10)').each(function() { 
             var cell = $(this);
             var rowData = table.row(cell.closest('tr')).data();
             var hoverTimeout;
@@ -203,7 +204,39 @@ var table=  $('#vehicleTable').DataTable({
             cell.off('mouseleave').on('mouseleave', function() {
                 clearTimeout(hoverTimeout);     
                 cell.tooltip('hide');
-            });       
+            });   
+         });
+        $('#vehicleTable tbody td:nth-child(2)').each(function() { // Nr. inmatriculare column
+            var cell = $(this);
+            var rowData = table.row(cell.closest('tr')).data();
+            var hoverTimeout;
+            /*cell.attr('data-bs-toggle', 'tooltip')
+                .attr('title', ''); // temporary placeholder
+
+            // Remove any existing tooltip
+            cell.tooltip('dispose');
+            // On mouse enter, fetch tooltip content
+         cell.off('mouseenter').on('mouseenter', function() {  
+                    
+                hoverTimeout = setTimeout(function() {
+                    $.ajax({
+                        url: baseUrl+'/vehicle/summary',
+                        data: { id: rowData[0] },
+                        success: function(response) {
+                            cell.attr('title', response.content)
+                                .tooltip('dispose')
+                                .tooltip({ html: true })
+                                .tooltip('show');
+                        }
+                    });
+                }, 300); // delay in milliseconds
+            });
+
+            // On mouse leave, hide tooltip
+            cell.off('mouseleave').on('mouseleave', function() {
+                clearTimeout(hoverTimeout);     
+                cell.tooltip('hide');
+            });   */    
       
             
         cell.off('click').on('click', function() {            
