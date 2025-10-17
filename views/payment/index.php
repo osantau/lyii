@@ -55,9 +55,8 @@ $(document).ready(function() {
         serverSide: true,
         ajax: baseUrl + '/payment/data', // server-side URL
         ordering: true,
-        autoWidth: true,
-        responsive: true,
-        scrollX: false,
+        autoWidth: false,
+        responsive: true,        
         columns: [
             { data : 'id', visible:false },
             { data : 'dateinvoiced' },
@@ -196,12 +195,13 @@ if (e.type === 'keydown' && e.key === 'Escape') {
 });
 
     // Refresh button
-    $('#refreshAll').on('click', function () {
+    $(document).on('click', '#refreshAll',function () {
         const btn = $(this);
         btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Reîncarcă...');
         table.ajax.reload(() => {
             btn.prop('disabled', false).html('<i class="fa fa-sync"></i> Reîncarcă');
         }, false);
+        table.columns.adjust().responsive.recalc();
     });
 
     // Duplicate button
