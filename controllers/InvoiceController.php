@@ -162,7 +162,7 @@ class InvoiceController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionData($days, $moneda)
+    public function actionData($moneda)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $request = Yii::$app->request;
@@ -187,30 +187,7 @@ class InvoiceController extends Controller
             'mentiuni',
             'credit_note'
         ];
-        $query = Invoice::find()->where(['=', 'moneda', $moneda]);
-        $days = (int) $days;
-        $breakpoints = [15, 30, 45, 60];
-
-        // Find the previous breakpoint (lower bound)
-        $previous = 0;
-        foreach ($breakpoints as $point) {
-            if ($days > $point) {
-                $previous = $point;
-            } else {
-                break;
-            }
-        }
-
-        if ($days <= 15) {
-            // duedays <= 15
-            $query->andWhere(['<=', 'duedays', 15]);
-        } elseif ($days >= 60) {
-            // duedays > 60
-            $query->andWhere(['>=', 'duedays', 60]);
-        } else {
-            // duedays between previous and current range
-            $query->andWhere(['between', 'duedays', $previous + 1, $days]);
-        }
+        $query = Invoice::find()->where(['=', 'moneda', $moneda]);      
 
         if (!empty($searchValue)) {
             $query->andFilterWhere([
