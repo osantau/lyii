@@ -187,8 +187,21 @@ class InvoiceController extends Controller
             'mentiuni',
             'credit_note'
         ];
-        $query = Invoice::find()->where(['=', 'moneda', $moneda]);      
 
+        $dateinvoiced = $request->get('dateinvoiced');      
+        $duedate = $request->get('duedate');
+        $partener = $request->get('partener');  
+        $query = Invoice::find()->where(['=', 'moneda', $moneda]);      
+                 //apply filters 
+         if (!empty($dateinvoiced)) {
+        $query->andWhere(['dateinvoiced' => $dateinvoiced]);
+    }
+    if (!empty($duedate)) {
+        $query->andWhere(['duedate' => $duedate]);
+    }
+    if (!empty($partener)) {
+        $query->andFilterWhere(['like', 'partener', $partener]);
+    }
         if (!empty($searchValue)) {
             $query->andFilterWhere([
                 'or',

@@ -75,7 +75,19 @@ $this->registerJs(<<<JS
 $(document).ready(function() {
     const moneda = $('#moneda').val();  
     const baseUrl = $('#baseUrl').val();
-
+ $('#invoiceTable thead').append('<tr class="filter-row"></tr>');
+    $('#invoiceTable thead tr:eq(0) th').each(function(i) {
+        const colName = $(this).text().trim();
+        let input = '';
+        if (colName === 'Data Factura' || colName === 'Data Scadenta') {
+            input = '<input type="date" class="form-control form-control-sm column-filter" placeholder="'+colName+'" />';
+        } else if (colName === 'Partener') {
+            input = '<input type="text" class="form-control form-control-sm column-filter" placeholder="Caută partener..." />';
+        } else {
+            input = '';
+        }
+        $('#invoiceTable thead tr.filter-row').append('<th>' + input + '</th>');
+    });
     let columns = [
         { data: 'id', visible: false },
         { data: 'dateinvoiced' },
@@ -128,11 +140,16 @@ $(document).ready(function() {
     const table = $('#invoiceTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: baseUrl + '/invoice/data?moneda=' + moneda,
+        ajax:{ url: baseUrl + '/invoice/data?moneda=' + moneda,
+             data: function(d){
+             d.dateinvoiced = $('input.column-filter[placeholder="Data Factura"]').val();
+             d.duedate = $('input.column-filter[placeholder="Data Scadenta"]').val();
+             d.partener = $('input.column-filter[placeholder="Caută partener..."]').val();
+          }
+        },
         ordering: true,
-        autoWidth: true,
-        responsive: true,
-        scrollX: true,
+        autoWidth: false,
+        responsive: true,        
         columns: columns,
         pageLength: 25,
         order: [[1, 'desc']],
@@ -149,7 +166,9 @@ $(document).ready(function() {
             btn.prop('disabled', false).html('<i class="fa fa-sync"></i> Reîncarcă');
         }, false);
     });
-
+  $(document).on('change keyup', '.column-filter', function() {
+        table.ajax.reload();
+    });
     // Inline editing (same as before)
     const editableColumns = {
         'dateinvoiced': 'date',

@@ -172,8 +172,7 @@ class PaymentController extends Controller
                     'suma_achitata_eur','sold_eur','paymentdate','bank','mentiuni'];
         $dateinvoiced = $request->get('dateinvoiced');      
         $duedate = $request->get('duedate');
-        $partener = $request->get('partener');
-        $nr_cmd_trs = $request->get('nr_cmd_trs');
+        $partener = $request->get('partener');       
         $query = Payment::find();        
         //apply filters 
          if (!empty($dateinvoiced)) {
@@ -185,9 +184,7 @@ class PaymentController extends Controller
     if (!empty($partener)) {
         $query->andFilterWhere(['like', 'partener', $partener]);
     }
-     if (!empty($nr_cmd_trs)) {
-        $query->andFilterWhere(['like', 'nr_cmd_trs', $nr_cmd_trs]);
-    }
+  
         // global search
   if (!empty($searchValue)) {
         $query->andFilterWhere(['or',            
