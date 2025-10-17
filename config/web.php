@@ -28,6 +28,7 @@ $config = [
         'session'=>[
             //    'class'=>'yii\web\DbSession',
                'class' => 'yii\redis\Session',
+               'timeout' => 1800, // 30 minutes
                       ],
         'cache' => [
             //    'class' => 'yii\caching\FileCache',
@@ -35,7 +36,12 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'app\models\User',
-            'enableAutoLogin' => false,
+            'enableAutoLogin' => true,
+               // Automatically logout after 1800 seconds (30 minutes) of inactivity
+            'authTimeout' => 1800,
+            // (optional) Automatically logout after 1 hour regardless of activity
+            //'absoluteAuthTimeout' => 3600,
+
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
