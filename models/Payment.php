@@ -36,6 +36,7 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property User $createdBy
  * @property User $updatedBy
+ * @property int $paymentterm
  */
 class Payment extends \yii\db\ActiveRecord
 {
@@ -73,6 +74,7 @@ class Payment extends \yii\db\ActiveRecord
             [['ron', 'eur'], 'string', 'max' => 50],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updated_by' => 'id']],
+            [['paymentterm'], 'default', 'value' => null],
         ];
     }
 
@@ -105,6 +107,7 @@ class Payment extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
+            'paymentterm'=>'Termen Plata',
         ];
     }
 
@@ -170,6 +173,16 @@ class Payment extends \yii\db\ActiveRecord
         {
             $this->sold_eur = $this->valoare_eur - $this->suma_achitata_eur;
         }
+    }
+
+    public static function getPaymentTerm() {
+        return [5=>'5 Zile',
+                15=>'15 Zile',
+                30=>'30 Zile',
+                45=>'45 Zile',
+                60=>'60 Zile',
+                90=>'90 Zile',    
+            ];
     }
 
 }

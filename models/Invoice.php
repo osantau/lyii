@@ -37,6 +37,7 @@ use yii\behaviors\TimestampBehavior;
  * @property Partner $partner
  * @property User $createdBy
  * @property User $updatedBy
+ * @property int $paymentterm
  */
 class Invoice extends \yii\db\ActiveRecord
 {
@@ -73,6 +74,7 @@ class Invoice extends \yii\db\ActiveRecord
             // [['nr_factura'], 'unique'],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updated_by' => 'id']],
+             [['paymentterm'], 'default', 'value' => null],
         ];
     }
 
@@ -105,6 +107,7 @@ class Invoice extends \yii\db\ActiveRecord
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
             'partner_id'=>'Partener',
+            'paymentterm'=>'Termen Plata',
         ];
     }
   public function behaviors()
@@ -176,6 +179,15 @@ class Invoice extends \yii\db\ActiveRecord
       public function getPartner()
     {
         return $this->hasOne(Partner::class, ['id' => 'partner_id']);
+    }
+       public static function getPaymentTerm() {
+        return [5=>'5 Zile',
+                15=>'15 Zile',
+                30=>'30 Zile',
+                45=>'45 Zile',
+                60=>'60 Zile',
+                90=>'90 Zile',    
+            ];
     }
 
 }

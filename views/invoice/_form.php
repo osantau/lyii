@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Invoice;
 use yii\helpers\Html;
 use yii\bootstrap5\ActiveForm;
 use kartik\select2\Select2;
@@ -29,7 +30,12 @@ use app\models\Partner;
         </div>
         <div class="col-md-4">
             <?= $form->field($model, 'duedate')->input('date') ?>
-        </div>            
+        </div>  
+         <div class="col-md-4">
+           <?= $form->field($model, 'paymentterm')->dropDownList(Invoice::getPaymentTerm() 
+           ,['prompt'=>''])->label('Termen Incasare') 
+            ?>
+        </div>           
     </div>
     <div class="row">      
          <div class="col-md-4">
@@ -95,3 +101,25 @@ use app\models\Partner;
     <?php ActiveForm::end(); ?>
 
 </div>
+<?php
+$js = <<<JS
+$('#invoice-paymentterm').on('change', function() {
+    var days = parseInt($(this).val());
+    if (!isNaN(days)) {
+        var dateInvoiced = $('#invoice-dateinvoiced').val();
+        if (dateInvoiced) {
+            var dueDate = new Date(dateInvoiced);
+            dueDate.setDate(dueDate.getDate() + days);
+            // format YYYY-MM-DD
+            var month = ('0' + (dueDate.getMonth()+1)).slice(-2);
+            var day = ('0' + dueDate.getDate()).slice(-2);
+            var formatted = dueDate.getFullYear() + '-' + month + '-' + day;
+            $('#invoice-duedate').val(formatted);
+        }
+    } else {
+        $('#invoice-duedate').val(null); 
+    }
+});
+JS;
+$this->registerJs($js);
+?>

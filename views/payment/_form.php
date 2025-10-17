@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap5\ActiveForm;
+use app\models\Payment;
 
 /** @var yii\web\View $this */
 /** @var app\models\Payment $model */
@@ -22,9 +23,16 @@ use yii\bootstrap5\ActiveForm;
         </div>
         <div class="col-md-4">
             <?= $form->field($model, 'dateinvoiced')->input('date') ?>
-        </div>
-        <div class="col-md-4">
+        </div>       
+    </div>
+    <div class="row">
+ <div class="col-md-4">
             <?= $form->field($model, 'duedate')->input('date') ?>
+        </div>
+         <div class="col-md-4">
+           <?= $form->field($model, 'paymentterm')->dropDownList(Payment::getPaymentTerm() 
+           ,['prompt'=>''])->label('Termen Incasare') 
+            ?>
         </div>
     </div>
     <div class="row">
@@ -85,3 +93,25 @@ use yii\bootstrap5\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+<?php
+$js = <<<JS
+$('#payment-paymentterm').on('change', function() {
+    var days = parseInt($(this).val());
+    if (!isNaN(days)) {
+        var dateInvoiced = $('#payment-dateinvoiced').val();
+        if (dateInvoiced) {
+            var dueDate = new Date(dateInvoiced);
+            dueDate.setDate(dueDate.getDate() + days);
+            // format YYYY-MM-DD
+            var month = ('0' + (dueDate.getMonth()+1)).slice(-2);
+            var day = ('0' + dueDate.getDate()).slice(-2);
+            var formatted = dueDate.getFullYear() + '-' + month + '-' + day;
+            $('#payment-duedate').val(formatted);
+        }
+    } else {
+        $('#payment-duedate').val(null); 
+    }
+});
+JS;
+$this->registerJs($js);
+?>
