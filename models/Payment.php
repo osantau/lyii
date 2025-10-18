@@ -33,7 +33,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int $updated_at
  * @property int|null $created_by
  * @property int|null $updated_by
- *
+ * @property int|null $paid_status
  * @property User $createdBy
  * @property User $updatedBy
  * @property int $paymentterm
@@ -75,6 +75,7 @@ class Payment extends \yii\db\ActiveRecord
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updated_by' => 'id']],
             [['paymentterm'], 'default', 'value' => null],
+            [['paid_status'], 'default', 'value' => null],
         ];
     }
 
@@ -183,6 +184,11 @@ class Payment extends \yii\db\ActiveRecord
                 60=>'60 Zile',
                 90=>'90 Zile',    
             ];
+    }
+
+    public static function getPaidStatus(){
+        return [0=>'Partial',
+            1=>'Total',];
     }
 
 }
