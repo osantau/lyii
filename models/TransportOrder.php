@@ -48,7 +48,7 @@ class TransportOrder extends \yii\db\ActiveRecord
             [['dateordered'], 'date', 'format' => 'php:Y-m-d'], // validates proper date
             [['dateordered'], 'default', 'value' => null],       // default NULL
             [['partner_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-            [['documentno'], 'string', 'max' => 4000],
+            [['documentno'], 'string', 'max' => 2000],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
             [['partner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Partner::class, 'targetAttribute' => ['partner_id' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updated_by' => 'id']],

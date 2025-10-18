@@ -9,10 +9,19 @@ class m251017_181909_modify_documento_transport_order extends Migration
      */
     public function safeUp()
     {
-        $this->alterColumn('{{%transport_order}}',"documentno",'varchar(4000) default null');
-        $this->alterColumn('{{%transport_order}}',"dateordered",'date default null');
-        $this->dropIndex('idx_unique_documento_dateordered_partner_id','{{%transport_order}}');
-        $this->dropIndex('idx_partner_id','{{%transport_order}}');        
+        $this->dropForeignKey('fk_vehicle_transport_order','{{%vehicle}}');
+        $this->dropTable('{{%transport_order}}');
+        $this->createTable('{{%transport_order}}', [
+             'id' => $this->primaryKey(),
+             'documentno' => $this->string(2000)->defaultValue(null),
+             'dateordered'=>$this->date()->defaultValue(null),
+             'partner_id' => $this->integer(11)->defaultValue(null),             
+             'created_at' => $this->integer(11)->defaultValue(null),
+             'updated_at' => $this->integer(11)->defaultValue(null),
+             'created_by'=>$this->integer(11)->defaultValue(null),
+             'updated_by'=> $this->integer(11)->defaultValue(null),
+             
+        ]);       
     }
 
     /**
